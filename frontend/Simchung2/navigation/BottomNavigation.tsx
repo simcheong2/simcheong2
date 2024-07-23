@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../page/HomeScreen";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import SearchScreen from "../page/SearchScreen";
 import PhotoScreen from "../page/PhotoScreen";
 import MyPageScreen from "../page/MypageScreen";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import HomeScreen from "../page/home/HomeScreen";
 import Signupscreen from "../page/SignupScreen";
 
 const Tab = createBottomTabNavigator();
@@ -20,7 +20,8 @@ const BottomNavigation = () => {
                     title: '홈',
                     tabBarIcon: ({color, size})=>(
                         <Icon name="home" color={color} size={size} />
-                    )
+                    ),
+                    headerShown: false
                 }}/>
             <Tab.Screen 
                 name="Search" 
@@ -49,9 +50,9 @@ const BottomNavigation = () => {
                         <Icon name="people-alt" color={color} size={size} />
                     )
                 }}/>
-                 <Tab.Screen 
-                name="SignUp" 
-                component={Signupscreen} 
+                 <Tab.Screen
+                name="SignUp"
+                component={Signupscreen}
                 options={{
                     title: '회원가입',
                     tabBarIcon: ({color, size})=>(
