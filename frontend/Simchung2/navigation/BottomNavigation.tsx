@@ -1,10 +1,10 @@
 import React from "react";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import HomeScreen from "../page/HomeScreen";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import SearchScreen from "../page/SearchScreen";
 import PhotoScreen from "../page/PhotoScreen";
 import MyPageScreen from "../page/MypageScreen";
-import Icon from "react-native-vector-icons/MaterialIcons";
+import HomeScreen from "../page/home/HomeScreen";
 
 const Tab = createBottomTabNavigator();
 
@@ -19,7 +19,8 @@ const BottomNavigation = () => {
                     title: '홈',
                     tabBarIcon: ({color, size})=>(
                         <Icon name="home" color={color} size={size} />
-                    )
+                    ),
+                    headerShown: false
                 }}/>
             <Tab.Screen 
                 name="Search" 

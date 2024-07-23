@@ -1,6 +1,6 @@
 import React from 'react'; 
-import BottomNavigation from './navigation/BottomNavigation';
 import { NavigationContainer } from '@react-navigation/native';
+import BottomNavigation from './navigation/BottomNavigation';
 
 const App = () => {
   return (    
