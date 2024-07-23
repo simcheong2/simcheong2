@@ -1,10 +1,10 @@
-package com.example.simcheong2.domain.user;
+package com.example.simcheong2.domain.user.entity;
 
 import com.example.simcheong2.domain.comment.entity.Comment;
 import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
-import com.example.simcheong2.domain.post_blame.PostBlame;
-import com.example.simcheong2.domain.user_blame.UserBlame;
-import com.example.simcheong2.domain.user_post_like.UserPostLike;
+import com.example.simcheong2.domain.post_blame.entity.PostBlame;
+import com.example.simcheong2.domain.user_blame.entity.UserBlame;
+import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import com.example.simcheong2.domain.follow.entity.Follow;
 import com.example.simcheong2.domain.post.entity.Post;
 import jakarta.persistence.Column;

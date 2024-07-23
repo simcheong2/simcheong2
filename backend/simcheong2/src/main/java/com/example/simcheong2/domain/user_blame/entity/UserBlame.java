@@ -1,7 +1,6 @@
-package com.example.simcheong2.domain.post_blame;
+package com.example.simcheong2.domain.user_blame.entity;
 
-import com.example.simcheong2.domain.post.entity.Post;
-import com.example.simcheong2.domain.user.User;
+import com.example.simcheong2.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -19,24 +18,24 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
-public class PostBlame {
+public class UserBlame {
 
     @Id
     @Column(nullable = false, updatable = false)
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer postBlameId;
-
-    @ManyToOne(fetch = FetchType.LAZY)
-    @JoinColumn(name = "blamed_post_id", nullable = false)
-    private Post blamedPost;
+    private Integer userBlameId;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blamer_id", nullable = false)
     private User blamer;
 
-    public PostBlame(Integer postBlameId, Post blamedPost, User blamer) {
-        this.postBlameId = postBlameId;
-        this.blamedPost = blamedPost;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "blamed_user_id", nullable = false)
+    private User blamedUser;
+
+    public UserBlame(Integer userBlameId, User blamer, User blamedUser) {
+        this.userBlameId = userBlameId;
         this.blamer = blamer;
+        this.blamedUser = blamedUser;
     }
 }

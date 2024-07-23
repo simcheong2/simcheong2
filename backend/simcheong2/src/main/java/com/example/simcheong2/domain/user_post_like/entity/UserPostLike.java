@@ -1,8 +1,8 @@
-package com.example.simcheong2.domain.user_post_like;
+package com.example.simcheong2.domain.user_post_like.entity;
 
 
 import com.example.simcheong2.domain.post.entity.Post;
-import com.example.simcheong2.domain.user.User;
+import com.example.simcheong2.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
