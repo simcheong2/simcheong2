@@ -1,7 +1,7 @@
 package com.example.simcheong2.domain.comment_blame.entity;
 
 import com.example.simcheong2.domain.comment.entity.Comment;
-import com.example.simcheong2.domain.user.User;
+import com.example.simcheong2.domain.user.entity.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

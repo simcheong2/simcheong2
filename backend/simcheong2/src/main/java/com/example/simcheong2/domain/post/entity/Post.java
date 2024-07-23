@@ -2,9 +2,9 @@ package com.example.simcheong2.domain.post.entity;
 
 import com.example.simcheong2.domain.comment.entity.Comment;
 import com.example.simcheong2.domain.image.entity.Image;
-import com.example.simcheong2.domain.post_blame.PostBlame;
-import com.example.simcheong2.domain.user.User;
-import com.example.simcheong2.domain.user_post_like.UserPostLike;
+import com.example.simcheong2.domain.post_blame.entity.PostBlame;
+import com.example.simcheong2.domain.user.entity.User;
+import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
