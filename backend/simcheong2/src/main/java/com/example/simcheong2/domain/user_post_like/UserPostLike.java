@@ -1,7 +1,7 @@
 package com.example.simcheong2.domain.user_post_like;
 
 
-import com.example.simcheong2.domain.post.Post;
+import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -14,7 +14,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity

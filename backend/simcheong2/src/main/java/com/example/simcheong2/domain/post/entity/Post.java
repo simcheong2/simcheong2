@@ -1,7 +1,7 @@
-package com.example.simcheong2.domain.post;
+package com.example.simcheong2.domain.post.entity;
 
-import com.example.simcheong2.domain.comment.Comment;
-import com.example.simcheong2.domain.image.Image;
+import com.example.simcheong2.domain.comment.entity.Comment;
+import com.example.simcheong2.domain.image.entity.Image;
 import com.example.simcheong2.domain.post_blame.PostBlame;
 import com.example.simcheong2.domain.user.User;
 import com.example.simcheong2.domain.user_post_like.UserPostLike;
@@ -19,7 +19,6 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity

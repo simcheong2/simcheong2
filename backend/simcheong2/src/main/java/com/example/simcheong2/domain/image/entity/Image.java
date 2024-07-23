@@ -1,6 +1,6 @@
-package com.example.simcheong2.domain.image;
+package com.example.simcheong2.domain.image.entity;
 
-import com.example.simcheong2.domain.post.Post;
+import com.example.simcheong2.domain.post.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -12,7 +12,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity

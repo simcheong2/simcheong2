@@ -1,6 +1,6 @@
-package com.example.simcheong2.domain.comment_blame;
+package com.example.simcheong2.domain.comment_blame.entity;
 
-import com.example.simcheong2.domain.comment.Comment;
+import com.example.simcheong2.domain.comment.entity.Comment;
 import com.example.simcheong2.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -13,7 +13,6 @@ import jakarta.persistence.ManyToOne;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity

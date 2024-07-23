@@ -1,12 +1,12 @@
 package com.example.simcheong2.domain.user;
 
-import com.example.simcheong2.domain.comment.Comment;
-import com.example.simcheong2.domain.comment_blame.CommentBlame;
+import com.example.simcheong2.domain.comment.entity.Comment;
+import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
 import com.example.simcheong2.domain.post_blame.PostBlame;
 import com.example.simcheong2.domain.user_blame.UserBlame;
 import com.example.simcheong2.domain.user_post_like.UserPostLike;
-import com.example.simcheong2.domain.follow.Follow;
-import com.example.simcheong2.domain.post.Post;
+import com.example.simcheong2.domain.follow.entity.Follow;
+import com.example.simcheong2.domain.post.entity.Post;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -20,7 +20,6 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity

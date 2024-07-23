@@ -1,7 +1,7 @@
-package com.example.simcheong2.domain.comment;
+package com.example.simcheong2.domain.comment.entity;
 
-import com.example.simcheong2.domain.comment_blame.CommentBlame;
-import com.example.simcheong2.domain.post.Post;
+import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
+import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.user.User;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -17,7 +17,6 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
-import lombok.Setter;
 
 
 @Entity
