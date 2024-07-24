@@ -5,7 +5,6 @@ import SearchScreen from "../page/SearchScreen";
 import PhotoScreen from "../page/PhotoScreen";
 import MyPageScreen from "../page/MypageScreen";
 import HomeScreen from "../page/home/HomeScreen";
-import Signupscreen from "../page/SignupScreen";
 
 const Tab = createBottomTabNavigator();
 
