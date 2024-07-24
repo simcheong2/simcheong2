@@ -1,5 +1,6 @@
 package com.example.simcheong2.domain.post.controller;
 
+import com.example.simcheong2.domain.post.controller.reqeust.PostContentRequest;
 import com.example.simcheong2.domain.post.controller.response.FeedResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
@@ -8,6 +9,9 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -29,5 +33,13 @@ public class PostController {
     @GetMapping("/recommend")
     public ResponseEntity<List<FeedResponse>> recommendPosts() {
         return ResponseEntity.ok(new ArrayList<>());
+    }
+
+        //게시글등록
+    @PostMapping
+    public ResponseEntity<Boolean> createPost (
+            @RequestPart List < MultipartFile > images,
+            @RequestPart @Valid PostContentRequest request){
+        return ResponseEntity.ok(true);
     }
 }
