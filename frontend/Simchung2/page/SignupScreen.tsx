@@ -32,7 +32,7 @@ function SignupScreen() {
     };
 
     const handleVerificationRequest = () => {
-      
+
         const smsData = {
             name: formData.name,
             phone: formData.phone,
@@ -56,7 +56,7 @@ function SignupScreen() {
     };
 
     const handleVerification = () => {
- 
+
         const codeData = {
             code: formData.verificationCode,
             phone: formData.phone,
@@ -68,7 +68,7 @@ function SignupScreen() {
         axios
             .post(
                 'http://www.my-first-develop-library.shop:8080/auth/sms-verifications',codeData,config
-                
+
             )
             .then((response) => {
                 if (response.status === 200) {
@@ -88,20 +88,20 @@ function SignupScreen() {
                 console.error(error);
             });
     };
-    
+
 
     const handleSignup = () => {
         let formattedDate;
         try {
             const [year, month, day] = formData.openingDate.split('-').map(Number);
             if (!year || !month || !day) throw new Error("Invalid date format");
-            formattedDate = formData.openingDate.replace(/-/g, ''); 
+            formattedDate = formData.openingDate.replace(/-/g, '');
             console.log(formattedDate);
         } catch (error) {
             Alert.alert("Error", "생년월일을 올바른 형식으로 입력해주세요. (예: YYYY-MM-DD)");
             return;
         }
-    
+
         const data = {
             id: formData.id,
             password: formData.password,
@@ -132,7 +132,7 @@ function SignupScreen() {
                 console.error(error);
             });
     };
-    
+
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
