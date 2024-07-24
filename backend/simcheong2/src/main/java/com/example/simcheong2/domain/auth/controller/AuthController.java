@@ -3,18 +3,21 @@ package com.example.simcheong2.domain.auth.controller;
 import com.example.simcheong2.domain.auth.controller.request.*;
 import com.example.simcheong2.domain.auth.controller.response.SmsCheckResponse;
 import com.example.simcheong2.domain.auth.controller.response.TokenResponse;
+import com.example.simcheong2.domain.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 @Slf4j
 @RestController
+@RequiredArgsConstructor
 @Tag(name = "로그인 관련 API")
 @RequestMapping("/auth")
 public class AuthController {
-
+    private final AuthService authService;
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
         return ResponseEntity.ok(new TokenResponse("", ""));

@@ -20,6 +20,6 @@ public class OtherUserInfoResponse {
     private Boolean isReported;
 
     @NonNull
-    @Schema(name = "내가 이 사람을 팔로우 하고 있는지 여부.")
+    @Schema(description = "내가 이 사람을 팔로우 하고 있는지 여부.")
     private Boolean isFollow;
 }

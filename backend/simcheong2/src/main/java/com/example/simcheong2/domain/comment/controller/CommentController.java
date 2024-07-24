@@ -1,6 +1,8 @@
 package com.example.simcheong2.domain.comment.controller;
 
 import com.example.simcheong2.domain.comment.controller.reqeust.CreateCommentRequest;
+import com.example.simcheong2.domain.comment.service.CommentCreateService;
+import com.example.simcheong2.domain.comment.service.CommentSearchService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -17,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 @RequestMapping("/comments")
 public class CommentController {
+    private final CommentCreateService commentCreateService;
+    private final CommentSearchService commentSearchService;
     @PostMapping
     public ResponseEntity<Boolean> createComment(@RequestBody @Valid CreateCommentRequest request){
         return ResponseEntity.ok(true);
