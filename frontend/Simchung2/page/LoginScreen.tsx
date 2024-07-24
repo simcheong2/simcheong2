@@ -20,7 +20,7 @@ function LoginScreen() {
     const [formData, setFormData] = useState({ id: '', pwd: '' });
 
     const handleLogin = async () => {
-       
+
         try {
             const response = await axios.post(`${BaseUrl}/auth/login`, formData);
             if (response.status === 200) {
@@ -36,7 +36,7 @@ function LoginScreen() {
                         if (tokenResponse.status === 200) {
                             const { accessToken: newAccessToken } = tokenResponse.data;
                             await AsyncStorage.setItem('accessToken', newAccessToken);
-                    
+
                         } else {
                             Alert.alert("토큰 재발급 실패", "다시 로그인해 주세요.");
                         }
