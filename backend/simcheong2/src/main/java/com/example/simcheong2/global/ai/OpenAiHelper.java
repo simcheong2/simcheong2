@@ -1,6 +1,10 @@
 package com.example.simcheong2.global.ai;
 
+import com.example.simcheong2.global.exception.model.CustomException;
+import com.example.simcheong2.global.exception.model.ErrorCode;
+import com.example.simcheong2.global.file.FileHelper;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.messages.Media;
 import org.springframework.ai.chat.messages.UserMessage;
@@ -15,29 +19,39 @@ import java.io.File;
 
 @Component
 @RequiredArgsConstructor
+@Slf4j
 public class OpenAiHelper {
     private final ChatClient chatClient;
+    private final FileHelper fileHelper;
 
-    public String getTextFromMultipartFile(String realPath, MultipartFile multipartFile) {
-        System.out.println("이미지 저장 시작");
-//        String imagePath = saveFile(multipartFile, realPath);
-        String imagePath = "";
+    public String getTextFromMultipartFile(MultipartFile multipartFile, String uploadDirRealPath) {
+        String uploadFileName = fileHelper.saveFile(multipartFile, uploadDirRealPath);
+        if (uploadFileName == null) {
+            throw new CustomException(ErrorCode.INTERNAL_SERVER_ERROR, "이미지 파일을 현재 처리할 수 없습니다. 잠시후 다시 시도해주세요.");
+        }
 
-        System.out.println("----");
-        System.out.println(realPath);
-        System.out.println(imagePath);
+        try {
+            String responseText = analyzeImageWithChatClient(uploadDirRealPath, uploadFileName);
+            log.info(responseText);
+            return responseText;
+        } catch (Exception e) {
+            log.error(e.getMessage());
+            return null;
+        } finally {
+            fileHelper.deleteFile(uploadDirRealPath, uploadFileName);
+        }
+    }
 
-        System.out.println("이미지 분석 시작");
-        String imageFullPath = realPath + File.separator + imagePath;
+    public String analyzeImageWithChatClient(String uploadDirRealPath, String uploadFileName) {
+        String imageFullPath = uploadDirRealPath + File.separator + uploadFileName;
+        log.info("이미지 분석 시작! 경로: {}", imageFullPath);
 
         Resource imageData = new FileSystemResource(imageFullPath);
         UserMessage userMessage = new UserMessage("What’s in this image? 한국어로 답변 해줘",
                 new Media(MimeTypeUtils.IMAGE_JPEG, imageData));
 
-        String responseText = chatClient.prompt(new Prompt(userMessage)).call().content();
-
-        // 저장된 이미지 파일 삭제
-
-        return responseText;
+        return chatClient.prompt(new Prompt(userMessage)).call().content();
     }
+
+
 }
