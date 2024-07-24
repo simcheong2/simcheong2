@@ -1,10 +1,19 @@
-import React from "react";
-import { Text } from "react-native";
+import React from 'react';
+import { View, Button } from 'react-native';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from '../types/navigationTypes';
 
 function MyPageScreen() {
-    return(
-        <Text>MyPage</Text>
-    )
+  const navigation = useNavigation< ScreenNavigationProp>();
+
+  return (
+    <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+      <Button
+        onPress={() => navigation.navigate('Signup')}
+        title="회원가입"
+      />
+    </View>
+  );
 }
 
-export default MyPageScreen
+export default MyPageScreen;
