@@ -1,7 +1,6 @@
 package com.example.simcheong2.domain.comment.controller;
 
 import com.example.simcheong2.domain.comment.controller.reqeust.CreateCommentRequest;
-import com.example.simcheong2.domain.comment.controller.response.CommentResponse;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
