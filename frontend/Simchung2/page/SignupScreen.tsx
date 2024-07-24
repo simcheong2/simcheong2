@@ -136,15 +136,15 @@ function SignupScreen() {
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={80}
         >
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
                     <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                     <Icon name="chevron-left" size={48} />
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Icon name="chevron-left" size={48} />
+                        </TouchableOpacity>
                         <Text style={styles.headerText}>회원가입</Text>
                     </View>
                     <View style={styles.inputSection}>
