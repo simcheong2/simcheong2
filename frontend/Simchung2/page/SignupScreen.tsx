@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { TouchableOpacity, StyleSheet, Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from "../types/navigationTypes";
 
-function SignupScreen({navigation}) {
+function SignupScreen() {
     const [selectedGender, setSelectedGender] = useState("");
     const [selectedDisability, setSelectedDisability] = useState("");
-
+    const navigation = useNavigation<ScreenNavigationProp>();
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
