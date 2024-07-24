@@ -5,6 +5,7 @@ import MyPageNavigation from '../navigation/home/MyPageNavigation';
 
 function MyPageScreen() {
 
+
   return(
       <MyPageNavigation/>
   )
