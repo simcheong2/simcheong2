@@ -1,18 +1,16 @@
-import { NavigationContainer } from "@react-navigation/native";
-import { createStackNavigator } from "@react-navigation/stack";
+import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import React from "react";
-import Signupscreen from "../page/SignupScreen";
-import MyPageScreen from "../page/MypageScreen";
-const Stack = createStackNavigator();
+import BottomNavigation from "./BottomNavigation";
+import SignupScreen from "../page/SignupScreen";
+
+const Stack = createNativeStackNavigator();
 
 const StackNavigation = () =>{
     return(
-      
-            <Stack.Navigator initialRouteName="MyPageScreen">
-                 <Stack.Screen name="MyPageScreen" component={MyPageScreen} />
-                <Stack.Screen name="signup" component={Signupscreen}/>
-            </Stack.Navigator>
-       
+        <Stack.Navigator>
+            <Stack.Screen name="BottomNavigation" component={BottomNavigation} options={{ headerShown: false }}/>
+            <Stack.Screen name="Signup" component={SignupScreen}  options={{ headerShown: false }} />
+        </Stack.Navigator>
     )
 }
 

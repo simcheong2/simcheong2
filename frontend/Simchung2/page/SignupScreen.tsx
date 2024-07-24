@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import { TouchableOpacity, StyleSheet, Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
 
-function Signupscreen() {
+function SignupScreen({navigation}) {
     const [selectedGender, setSelectedGender] = useState("");
     const [selectedDisability, setSelectedDisability] = useState("");
 
@@ -10,12 +10,14 @@ function Signupscreen() {
         <KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === "ios" ? "padding" : "height"}
-            keyboardVerticalOffset={80} // iOS의 경우 필요한 오프셋 설정
+            keyboardVerticalOffset={80}
         >
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
                     <View style={styles.header}>
-                        <Icon name="chevron-left" size={48} />
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                     <Icon name="chevron-left" size={48} />
+                    </TouchableOpacity>
                         <Text style={styles.headerText}>회원가입</Text>
                     </View>
                     <View style={styles.inputSection}>
@@ -139,6 +141,7 @@ const styles = StyleSheet.create({
         backgroundColor: "#ffffff",
     },
     header: {
+        marginTop: 24,
         flexDirection: "row",
         alignItems: "center",
     },
@@ -216,4 +219,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Signupscreen;
+export default SignupScreen;

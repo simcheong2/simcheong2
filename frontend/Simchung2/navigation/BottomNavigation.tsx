@@ -50,15 +50,6 @@ const BottomNavigation = () => {
                         <Icon name="people-alt" color={color} size={size} />
                     )
                 }}/>
-                 <Tab.Screen
-                name="SignUp"
-                component={Signupscreen}
-                options={{
-                    title: '회원가입',
-                    tabBarIcon: ({color, size})=>(
-                        <Icon name="people-alt" color={color} size={size} />
-                    )
-                }}/>
         </Tab.Navigator>
     )
 }

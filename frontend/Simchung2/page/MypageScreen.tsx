@@ -1,9 +1,15 @@
 import React from "react";
-import { Text } from "react-native";
+import { View,Button } from "react-native";
 
-function MyPageScreen() {
+function MyPageScreen({navigation}) {
     return(
-        <Text>MyPage</Text>
+        <View style={{ flex: 1, alignItems: 'center', justifyContent: 'center' }}>
+    
+        <Button
+          onPress={() => navigation.navigate('Signup')}
+          title="회원가입"
+        />
+      </View>
     )
 }
 
