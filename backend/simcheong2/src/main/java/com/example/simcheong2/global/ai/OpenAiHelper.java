@@ -24,6 +24,9 @@ public class OpenAiHelper {
     private final ChatClient chatClient;
     private final FileHelper fileHelper;
 
+    private String requestText = "What’s in this image? 한국어로 해줘. " +
+            "단, 이 사진이 너무 야하거나 인종차별이나 장애차별적인 성격을 띄고 있다면 '부적절한 컨텐츠입니다.'라는 텍스트를 응답해줘";
+
     public String getTextFromMultipartFile(MultipartFile multipartFile, String uploadDirRealPath) {
         String uploadFileName = fileHelper.saveFile(multipartFile, uploadDirRealPath);
         if (uploadFileName == null) {
@@ -47,9 +50,7 @@ public class OpenAiHelper {
         log.info("이미지 분석 시작! 경로: {}", imageFullPath);
 
         Resource imageData = new FileSystemResource(imageFullPath);
-        UserMessage userMessage = new UserMessage("What’s in this image? 한국어로 답변 해줘",
-                new Media(MimeTypeUtils.IMAGE_JPEG, imageData));
-
+        UserMessage userMessage = new UserMessage(requestText, new Media(MimeTypeUtils.IMAGE_JPEG, imageData));
         return chatClient.prompt(new Prompt(userMessage)).call().content();
     }
 
