@@ -17,7 +17,7 @@ function SignupScreen() {
         verificationCode: '',
         sessionId:'',
     });
-    
+
     const [selectedGender, setSelectedGender] = useState("");
     const [selectedDisability, setSelectedDisability] = useState("");
     const [isVerificationSent, setIsVerificationSent] = useState(false);
@@ -95,7 +95,7 @@ function SignupScreen() {
             password: formData.password,
             email: formData.email,
             name: formData.name,
-            isForeign: false, 
+            isForeign: false,
             sex: selectedGender === 'male' ? 'MALE' : 'FEMALE',
             openingDate: formattedDate,
             phone: formData.phone,
