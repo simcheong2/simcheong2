@@ -48,4 +48,8 @@ public class SignupRequest {
 
     @NonNull
     private Boolean isDisabled;
+
+    @NonNull
+    @Size(min = 1, max = 20, message = "닉네임 글자 길이는 1글자 이상 20글자 이하여야 합니다.")
+    private String nickname;
 }

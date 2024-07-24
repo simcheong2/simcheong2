@@ -1,4 +1,4 @@
-package com.example.simcheong2.domain.user.controller.response;
+package com.example.simcheong2.domain.follow.controller.response;
 
 import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.AllArgsConstructor;
@@ -9,15 +9,15 @@ import lombok.NonNull;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class OtherUserInfoResponse {
-    @NonNull
-    private String profileUrl;
-
+public class FollowerUserInfoResponse {
     @NonNull
     private String nickname;
 
     @NonNull
-    private Boolean isReported;
+    private String profileUrl;
+
+    @NonNull
+    private Boolean isDisabled;
 
     @NonNull
     @Schema(name = "내가 이 사람을 팔로우 하고 있는지 여부.")
