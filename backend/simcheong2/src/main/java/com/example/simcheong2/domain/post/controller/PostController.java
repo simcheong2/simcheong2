@@ -7,6 +7,7 @@ import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user_post_like.controller.request.LikeRequest;
 import com.example.simcheong2.domain.user_post_like.service.LikeService;
 import com.example.simcheong2.global.ai.OpenAiHelper;
+import com.example.simcheong2.global.s3.S3Uploader;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,7 @@ public class PostController {
     private final PostSearchService postSearchService;
 
     private final OpenAiHelper openAiHelper;
+    private final S3Uploader s3Uploader;
 
     // 메인 피드
     @GetMapping("/main")
@@ -52,8 +54,13 @@ public class PostController {
             HttpServletRequest servletRequest,
             @RequestPart List<MultipartFile> images,
             @RequestPart @Valid PostContentRequest request) {
-        String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
-        String text = openAiHelper.getTextFromMultipartFile(images.get(0), uploadDirRealPath);
+        try {
+            String s3Url = s3Uploader.uploadFile(images.get(0), "static");
+            String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
+            String text = openAiHelper.getTextFromMultipartFile(images.get(0), uploadDirRealPath);
+        } catch (Exception e) {
+            return ResponseEntity.ok(false);
+        }
         return ResponseEntity.ok(true);
     }
 
