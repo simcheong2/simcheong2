@@ -3,6 +3,8 @@ package com.example.simcheong2.domain.user.controller;
 import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.Sex;
+import com.example.simcheong2.domain.user.service.UserSearchService;
+import com.example.simcheong2.domain.user.service.UserUpdateService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +21,9 @@ import java.util.List;
 @Slf4j
 @RestController
 public class UserController {
+    private final UserSearchService userSearchService;
+    private final UserUpdateService userUpdateService;
+
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
         return ResponseEntity.ok(new ArrayList<>());

@@ -2,6 +2,10 @@ package com.example.simcheong2.domain.post.controller;
 
 import com.example.simcheong2.domain.post.controller.reqeust.PostContentRequest;
 import com.example.simcheong2.domain.post.controller.response.FeedResponse;
+import com.example.simcheong2.domain.post.service.PostCreateService;
+import com.example.simcheong2.domain.post.service.PostSearchService;
+import com.example.simcheong2.domain.user_post_like.controller.request.LikeRequest;
+import com.example.simcheong2.domain.user_post_like.service.LikeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -22,6 +26,9 @@ import java.util.List;
 @RestController
 @RequestMapping("/posts")
 public class PostController {
+    private final LikeService likeService;
+    private final PostCreateService postCreateService;
+    private final PostSearchService postSearchService;
 
     // 메인 피드
     @GetMapping("/main")
@@ -35,11 +42,17 @@ public class PostController {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-        //게시글등록
+    //게시글등록
     @PostMapping
     public ResponseEntity<Boolean> createPost (
             @RequestPart List < MultipartFile > images,
             @RequestPart @Valid PostContentRequest request){
+        return ResponseEntity.ok(true);
+    }
+
+    // 게시글 좋아요
+    @PostMapping("/like")
+    public ResponseEntity<Boolean> likePost(@RequestBody @Valid LikeRequest request){
         return ResponseEntity.ok(true);
     }
 }
