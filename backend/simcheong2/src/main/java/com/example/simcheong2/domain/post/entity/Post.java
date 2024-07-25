@@ -5,6 +5,7 @@ import com.example.simcheong2.domain.image.entity.Image;
 import com.example.simcheong2.domain.post_blame.entity.PostBlame;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
+import com.example.simcheong2.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post {
+public class Post extends BaseEntity {
 
     @Id
     @Column(nullable = false, updatable = false)
