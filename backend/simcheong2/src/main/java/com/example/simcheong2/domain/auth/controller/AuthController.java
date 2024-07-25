@@ -32,6 +32,7 @@ public class AuthController {
     // 코드 생성 요청
     @PostMapping("/validations/sms")
     public ResponseEntity<SmsCheckResponse> createCode(@RequestBody @Valid SmsCheckRequest request) {
+        authService.createCode(request.getPhone());
         return ResponseEntity.ok(new SmsCheckResponse(true));
     }
 

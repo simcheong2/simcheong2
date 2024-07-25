@@ -31,6 +31,9 @@ public class User {
     private Integer userId;
 
     @Column(length = 100)
+    private String inputId;
+
+    @Column(length = 100)
     private String email;
 
     @Column(length = 200)
@@ -90,8 +93,9 @@ public class User {
     @OneToMany(mappedBy = "blamer")
     private Set<PostBlame> blamerPostBlames;
 
-    public User(Integer userId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
+    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
         this.userId = userId;
+        this.inputId = inputId;
         this.email = email;
         this.password = password;
         this.phone = phone;

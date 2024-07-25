@@ -21,14 +21,8 @@ public class SmsCheckRequest {
     private String name;
 
     @NonNull
-    private Boolean isForeign;
-
-    @NonNull
-    private Sex sex; // MALE, FEMALE 스트링이 입력으로 들어오면 자동으로 매칭 됨.
-
-    @NonNull
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyyMMdd", timezone = "Asia/Seoul")
-    private Date openingDate;
+    private Date birthDate;
 
     @NonNull
     @PhoneNumber
