@@ -12,7 +12,7 @@ function LoginScreen() {
     const navigation = useNavigation<ScreenNavigationProp>();
     const [isChecked, setIsChecked] = useState(false);
     const [secureTextEntry, setSecureTextEntry] = useState(true);
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
 
     const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
 
@@ -75,7 +75,7 @@ function LoginScreen() {
         } catch (error) {
             Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
         } finally {
-            setIsLoading(false); 
+            setIsLoading(false);
         }
     };
 
