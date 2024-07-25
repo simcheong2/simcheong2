@@ -32,16 +32,16 @@ public class Post extends BaseEntity {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> postComments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> postImages;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserPostLike> postUserPostLikes;
 
-    @OneToMany(mappedBy = "blamedPost")
+    @OneToMany(mappedBy = "blamedPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostBlame> blamedPostPostBlames;
 
     public Post(String content, List<Image> postImages) {

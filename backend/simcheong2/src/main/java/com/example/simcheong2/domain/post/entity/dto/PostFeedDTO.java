@@ -80,6 +80,7 @@ public class PostFeedDTO {
                 .isFollow(followed) //
                 .images(post.getPostImages().stream()
                         .map(ImageDTO::from)
+                        .sorted()
                         .collect(Collectors.toList()))
                 .content(post.getContent())
                 .likeCount(post.getPostUserPostLikes().size())

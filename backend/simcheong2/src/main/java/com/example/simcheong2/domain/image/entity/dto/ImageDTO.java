@@ -10,9 +10,10 @@ import lombok.*;
 @NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
-public class ImageDTO {
+public class ImageDTO implements Comparable {
     private String imageUrl;
     private String imageText;
+    private int index;
 
     public ImagesResponse toResponse() {
         return ImagesResponse.builder()
@@ -25,6 +26,13 @@ public class ImageDTO {
         return ImageDTO.builder()
                 .imageUrl(image.getFileUrl())
                 .imageText(image.getImageText())
+                .index(image.getImageIndex())
                 .build();
+    }
+
+    @Override
+    public int compareTo(@NonNull Object o) {
+        ImageDTO otherImage = (ImageDTO) o;
+        return this.getIndex() - otherImage.getIndex();
     }
 }

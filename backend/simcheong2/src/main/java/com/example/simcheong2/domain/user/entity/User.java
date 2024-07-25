@@ -7,6 +7,7 @@ import com.example.simcheong2.domain.user_blame.entity.UserBlame;
 import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import com.example.simcheong2.domain.follow.entity.Follow;
 import com.example.simcheong2.domain.post.entity.Post;
+import com.example.simcheong2.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
@@ -23,7 +24,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
-public class User {
+public class User extends BaseEntity {
 
     @Id
     @Column(nullable = false, updatable = false)

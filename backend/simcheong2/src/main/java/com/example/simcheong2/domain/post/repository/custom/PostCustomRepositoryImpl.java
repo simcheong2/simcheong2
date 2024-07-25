@@ -29,6 +29,7 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         .leftJoin(post.postComments).fetchJoin()
                         .leftJoin(post.blamedPostPostBlames).fetchJoin()
                         .where(post.user.userId.eq(userId).not()) // 자기 게시물은 안가져오도록
+                        .orderBy(post.createdDate.desc()) // 최신 게시글 먼저 뜨도록
                         .fetch()
         );
     }
