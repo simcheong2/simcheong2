@@ -9,14 +9,11 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
-
 @Entity
 @Getter
-@Builder(toBuilder = true)
 @NoArgsConstructor
 public class Image {
 
@@ -38,11 +35,13 @@ public class Image {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    public Image(Integer imageId, String fileUrl, String imageText, Integer imageIndex, Post post) {
-        this.imageId = imageId;
+    public Image(String fileUrl, String imageText, Integer imageIndex) {
         this.fileUrl = fileUrl;
         this.imageText = imageText;
         this.imageIndex = imageIndex;
+    }
+
+    public void updatePost(Post post) {
         this.post = post;
     }
 }

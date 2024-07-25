@@ -7,6 +7,7 @@ import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user_post_like.controller.request.LikeRequest;
 import com.example.simcheong2.domain.user_post_like.service.LikeService;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -44,15 +45,18 @@ public class PostController {
 
     //게시글등록
     @PostMapping
-    public ResponseEntity<Boolean> createPost (
-            @RequestPart List < MultipartFile > images,
-            @RequestPart @Valid PostContentRequest request){
+    public ResponseEntity<Boolean> createPost(
+            HttpServletRequest servletRequest,
+            @RequestPart List<MultipartFile> images,
+            @RequestPart @Valid PostContentRequest request) {
+        String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
+        postCreateService.createPost(1, images, request.getContent(), uploadDirRealPath);
         return ResponseEntity.ok(true);
     }
 
     // 게시글 좋아요
     @PostMapping("/like")
-    public ResponseEntity<Boolean> likePost(@RequestBody @Valid LikeRequest request){
+    public ResponseEntity<Boolean> likePost(@RequestBody @Valid LikeRequest request) {
         return ResponseEntity.ok(true);
     }
 }
