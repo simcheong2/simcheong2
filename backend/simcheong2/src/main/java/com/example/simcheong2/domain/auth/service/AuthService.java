@@ -36,15 +36,21 @@ public class AuthService {
         if (user.isPresent()) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "이미 가입된 전화번호입니다.");
         }
-        // 레디스에 남아있는 번호는 아닌지 확인. -> 5분 동안 유지된다고 말하기
-        if(smsRedisTemplate.opsForValue().get(phone) != null) {
+        isAlreadySendCode(phone);
+        sendCode(phone);
+    }
+
+    private void isAlreadySendCode(String phone) {
+        // 레디스에 남아있는 번호는 아닌지 확인.
+        if (smsRedisTemplate.opsForValue().get(phone) != null) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "이미 인증번호를 발송했습니다. 5분간 유효합니다.");
         }
+    }
 
+    private void sendCode(String phone) {
         String code = codeGenerator.generatorCode();
-//        smsUtil.sendOne(phone, code);
+//        smsUtil.sendOne(phone, code); // 하면 진짜 전송됨ㅋㅋ
         log.info("{}에게 {}를 전송함", phone, code);
-        // 레디스에 폰,번호 쌍 5분 유효시간으로 추가
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
