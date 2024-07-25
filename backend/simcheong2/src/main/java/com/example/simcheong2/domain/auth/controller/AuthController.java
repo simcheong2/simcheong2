@@ -3,6 +3,8 @@ package com.example.simcheong2.domain.auth.controller;
 import com.example.simcheong2.domain.auth.controller.request.*;
 import com.example.simcheong2.domain.auth.controller.response.SmsCheckResponse;
 import com.example.simcheong2.domain.auth.controller.response.TokenResponse;
+import com.example.simcheong2.domain.auth.entity.Tokens;
+import com.example.simcheong2.domain.auth.entity.dto.LoginDto;
 import com.example.simcheong2.domain.auth.service.AuthService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
@@ -20,7 +22,11 @@ public class AuthController {
     private final AuthService authService;
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
-        return ResponseEntity.ok(new TokenResponse("", ""));
+        LoginDto loginDto = new LoginDto(request.getId(),request.getPassword());
+
+        //로그인 성공 했다면 토큰 발급
+        Tokens tokens = authService.login(loginDto);
+        return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(),tokens.getRefreshToken()));
     }
 
     // 코드 검사
