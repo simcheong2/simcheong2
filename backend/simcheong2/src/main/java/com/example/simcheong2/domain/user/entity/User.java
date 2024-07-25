@@ -7,14 +7,11 @@ import com.example.simcheong2.domain.user_blame.entity.UserBlame;
 import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import com.example.simcheong2.domain.follow.entity.Follow;
 import com.example.simcheong2.domain.post.entity.Post;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 import lombok.Builder;
@@ -66,8 +63,8 @@ public class User {
     @Column(columnDefinition = "tinyint", length = 1)
     private Boolean postVisible;
 
-    @OneToMany(mappedBy = "user")
-    private Set<Post> userPosts;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Post> userPosts = new ArrayList<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Comment> userComments;
@@ -93,7 +90,7 @@ public class User {
     @OneToMany(mappedBy = "blamer")
     private Set<PostBlame> blamerPostBlames;
 
-    public User(Integer userId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, Set<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
+    public User(Integer userId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
         this.userId = userId;
         this.email = email;
         this.password = password;
@@ -115,5 +112,10 @@ public class User {
         this.blamedUserUserBlames = blamedUserUserBlames;
         this.blamerCommentBlames = blamerCommentBlames;
         this.blamerPostBlames = blamerPostBlames;
+    }
+
+    public void addPost(Post post) {
+        this.userPosts.add(post);
+        post.updateUser(this);
     }
 }
