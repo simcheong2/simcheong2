@@ -3,6 +3,7 @@ package com.example.simcheong2.domain.user.entity;
 import com.example.simcheong2.domain.comment.entity.Comment;
 import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
 import com.example.simcheong2.domain.post_blame.entity.PostBlame;
+import com.example.simcheong2.domain.user.entity.dto.Sex;
 import com.example.simcheong2.domain.user_blame.entity.UserBlame;
 import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import com.example.simcheong2.domain.follow.entity.Follow;
@@ -11,8 +12,7 @@ import com.example.simcheong2.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.HashSet;
 import java.util.Set;
 
 import lombok.Builder;
@@ -55,6 +55,10 @@ public class User extends BaseEntity {
     @Column(length = 100)
     private String nickname;
 
+    @Enumerated(EnumType.STRING) // EnumType.ORDINAL을 사용하면 숫자로 저장됩니다.
+    @Column
+    private Sex sex;
+
     @Column(length = 100)
     private String introduce;
 
@@ -68,7 +72,7 @@ public class User extends BaseEntity {
     private Boolean postVisible;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Post> userPosts = new ArrayList<>();
+    private Set<Post> userPosts = new HashSet<>();
 
     @OneToMany(mappedBy = "user")
     private Set<Comment> userComments;
@@ -95,7 +99,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "blamer")
     private Set<PostBlame> blamerPostBlames;
 
-    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
+    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, Sex sex, String introduce, String profileImage, Boolean disabled, Boolean postVisible, Set<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
         this.userId = userId;
         this.inputId = inputId;
         this.email = email;
