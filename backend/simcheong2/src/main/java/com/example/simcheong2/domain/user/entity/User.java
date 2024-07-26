@@ -79,6 +79,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "follower")
     private Set<Follow> followerFollows;
 
+    // 내가 팔로잉 당하고 있는 입장으로 Follow 테이블에 들어간 것
     @OneToMany(mappedBy = "following")
     private Set<Follow> followingFollows;
 
@@ -122,5 +123,19 @@ public class User extends BaseEntity {
     public void addPost(Post post) {
         this.userPosts.add(post);
         post.updateUser(this);
+    }
+
+    // 너가 얘 other를 팔로우 하고 있니?
+    public boolean isFollow(User other) {
+        return followerFollows.stream().anyMatch(
+                follow -> follow.getFollowing().getUserId() == other.getUserId()
+        );
+    }
+
+    // other가 너 게시물에 좋아요 누를 수 있니?
+    public boolean isPossibleLike(User other) {
+        if (this.postVisible) return true;
+        if (this.isFollow(other)) return true;
+        return false;
     }
 }
