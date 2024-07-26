@@ -86,6 +86,8 @@ const styles = StyleSheet.create({
         alignItems: "center",
         marginTop: 16,
         width: '100%',
+        borderColor:"#555555",
+        borderWidth:1,
     },
     buttonText: {
         color: "#fff",
