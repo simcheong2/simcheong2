@@ -2,6 +2,7 @@ package com.example.simcheong2.domain.post.controller;
 
 import com.example.simcheong2.domain.post.controller.reqeust.PostContentRequest;
 import com.example.simcheong2.domain.post.controller.response.FeedResponse;
+import com.example.simcheong2.domain.post.entity.dto.PostFeedDTO;
 import com.example.simcheong2.domain.post.service.PostCreateService;
 import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user_post_like.controller.request.LikeRequest;
@@ -20,6 +21,7 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "게시글 관련 API")
 @Slf4j
@@ -34,7 +36,12 @@ public class PostController {
     // 메인 피드
     @GetMapping("/main")
     public ResponseEntity<List<FeedResponse>> mainPosts() {
-        return ResponseEntity.ok(new ArrayList<>());
+        // 1번 유저가 지금 피드들 요청한거임.
+        List<FeedResponse> feeds = postSearchService.getFeeds(1).stream()
+                .map(PostFeedDTO::toResponse)
+                .toList();
+
+        return ResponseEntity.ok(feeds);
     }
 
     // 추천 피드
@@ -50,7 +57,7 @@ public class PostController {
             @RequestPart List<MultipartFile> images,
             @RequestPart @Valid PostContentRequest request) {
         String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
-        postCreateService.createPost(1, images, request.getContent(), uploadDirRealPath);
+        postCreateService.createPost(3, images, request.getContent(), uploadDirRealPath);
         return ResponseEntity.ok(true);
     }
 

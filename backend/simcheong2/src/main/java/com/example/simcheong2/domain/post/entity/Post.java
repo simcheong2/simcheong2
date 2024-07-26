@@ -5,6 +5,7 @@ import com.example.simcheong2.domain.image.entity.Image;
 import com.example.simcheong2.domain.post_blame.entity.PostBlame;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
+import com.example.simcheong2.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
 import java.util.List;
@@ -17,7 +18,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @NoArgsConstructor
-public class Post {
+public class Post extends BaseEntity {
 
     @Id
     @Column(nullable = false, updatable = false)
@@ -31,16 +32,16 @@ public class Post {
     @JoinColumn(name = "user_id", nullable = false)
     private User user;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> postComments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Image> postImages;
 
-    @OneToMany(mappedBy = "post")
+    @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserPostLike> postUserPostLikes;
 
-    @OneToMany(mappedBy = "blamedPost")
+    @OneToMany(mappedBy = "blamedPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostBlame> blamedPostPostBlames;
 
     public Post(String content, List<Image> postImages) {
