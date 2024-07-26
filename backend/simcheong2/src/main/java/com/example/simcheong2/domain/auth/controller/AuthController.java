@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/auth")
 public class AuthController {
     private final AuthService authService;
+
     @PostMapping("/login")
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
         return ResponseEntity.ok(new TokenResponse("", ""));
@@ -26,6 +27,7 @@ public class AuthController {
     // 코드 검사
     @GetMapping("/validations/sms")
     public ResponseEntity<SmsCheckResponse> checkCode(@RequestBody @Valid SmsValidationRequest request) {
+        authService.validateSmsCode(request.getPhone(), request.getCode());
         return ResponseEntity.ok(new SmsCheckResponse(true));
     }
 
