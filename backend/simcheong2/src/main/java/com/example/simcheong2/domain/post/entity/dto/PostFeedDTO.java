@@ -8,6 +8,7 @@ import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.user.controller.response.OtherUserInfoResponse;
 import lombok.*;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -29,6 +30,7 @@ public class PostFeedDTO {
     private Integer commentCount; // fetch
     private Boolean isLiked; // fetch로 UserPostLike 한거에서 딸려올거임. Ser<User> 정보 조회하면 됨.
     private Boolean isPostReported; // fetch로 PostBlame 한거에서 딸려올거임. blamer에 해당 우저 id있나보면 될듯
+    private LocalDateTime createdAt;
 
     private List<CommentDTO> comments; // fetch로
 
@@ -49,6 +51,7 @@ public class PostFeedDTO {
                         .commentCount(commentCount)
                         .isLiked(isLiked)
                         .isReported(isPostReported)
+                        .createdAt(createdAt)
                         .build())
                 .comments(comments.stream()
                         .map(CommentDTO::toResponse)
@@ -87,6 +90,7 @@ public class PostFeedDTO {
                 .commentCount(post.getPostComments().size())
                 .isLiked(liked)//
                 .isPostReported(postReported)
+                .createdAt(post.getCreatedDate())
                 .comments(post.getPostComments().stream()
                         .map(CommentDTO::from)
                         .collect(Collectors.toList()))
