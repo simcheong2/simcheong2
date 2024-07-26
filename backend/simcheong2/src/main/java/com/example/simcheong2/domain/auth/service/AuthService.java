@@ -10,12 +10,13 @@ import com.example.simcheong2.domain.user.service.UserDeleteService;
 import com.example.simcheong2.domain.user.service.UserValidationService;
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
-import com.example.simcheong2.global.redis.service.RedisUtilService;
+import com.example.simcheong2.global.security.redis.repository.RedisTokensRepository;
+import com.example.simcheong2.global.security.redis.service.RedisUtilService;
 import com.example.simcheong2.global.service.TokensGenerateService;
 import com.example.simcheong2.global.sms.SmsUtil;
 import com.example.simcheong2.global.sms.SmsValidationCodeGenerator;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
-import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -36,6 +37,7 @@ public class AuthService {
     private final UserDeleteService userDeleteService;
     private final TokensGenerateService tokensGenerateService;
     private final RedisUtilService redisUtilService;
+    private final RedisTokensRepository redisTokensRepository;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -53,20 +55,36 @@ public class AuthService {
         }
         User user = isExist.get();
         String userPassword =user.getPassword();
-        if(!passwordEncoder.matches(loginDto.getInputPassword(), userPassword)){
+        if(!loginDto.getInputPassword().equals(userPassword)){
+        //if(!passwordEncoder.matches(userPassword, loginDto.getInputPassword())){
+            log.debug("userPassword:" + userPassword);
+            log.debug("inputPassword:" + loginDto.getInputPassword());
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
-
-        redisUtilService.setData(user.getUserId().toString(), tokens.getRefreshToken());
-
-        // key : UUID, value : refreshToken 으로 redis 에 50400 초 동안 저장
+        log.debug("access token :" + tokens.getAccessToken());
+        log.debug("refresh token :" + tokens.getRefreshToken());
+        //redisUtilService.setData(user.getUserId().toString(), tokens.getRefreshToken());
+        // key : UserId, value : refreshToken 으로 redis 에 50400 초 동안 저장
         // reissue 시 보안을 위해 저장을 위함이라네요/
+        log.debug("refreshToken = " + tokens.getRefreshToken());
         redisUtilService.setRefreshToken(user.getUserId().toString(), tokens.getRefreshToken());
         // key : inputId, value : "login" 으로 redis 에 7200 초 동안 저장
         // 중복 로그인을 방지 하기 위함이라네요.
         redisUtilService.setAccessToken(user.getInputId(), "login");
 
+        return tokens;
+    }
+    public Tokens test(LoginDto loginDto){
+        Integer userId = 1234;
+        String inputId = "school";
+        Tokens tokens = tokensGenerateService.generate(userId,inputId);
+        log.debug("access token :" + tokens.getAccessToken());
+        log.debug("refresh token :" + tokens.getRefreshToken());
+        redisUtilService.setRefreshToken(userId.toString(), tokens.getRefreshToken());
+        // key : inputId, value : "login" 으로 redis 에 7200 초 동안 저장
+        // 중복 로그인을 방지 하기 위함이라네요.
+        redisUtilService.setAccessToken(inputId, "login");
         return tokens;
     }
     public void createCode(String phone) {
@@ -84,6 +102,7 @@ public class AuthService {
         log.info("{}에게 {}를 전송함", phone, code);
         // 레디스에 폰,번호 쌍 5분 유효시간으로 추가
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
+
     }
 
 }
