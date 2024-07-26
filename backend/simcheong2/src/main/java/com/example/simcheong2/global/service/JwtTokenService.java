@@ -10,7 +10,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Component;
 
@@ -18,16 +17,13 @@ import java.security.Key;
 import java.util.Collection;
 import java.util.Date;
 
-import static com.amazonaws.services.ec2.model.PrincipalType.User;
-
 @Component
 @Slf4j
 public class JwtTokenService {
     private final Key key;
-
-    public JwtTokenService(@Value("${jwt.secret.ket")String secretKey){
-        byte[] ketBytes =Decoders.BASE64.decode(secretKey);
-        this.key = Keys.hmacShaKeyFor(ketBytes);
+    public JwtTokenService(@Value("${jwt.secret.key}") String secretKey) {
+        byte[] keyBytes = Decoders.BASE64.decode(secretKey);
+        this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
     public String generate(String subject, String kind, Date expiredAt){

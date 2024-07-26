@@ -1,18 +1,21 @@
-package com.example.simcheong2.global.redis.service;
+package com.example.simcheong2.global.security.redis.service;
 
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
 import java.time.Duration;
+import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Slf4j
 public class RedisUtilService {
-    private final RedisTemplate redisTemplate;
+    private final RedisTemplate<String,String> redisTemplate;
 
     public String getData(String key){
         Object result = redisTemplate.opsForValue().get(key);
@@ -31,17 +34,20 @@ public class RedisUtilService {
 
     public void setAccessToken(String key, String value){
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        if(!valueOperations.setIfAbsent(key, value, Duration.ofSeconds(43200))){
+        valueOperations.set(key,value,Duration.ofSeconds(43200));
+        /*if(!valueOperations.setIfAbsent(key, value, Duration.ofSeconds(43200))){
             throw new CustomException(ErrorCode.BAD_REQUEST,"Duplication login");
         }
+         */
     }
 
     public void setRefreshToken(String key, String value){
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        if(!valueOperations.setIfAbsent(key, value, Duration.ofSeconds(1209600))){
+        valueOperations.set(key,value,Duration.ofSeconds(1209600));
+        /*if(!valueOperations.setIfAbsent(key, value, Duration.ofSeconds(1209600))){
             throw new CustomException(ErrorCode.BAD_REQUEST,"Duplication login");
-
         }
+         */
     }
 
 
