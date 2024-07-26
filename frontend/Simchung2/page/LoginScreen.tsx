@@ -1,13 +1,27 @@
 import React, { useState } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
+import axios from 'axios';
 
 function LoginScreen() {
     const [isChecked, setIsChecked] = useState(false);
-
+    const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
     const toggleCheckbox = () => {
         setIsChecked(!isChecked);
     };
+
+    const [formData,setFormData]=useState({id:'',pwd:'',});
+
+    const handleLogin = async () =>{
+        try{
+            const response = await axios.post(`${BaseUrl}/auth/login`,formData);
+            if(response.status===200){
+                const {accessToken,refreshToken} = response.data;
+            }
+        }catch (error){
+
+        }
+    }
 
     return(
         <View style={styles.container}>
