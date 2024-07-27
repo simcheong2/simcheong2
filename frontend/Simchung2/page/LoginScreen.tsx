@@ -20,6 +20,7 @@ function LoginScreen() {
     const [formData, setFormData] = useState({ id: '', pwd: '' });
 
     const handleLogin = async () => {
+       
         try {
             const response = await axios.post(`${BaseUrl}/auth/login`, formData);
             if (response.status === 200) {
@@ -28,7 +29,23 @@ function LoginScreen() {
                 await AsyncStorage.setItem('refreshToken', refreshToken);
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
             }else if(response.status === 401){
-                // 리프레시 토큰을 써서 엑세스 토큰 재발급
+                const refreshToken = await AsyncStorage.getItem('refreshToken');
+                if (refreshToken) {
+                    try {
+                        const tokenResponse = await axios.post(`${BaseUrl}/auth/reissue`, { refreshToken });
+                        if (tokenResponse.status === 200) {
+                            const { accessToken: newAccessToken } = tokenResponse.data;
+                            await AsyncStorage.setItem('accessToken', newAccessToken);
+                    
+                        } else {
+                            Alert.alert("토큰 재발급 실패", "다시 로그인해 주세요.");
+                        }
+                    } catch (tokenError) {
+                        Alert.alert("토큰 재발급 에러", "다시 로그인해 주세요.");
+                    }
+                } else {
+                    Alert.alert("리프레시 토큰 없음", "다시 로그인해 주세요.");
+                }
             }
         } catch (error) {
             Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
