@@ -27,6 +27,8 @@ function LoginScreen() {
                 await AsyncStorage.setItem('accessToken', accessToken);
                 await AsyncStorage.setItem('refreshToken', refreshToken);
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
+            }else if(response.status === 401){
+                // 리프레시 토큰을 써서 엑세스 토큰 재발급
             }
         } catch (error) {
             Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
@@ -58,7 +60,7 @@ function LoginScreen() {
                 <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>
                     <Icon name={isChecked ? "checkbox-marked" : "checkbox-blank-outline"} size={24} />
                 </TouchableOpacity>
-                <Text>아이디 저장</Text>
+                <Text>자동 로그인</Text>
             </View>
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>로그인</Text>
@@ -83,11 +85,13 @@ const styles = StyleSheet.create({
     },
     input: {
         width: '100%',
-        padding: 10,
         borderColor: '#ccc',
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 16,
+        paddingLeft:22,
+        paddingTop:10,
+        paddingBottom:10,
     },
     passwordContainer: {
         flexDirection: 'row',
