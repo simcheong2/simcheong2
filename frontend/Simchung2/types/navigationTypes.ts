@@ -4,6 +4,7 @@ import type { BottomTabNavigationProp } from '@react-navigation/bottom-tabs';
 
 type RootStackParamList = {
   Signup: undefined;
+  Login : undefined;
 };
 
 type BottomTabParamList = {
@@ -14,6 +15,6 @@ type BottomTabParamList = {
 };
 
 export type ScreenNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList, 'MyPage','Signup'>,
+  BottomTabNavigationProp<BottomTabParamList>,
   NativeStackNavigationProp<RootStackParamList>
 >;
