@@ -3,17 +3,11 @@ package com.example.simcheong2.domain.comment.entity;
 import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
 import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.user.entity.User;
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.FetchType;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
-import jakarta.persistence.ManyToOne;
-import jakarta.persistence.OneToMany;
+import jakarta.persistence.*;
+
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,6 +16,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 public class Comment {
 
@@ -41,14 +36,6 @@ public class Comment {
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
 
-    @OneToMany(mappedBy = "blamedComment")
+    @OneToMany(mappedBy = "blamedComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentBlame> blamedCommentCommentBlames;
-
-    public Comment(Integer commentId, String content, User user, Post post, Set<CommentBlame> blamedCommentCommentBlames) {
-        this.commentId = commentId;
-        this.content = content;
-        this.user = user;
-        this.post = post;
-        this.blamedCommentCommentBlames = blamedCommentCommentBlames;
-    }
 }

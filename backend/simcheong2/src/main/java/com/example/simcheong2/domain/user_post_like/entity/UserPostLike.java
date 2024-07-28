@@ -11,6 +11,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Entity
 @Getter
 @Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 public class UserPostLike {
 
@@ -34,10 +36,4 @@ public class UserPostLike {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
-
-    public UserPostLike(Integer userPostLikeId, User user, Post post) {
-        this.userPostLikeId = userPostLikeId;
-        this.user = user;
-        this.post = post;
-    }
 }

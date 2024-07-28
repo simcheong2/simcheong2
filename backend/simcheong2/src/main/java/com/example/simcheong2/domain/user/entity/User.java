@@ -18,6 +18,7 @@ import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -27,6 +28,7 @@ import org.hibernate.annotations.ColumnDefault;
 @Entity
 @Getter
 @Builder(toBuilder = true)
+@AllArgsConstructor
 @NoArgsConstructor
 public class User extends BaseEntity {
 
@@ -35,20 +37,17 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @Column(length = 100,unique = true)
+    @Column(length = 100, unique = true, nullable = false)
     private String inputId;
 
     @Column(length = 100)
     private String email;
 
-    @Column(length = 200)
+    @Column(length = 200, nullable = false)
     private String password;
 
-    @Column(length = 11)
+    @Column(length = 11, nullable = false)
     private String phone;
-
-    @Column(columnDefinition = "tinyint", length = 1)
-    private Boolean gender;
 
     @Column
     private Date birth;
@@ -56,7 +55,7 @@ public class User extends BaseEntity {
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(length = 100,unique = true)
+    @Column(length = 100, unique = true)
     private String nickname;
 
     @Enumerated(EnumType.STRING) // EnumType.ORDINAL을 사용하면 숫자로 저장됩니다.
@@ -66,11 +65,13 @@ public class User extends BaseEntity {
     @Column(length = 100)
     private String introduce;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "text")
     private String profileImage;
 
     @Column(columnDefinition = "tinyint", length = 1)
-    private Boolean disabled;
+    @Builder.Default
+    @ColumnDefault("1")
+    private Boolean disabled = true;
 
     @Column(columnDefinition = "tinyint", length = 1)
     @Builder.Default
@@ -80,55 +81,30 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> userPosts = new HashSet<>();
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Comment> userComments;
 
-    @OneToMany(mappedBy = "user")
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserPostLike> userUserPostLikes;
 
-    @OneToMany(mappedBy = "follower")
+    @OneToMany(mappedBy = "follower", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Follow> followerFollows;
 
     // 내가 팔로잉 당하고 있는 입장으로 Follow 테이블에 들어간 것
-    @OneToMany(mappedBy = "following")
+    @OneToMany(mappedBy = "following", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Follow> followingFollows;
 
-    @OneToMany(mappedBy = "blamer")
+    @OneToMany(mappedBy = "blamer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserBlame> blamerUserBlames;
 
-    @OneToMany(mappedBy = "blamedUser")
+    @OneToMany(mappedBy = "blamedUser", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserBlame> blamedUserUserBlames;
 
-    @OneToMany(mappedBy = "blamer")
+    @OneToMany(mappedBy = "blamer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentBlame> blamerCommentBlames;
 
-    @OneToMany(mappedBy = "blamer")
+    @OneToMany(mappedBy = "blamer", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostBlame> blamerPostBlames;
-
-    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, Date birth, String name, String nickname,  Sex sex, String introduce, String profileImage, Boolean disabled, Boolean postVisible, Set<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
-        this.userId = userId;
-        this.inputId = inputId;
-        this.email = email;
-        this.password = password;
-        this.phone = phone;
-        this.gender = gender;
-        this.birth = birth;
-        this.name = name;
-        this.nickname = nickname;
-        this.introduce = introduce;
-        this.profileImage = profileImage;
-        this.disabled = disabled;
-        this.postVisible = postVisible;
-        this.userPosts = userPosts;
-        this.userComments = userComments;
-        this.userUserPostLikes = userUserPostLikes;
-        this.followerFollows = followerFollows;
-        this.followingFollows = followingFollows;
-        this.blamerUserBlames = blamerUserBlames;
-        this.blamedUserUserBlames = blamedUserUserBlames;
-        this.blamerCommentBlames = blamerCommentBlames;
-        this.blamerPostBlames = blamerPostBlames;
-    }
 
     public void addPost(Post post) {
         this.userPosts.add(post);

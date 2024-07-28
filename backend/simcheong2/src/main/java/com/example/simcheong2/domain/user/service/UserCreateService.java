@@ -32,7 +32,7 @@ public class UserCreateService {
                 .email(userSaveDTO.getEmail())
                 .password(passwordEncoder.encode(userSaveDTO.getPassword()))
                 .phone(userSaveDTO.getPhone().replaceAll("-",""))
-                .gender(convertStoB(userSaveDTO.getSex()))
+                .sex(userSaveDTO.getSex())
                 .birth(userSaveDTO.getBirthday())
                 .name(userSaveDTO.getName())
                 .nickname(userSaveDTO.getNickname())

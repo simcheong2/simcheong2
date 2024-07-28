@@ -9,12 +9,16 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 @Entity
 @Getter
 @NoArgsConstructor
+@Builder(toBuilder = true)
+@AllArgsConstructor
 public class Image {
 
     @Id
@@ -22,24 +26,18 @@ public class Image {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer imageId;
 
-    @Column
+    @Column(columnDefinition = "text", nullable = false)
     private String fileUrl;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "text")
     private String imageText;
 
-    @Column
+    @Column(nullable = false)
     private Integer imageIndex;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "post_id", nullable = false)
     private Post post;
-
-    public Image(String fileUrl, String imageText, Integer imageIndex) {
-        this.fileUrl = fileUrl;
-        this.imageText = imageText;
-        this.imageIndex = imageIndex;
-    }
 
     public void updatePost(Post post) {
         this.post = post;

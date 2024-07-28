@@ -10,6 +10,7 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -19,6 +20,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @Builder(toBuilder = true)
 @NoArgsConstructor
+@AllArgsConstructor
 public class CommentBlame {
 
     @Id
@@ -33,10 +35,4 @@ public class CommentBlame {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "blamer_id", nullable = false)
     private User blamer;
-
-    public CommentBlame(Integer commentBlameId, Comment blamedComment, User blamer) {
-        this.commentBlameId = commentBlameId;
-        this.blamedComment = blamedComment;
-        this.blamer = blamer;
-    }
 }

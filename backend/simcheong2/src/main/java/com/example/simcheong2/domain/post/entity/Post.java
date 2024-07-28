@@ -25,7 +25,7 @@ public class Post extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer postId;
 
-    @Column(columnDefinition = "longtext")
+    @Column(columnDefinition = "text")
     private String content;
 
     @ManyToOne(fetch = FetchType.LAZY)

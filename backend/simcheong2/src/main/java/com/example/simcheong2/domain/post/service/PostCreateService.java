@@ -49,7 +49,11 @@ public class PostCreateService {
     public static List<Image> createImages(List<ImageAnalysisResultDTO> imageAnalysisResultDTOS) {
         AtomicInteger index = new AtomicInteger();
         return imageAnalysisResultDTOS.stream()
-                .map(dto -> new Image(dto.getImageUrl(), dto.getAnalyzedText(), index.getAndIncrement()))
+                .map(dto -> Image.builder()
+                        .imageIndex(index.getAndIncrement())
+                        .imageText(dto.getAnalyzedText())
+                        .fileUrl(dto.getImageUrl())
+                        .build())
                 .collect(Collectors.toList());
     }
 
