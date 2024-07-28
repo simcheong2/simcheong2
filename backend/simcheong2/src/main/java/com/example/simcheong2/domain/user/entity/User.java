@@ -21,6 +21,7 @@ import java.util.Set;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 
 @Entity
@@ -72,7 +73,9 @@ public class User extends BaseEntity {
     private Boolean disabled;
 
     @Column(columnDefinition = "tinyint", length = 1)
-    private Boolean postVisible;
+    @Builder.Default
+    @ColumnDefault("1")
+    private Boolean postVisible = true;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Post> userPosts = new HashSet<>();
