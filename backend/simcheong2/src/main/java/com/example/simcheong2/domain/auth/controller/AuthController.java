@@ -83,12 +83,4 @@ public class AuthController {
         return ResponseEntity.ok(new TokenResponse("", ""));
     }
 
-    @PostMapping("/test")
-    public ResponseEntity<TokenResponse> printHello(@RequestBody @Valid LoginRequest request) {
-        LoginDto loginDto = new LoginDto(request.getId(),request.getPassword());
-        //로그인 성공 했다면 토큰 발급
-        Tokens tokens = authService.test(loginDto);
-        return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(),tokens.getRefreshToken()));
-    }
-
 }
