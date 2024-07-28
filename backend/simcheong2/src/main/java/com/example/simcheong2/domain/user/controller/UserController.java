@@ -1,8 +1,11 @@
 package com.example.simcheong2.domain.user.controller;
 
+import com.example.simcheong2.domain.auth.controller.request.SignupRequest;
 import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.Sex;
+import com.example.simcheong2.domain.user.entity.dto.UserSaveDTO;
+import com.example.simcheong2.domain.user.service.UserCreateService;
 import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -23,12 +26,28 @@ import java.util.List;
 public class UserController {
     private final UserSearchService userSearchService;
     private final UserUpdateService userUpdateService;
-
+    private final UserCreateService userCreateService;
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
-
+    @PostMapping("/signup")
+    public ResponseEntity<Boolean> signup(@RequestBody @Valid SignupRequest request) {
+        UserSaveDTO userSaveDTO = new UserSaveDTO(
+                request.getId(),
+                request.getPassword(),
+                request.getEmail(),
+                request.getName(),
+                request.getNickname(),
+                request.getOpeningDate(),
+                request.getPhone(),
+                request.getIsForeign(),
+                request.getIsDisabled(),
+                request.getSex()
+        );
+        userCreateService.signUp(userSaveDTO);
+        return ResponseEntity.ok(true);
+    }
     @GetMapping("/my-page")
     public ResponseEntity<MyPageResponse> myPage() {
         int userId = 3;

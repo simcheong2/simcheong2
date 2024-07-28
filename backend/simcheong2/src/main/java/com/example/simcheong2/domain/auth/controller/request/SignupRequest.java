@@ -3,6 +3,7 @@ package com.example.simcheong2.domain.auth.controller.request;
 import com.example.simcheong2.domain.user.entity.dto.Sex;
 import com.example.simcheong2.global.valid.PhoneNumber;
 import com.fasterxml.jackson.annotation.JsonFormat;
+import io.lettuce.core.BitFieldArgs;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
@@ -11,6 +12,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import lombok.NonNull;
 
+import java.time.OffsetDateTime;
 import java.util.Date;
 
 @Data

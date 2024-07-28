@@ -13,6 +13,9 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.HashSet;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
 import java.util.Set;
 
 import lombok.Builder;
@@ -31,7 +34,7 @@ public class User extends BaseEntity {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @Column(length = 100)
+    @Column(length = 100,unique = true)
     private String inputId;
 
     @Column(length = 100)
@@ -47,12 +50,12 @@ public class User extends BaseEntity {
     private Boolean gender;
 
     @Column
-    private OffsetDateTime birth;
+    private Date birth;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(length = 100)
+    @Column(length = 100,unique = true)
     private String nickname;
 
     @Enumerated(EnumType.STRING) // EnumType.ORDINAL을 사용하면 숫자로 저장됩니다.
@@ -99,7 +102,7 @@ public class User extends BaseEntity {
     @OneToMany(mappedBy = "blamer")
     private Set<PostBlame> blamerPostBlames;
 
-    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, Sex sex, String introduce, String profileImage, Boolean disabled, Boolean postVisible, Set<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
+    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, Date birth, String name, String nickname,  Sex sex, String introduce, String profileImage, Boolean disabled, Boolean postVisible, Set<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
         this.userId = userId;
         this.inputId = inputId;
         this.email = email;
