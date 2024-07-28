@@ -1,10 +1,15 @@
 import React from "react";
 import { Text, View } from "react-native";
+import { Comments } from '../../interface/feed/Feed';
 
-const Comment = () => {
+interface CommentProps{
+    comment: Comments;
+}
+
+const Comment = ({comment}: CommentProps) => {
     return(
         <View>
-            <Text/>
+            <Text>{comment.comment}</Text>
         </View>
     )
 }
