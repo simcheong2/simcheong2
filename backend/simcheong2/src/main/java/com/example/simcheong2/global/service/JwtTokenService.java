@@ -21,22 +21,23 @@ import java.util.Date;
 @Slf4j
 public class JwtTokenService {
     private final Key key;
+
     public JwtTokenService(@Value("${jwt.secret.key}") String secretKey) {
         byte[] keyBytes = Decoders.BASE64.decode(secretKey);
         this.key = Keys.hmacShaKeyFor(keyBytes);
     }
 
-    public String generate(String subject, String kind, Date expiredAt){
+    public String generate(String subject, String kind, Date expiredAt) {
         return Jwts.builder()
                 .setSubject(subject)
                 .setExpiration(expiredAt)
-                .claim("kind",kind)
+                .claim("kind", kind)
                 .signWith(key, SignatureAlgorithm.HS512)
                 .compact();
     }
 
     public String extractSubject(String accessToken) {
-        if(!this.validateToken(accessToken)) throw new CustomException(ErrorCode.BAD_REQUEST,"유효하지 않은 토큰입니다.");
+        if (!this.validateToken(accessToken)) throw new CustomException(ErrorCode.BAD_REQUEST, "유효하지 않은 토큰입니다.");
         Claims claims = parseClaims(accessToken);
         return claims.getSubject();
     }
@@ -54,7 +55,7 @@ public class JwtTokenService {
     }
 
     // 토근 검증
-    public Boolean validateToken(String token){
+    public Boolean validateToken(String token) {
         try {
             this.parseClaims(token);
             return true;
@@ -70,16 +71,16 @@ public class JwtTokenService {
         return false;
     }
 
-    public Long getExpiration(String token){
+    public Long getExpiration(String token) {
         Long expiration = this.parseClaims(token).getExpiration().getTime();
         Long now = new Date().getTime();
-        return (expiration - now)/1000;
+        return (expiration - now) / 1000;
     }
 
-    public Authentication getAuthentication(com.example.simcheong2.domain.user.entity.User user1){
+    public Authentication getAuthentication(com.example.simcheong2.domain.user.entity.User user1) {
         // getKey 는 뺌...
         UserDetails userDetails = org.springframework.security.core.userdetails.User.builder()
-                .username(user1.getInputId())
+                .username(user1.getUserId().toString())
                 .password(user1.getPassword())
                 .build();
         Collection<? extends GrantedAuthority> authorities = userDetails.getAuthorities();

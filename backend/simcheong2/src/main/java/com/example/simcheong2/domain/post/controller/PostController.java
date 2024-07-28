@@ -7,6 +7,7 @@ import com.example.simcheong2.domain.post.service.PostCreateService;
 import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user_post_like.controller.request.LikeRequest;
 import com.example.simcheong2.domain.user_post_like.service.LikeService;
+import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
@@ -21,7 +22,6 @@ import jakarta.validation.Valid;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Tag(name = "게시글 관련 API")
 @Slf4j
@@ -36,8 +36,10 @@ public class PostController {
     // 메인 피드
     @GetMapping("/main")
     public ResponseEntity<List<FeedResponse>> mainPosts() {
+        int userId = SecurityUtil.getCurrentUserId();
+//        int userId =
         // 1번 유저가 지금 피드들 요청한거임.
-        List<FeedResponse> feeds = postSearchService.getFeeds(1).stream()
+        List<FeedResponse> feeds = postSearchService.getFeeds(userId).stream()
                 .map(PostFeedDTO::toResponse)
                 .toList();
 
@@ -56,15 +58,16 @@ public class PostController {
             HttpServletRequest servletRequest,
             @RequestPart List<MultipartFile> images,
             @RequestPart @Valid PostContentRequest request) {
+        int userId = SecurityUtil.getCurrentUserId();
         String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
-        postCreateService.createPost(3, images, request.getContent(), uploadDirRealPath);
+        postCreateService.createPost(userId, images, request.getContent(), uploadDirRealPath);
         return ResponseEntity.ok(true);
     }
 
     // 게시글 좋아요 / 좋아요 취소. Restful 하지 않으나, 프론트와 논의 끝에 개발 편의성으로 이렇게 정함
     @PostMapping("/like")
     public ResponseEntity<Boolean> likePost(@RequestBody @Valid LikeRequest request) {
-        int userId = 1;
+        int userId = SecurityUtil.getCurrentUserId();
         int postId = Math.toIntExact(request.getId()); // 지금 엔티티 id 타입이 인티저임. 나중에 한 번에 수정해야할듯.
         likeService.likePost(userId, postId);
         return ResponseEntity.ok(true);
