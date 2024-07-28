@@ -1,24 +1,50 @@
 import React from "react";
 import {
+  SafeAreaView,
+  ScrollView,
   StyleSheet,
   Text,
+  TextInput,
   View,
+  KeyboardAvoidingView,
+  TouchableWithoutFeedback,
+  Keyboard,
 } from "react-native";
 import { useRecoilValue } from "recoil";
 import commentsAtom from "../../recoil/atom/commentsAtom";
 import { Comments } from "../../interface/feed/Feed";
+import Comment from './Comment';
 
 const FeedComment = () => {
   const comments = useRecoilValue<Comments[]>(commentsAtom);
 
-  const handleVoice = () => {
-    
-  }
-
   return (
-      <View>
-        <Text>댓글</Text>
-      </View>
+      <KeyboardAvoidingView
+          style={styles.container}
+          behavior="padding"
+          keyboardVerticalOffset={80}
+      >
+        <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
+          <View style={styles.inner}>
+            <View style={styles["title-container"]}>
+              <Text>댓글</Text>
+            </View>
+            <SafeAreaView style={styles["comments-container"]}>
+              <ScrollView style={styles["comments-scroll"]}>
+                {comments.map((comment, index)=>(
+                    <Comment key={index} comment={comment}/>
+                ))}
+              </ScrollView>
+            </SafeAreaView>
+            <View style={styles["comment-register"]}>
+              <TextInput
+                  style={styles.comment}
+                  placeholder="댓글"
+              />
+            </View>
+          </View>
+        </TouchableWithoutFeedback>
+      </KeyboardAvoidingView>
   );
 };
 
