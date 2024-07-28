@@ -19,6 +19,7 @@ import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -35,11 +36,18 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     )throws IOException, ServletException {
+        log.debug("doFilterInternal start");
         String regexp = "^(Bearer)\s.+$";
+        log.debug("Request = {}", request);
+        log.debug("Response = {}",response);
         String Tokens = request.getHeader("Authorization");
+        log.debug("Tokens = {}",Tokens);
         if(Tokens != null){
+            log.debug("Tokens != null");
             if(Tokens.matches(regexp)){
+                log.debug("Token matches regexp");
                 String accessToken = Tokens.substring(7);
+                log.debug("accessToken = {}",accessToken);
                 try{
                     if(!this.checkAccessToken(accessToken)){
                         this.sendResponse(response, "접근 권한이 없습니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.UNAUTHORIZED);
@@ -56,10 +64,16 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         filterChain.doFilter(request, response);
     }
     private boolean checkAccessToken(String accessToken){
+        log.debug("checkAccessToken start");
         String inputId = jwtTokenService.extractSubject(accessToken);
-        User user = userRepository.findByInputId(inputId).get();
-        //ispresent +
+        Optional<User> exist = userRepository.findByInputId(inputId);
+        if(exist.isEmpty()){
+            log.debug("{} 의 user 를 찾을수 없습니다.",accessToken);
+            return false;
+        }
+        User user = exist.get();
         Integer memberId = user.getUserId();
+        log.debug("User : " + user.getInputId());
         String isLogout = redisUtilService.getData(accessToken);
         //String refreshToken = redisUtilService.getData(memberId.toString());
         String isLogin = redisUtilService.getData(user.getInputId());

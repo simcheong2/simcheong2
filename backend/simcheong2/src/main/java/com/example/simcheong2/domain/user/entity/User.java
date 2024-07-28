@@ -11,6 +11,7 @@ import jakarta.persistence.*;
 
 import java.time.OffsetDateTime;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
@@ -30,7 +31,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer userId;
 
-    @Column(length = 100)
+    @Column(length = 100,unique = true)
     private String inputId;
 
     @Column(length = 100)
@@ -46,12 +47,12 @@ public class User {
     private Boolean gender;
 
     @Column
-    private OffsetDateTime birth;
+    private Date birth;
 
     @Column(nullable = false, length = 100)
     private String name;
 
-    @Column(length = 100)
+    @Column(length = 100,unique = true)
     private String nickname;
 
     @Column(length = 100)
@@ -93,7 +94,7 @@ public class User {
     @OneToMany(mappedBy = "blamer")
     private Set<PostBlame> blamerPostBlames;
 
-    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, OffsetDateTime birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
+    public User(Integer userId, String inputId, String email, String password, String phone, Boolean gender, Date birth, String name, String nickname, String introduce, String profileImage, Boolean disabled, Boolean postVisible, List<Post> userPosts, Set<Comment> userComments, Set<UserPostLike> userUserPostLikes, Set<Follow> followerFollows, Set<Follow> followingFollows, Set<UserBlame> blamerUserBlames, Set<UserBlame> blamedUserUserBlames, Set<CommentBlame> blamerCommentBlames, Set<PostBlame> blamerPostBlames) {
         this.userId = userId;
         this.inputId = inputId;
         this.email = email;

@@ -15,7 +15,7 @@ import java.util.Objects;
 @RequiredArgsConstructor
 @Slf4j
 public class RedisUtilService {
-    private final RedisTemplate<String,String> redisTemplate;
+    private final RedisTemplate redisTemplate;
 
     public String getData(String key){
         Object result = redisTemplate.opsForValue().get(key);

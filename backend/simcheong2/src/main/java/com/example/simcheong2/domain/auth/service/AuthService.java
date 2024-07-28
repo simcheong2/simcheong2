@@ -55,22 +55,24 @@ public class AuthService {
         }
         User user = isExist.get();
         String userPassword =user.getPassword();
-        if(!loginDto.getInputPassword().equals(userPassword)){
+        if(!userPassword.equals(loginDto.getInputPassword())){
         //if(!passwordEncoder.matches(userPassword, loginDto.getInputPassword())){
             log.debug("userPassword:" + userPassword);
             log.debug("inputPassword:" + loginDto.getInputPassword());
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
-        log.debug("access token :" + tokens.getAccessToken());
-        log.debug("refresh token :" + tokens.getRefreshToken());
+//        log.debug("access token :" + tokens.getAccessToken());
+//        log.debug("refresh token :" + tokens.getRefreshToken());
         //redisUtilService.setData(user.getUserId().toString(), tokens.getRefreshToken());
         // key : UserId, value : refreshToken 으로 redis 에 50400 초 동안 저장
         // reissue 시 보안을 위해 저장을 위함이라네요/
+        // 재발급용 리프레시 토큰을 레디스에 저장
         log.debug("refreshToken = " + tokens.getRefreshToken());
         redisUtilService.setRefreshToken(user.getUserId().toString(), tokens.getRefreshToken());
         // key : inputId, value : "login" 으로 redis 에 7200 초 동안 저장
         // 중복 로그인을 방지 하기 위함이라네요.
+        // 이건 없어도 될 것 같음. 중복 로그인을 방지하기 위해 accessToken 을 레디스에 저장한것이긴 함.
         redisUtilService.setAccessToken(user.getInputId(), "login");
 
         return tokens;
@@ -102,7 +104,6 @@ public class AuthService {
         log.info("{}에게 {}를 전송함", phone, code);
         // 레디스에 폰,번호 쌍 5분 유효시간으로 추가
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
-
     }
 
 }

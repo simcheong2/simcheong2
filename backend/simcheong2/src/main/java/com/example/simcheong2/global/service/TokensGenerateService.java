@@ -32,7 +32,7 @@ public class TokensGenerateService {
 
         return Tokens.of(accessToken,refreshToken,BEARER_TYPE,ACCESS_TOKEN_EXPIRE_TIME);
     }
-    public Long extractMemberId(String accessToken) {
-        return Long.valueOf(jwtTokenService.extractSubject(accessToken));
+    public String extractMemberId(String accessToken) {
+        return String.valueOf(jwtTokenService.extractSubject(accessToken));
     }
 }
