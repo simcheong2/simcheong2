@@ -67,7 +67,6 @@ public class AuthService {
         // 재발급용 리프레시 토큰을 레디스에 저장
         log.debug("refreshToken = " + tokens.getRefreshToken());
         redisUtilService.setRefreshToken(user.getUserId().toString(), tokens.getRefreshToken());
-        // key : inputId, value : "login" 으로 redis 에 7200 초 동안 저장
         // 중복 로그인을 방지 하기 위함이라네요.
         // 이건 없어도 될 것 같음. 중복 로그인을 방지하기 위해 accessToken 을 레디스에 저장한것이긴 함.
         redisUtilService.setAccessToken(user.getInputId(), "login");

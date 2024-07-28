@@ -33,10 +33,9 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/auth/**").permitAll()
+                        .requestMatchers("/auth/login","/auth/signup").permitAll()
                         // 임시 테스트 할때는 anyRequest().permitAll()로 잠시.
-                        .anyRequest().permitAll()
-                        //.anyRequest().authenticated()
+                        .anyRequest().authenticated()
                 )
                 .headers((headers) -> headers
                         .frameOptions(frameOptions -> frameOptions

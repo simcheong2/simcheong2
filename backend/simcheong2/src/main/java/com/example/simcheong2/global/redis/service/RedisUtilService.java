@@ -34,7 +34,7 @@ public class RedisUtilService {
 
     public void setAccessToken(String key, String value){
         ValueOperations<String, String> valueOperations = redisTemplate.opsForValue();
-        valueOperations.set(key,value,Duration.ofSeconds(43200));
+        valueOperations.set(key,value,Duration.ofSeconds(60));
         /*if(!valueOperations.setIfAbsent(key, value, Duration.ofSeconds(43200))){
             throw new CustomException(ErrorCode.BAD_REQUEST,"Duplication login");
         }
