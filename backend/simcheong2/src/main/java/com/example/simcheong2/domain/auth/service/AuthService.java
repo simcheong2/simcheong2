@@ -18,7 +18,6 @@ import com.example.simcheong2.global.service.JwtTokenService;
 import com.example.simcheong2.global.service.TokensGenerateService;
 import com.example.simcheong2.global.sms.SmsUtil;
 import com.example.simcheong2.global.sms.SmsValidationCodeGenerator;
-import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
@@ -36,11 +35,8 @@ import java.util.concurrent.TimeUnit;
 @Transactional
 public class AuthService {
     private final UserValidationService userValidationService;
-    private final UserCreateService userCreateService;
-    private final UserDeleteService userDeleteService;
     private final TokensGenerateService tokensGenerateService;
     private final RedisUtilService redisUtilService;
-    private final RedisTokensRepository redisTokensRepository;
     private final JwtTokenService jwtTokenService;
 
     private final BCryptPasswordEncoder passwordEncoder;
@@ -60,10 +56,9 @@ public class AuthService {
         }
         User user = isExist.get();
         String userPassword =user.getPassword();
-        if(!userPassword.equals(loginDto.getInputPassword())){
-        //if(!passwordEncoder.matches(userPassword, loginDto.getInputPassword())){
-            log.debug("userPassword:" + userPassword);
-            log.debug("inputPassword:" + loginDto.getInputPassword());
+        log.debug("userPassword:" + userPassword);
+        log.debug("inputPassword:" + loginDto.getInputPassword());
+        if(!passwordEncoder.matches(loginDto.getInputPassword(), userPassword)){
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
