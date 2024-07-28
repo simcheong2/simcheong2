@@ -2,6 +2,8 @@ import React from "react";
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from "react-native";
 import Icon from "react-native-vector-icons/MaterialIcons";
 import LonIcons from "react-native-vector-icons/Ionicons";
+import { Comments, FeedItemResponse } from '../../interface/feed/Feed';
+import { formatComma } from '../../util/common/Common';
 
 export interface FeedItem{
     userName: string,
@@ -13,12 +15,13 @@ export interface FeedItem{
 }
 
 interface FeedProps{
-    feed: FeedItem;
+    feed: FeedItemResponse;
+    onPress: (comments: Comments[])=>void
 }
 
-const Feed = ({feed}: FeedProps) => {
-    const userImgSrc = {uri: `${feed.userImgUrl}`}
-    const imgSrc = {uri: `${feed.imgUrl}`}
+const Feed = ({feed,onPress}: FeedProps) => {
+    const userImgSrc = {uri: `${feed.otherUserInfoResponse.profileUrl}`}
+    const imgSrc = {uri: `${feed.post.images[0].imageUrl}`}
 
 
     return(
@@ -28,9 +31,9 @@ const Feed = ({feed}: FeedProps) => {
                     style={styles["profile-image"]}
                     source={userImgSrc}
                     resizeMode="cover"/>
-                <View style={styles["user-container"]}>
-                    <Text style={styles.userName}>{feed.userName}</Text>
-                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.feedContent}</Text>
+                <View style={styles["user-container"]} accessibilityLabel={`${feed.post.images[0].imageUrl}`}>
+                    <Text style={styles.userName}>{feed.otherUserInfoResponse.nickname}</Text>
+                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.post.content}</Text>
                 </View>
                 <TouchableOpacity style={styles.iconButton}>
                     <Icon name="more-horiz" size={24} style={styles.icon} /> 
@@ -40,13 +43,13 @@ const Feed = ({feed}: FeedProps) => {
                 <Image style={styles.image} source={imgSrc} resizeMode="cover"/>
             </View>
             <View style={styles.favorite}>
-                <TouchableOpacity style={styles["comment-container"]}>
+                <TouchableOpacity style={styles["comment-container"]} onPress={()=>onPress&&onPress(feed.comments)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon}/>
-                    <Text style={styles["comment-count"]}>{feed.commentCnt}</Text>
+                    <Text style={styles["comment-count"]}>{formatComma(feed.post.likeCount)}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles["favorite-container"]}>
                     <Icon name="favorite-outline" size={24} style={styles.icon}/>
-                    <Text style={styles["comment-count"]}>{feed.favoriteCnt}</Text>
+                    <Text style={styles["comment-count"]}>{formatComma(feed.post.commentCount)}</Text>
                 </TouchableOpacity>
             </View>
         </View>
