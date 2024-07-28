@@ -54,17 +54,4 @@ public class UserCreateService {
             throw new CustomException(ErrorCode.BAD_REQUEST,"저장하려는 유저 존재.");
         }
     }
-
-    private Boolean convertStoB(Sex sex){
-        if(sex == Sex.MALE){
-            return true;
-        }
-        else if(sex == Sex.FEMALE){
-            return false;
-        }
-        else{
-            throw new CustomException(ErrorCode.BAD_REQUEST,"성별 오류 발생");
-        }
-    }
-
 }
