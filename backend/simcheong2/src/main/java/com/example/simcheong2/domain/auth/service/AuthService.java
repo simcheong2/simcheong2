@@ -99,7 +99,9 @@ public class AuthService {
         User user = isExist.get();
         String userId = user.getUserId().toString();
 
-        // 리프레쉬 토큰 삭제.
+        // acc로 찾지말고 refresh 받은거로 redis 다 지워라.
+        // acc, ref 둘다 만료 -> refresh 만료 -> 401 처리를 클라
+
         redisUtilService.deleteData(userId);
         // 로그인된 액세스토큰 삭제.
         redisUtilService.deleteData(userInputId);
