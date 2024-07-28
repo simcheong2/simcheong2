@@ -1,4 +1,4 @@
-package com.example.simcheong2.global.security.redis.config;
+package com.example.simcheong2.global.redis.config;
 
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;

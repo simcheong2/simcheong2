@@ -3,7 +3,7 @@ package com.example.simcheong2.global.security.filter;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.repository.UserRepository;
 import com.example.simcheong2.global.exception.model.CommonExceptionResponse;
-import com.example.simcheong2.global.security.redis.service.RedisUtilService;
+import com.example.simcheong2.global.redis.service.RedisUtilService;
 import com.example.simcheong2.global.service.JwtTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -20,7 +20,6 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 import java.io.IOException;
 import java.util.Optional;
-import java.util.UUID;
 
 
 @Slf4j

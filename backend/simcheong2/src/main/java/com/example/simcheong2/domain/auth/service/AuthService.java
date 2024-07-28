@@ -10,7 +10,7 @@ import com.example.simcheong2.domain.user.repository.UserRepository;
 import com.example.simcheong2.domain.user.service.UserValidationService;
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
-import com.example.simcheong2.global.security.redis.service.RedisUtilService;
+import com.example.simcheong2.global.redis.service.RedisUtilService;
 import com.example.simcheong2.global.service.JwtTokenService;
 import com.example.simcheong2.global.service.TokensGenerateService;
 import com.example.simcheong2.global.sms.SmsUtil;

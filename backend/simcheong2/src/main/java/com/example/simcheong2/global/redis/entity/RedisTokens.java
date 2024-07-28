@@ -1,4 +1,4 @@
-package com.example.simcheong2.global.security.redis.entity;
+package com.example.simcheong2.global.redis.entity;
 import jakarta.persistence.Id;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

@@ -1,4 +1,4 @@
-package com.example.simcheong2.global.security.redis.service;
+package com.example.simcheong2.global.redis.service;
 
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
