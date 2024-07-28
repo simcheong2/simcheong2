@@ -7,12 +7,9 @@ import com.example.simcheong2.domain.auth.entity.dto.ReissueDto;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.entity.dto.UserDTO;
 import com.example.simcheong2.domain.user.repository.UserRepository;
-import com.example.simcheong2.domain.user.service.UserCreateService;
-import com.example.simcheong2.domain.user.service.UserDeleteService;
 import com.example.simcheong2.domain.user.service.UserValidationService;
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
-import com.example.simcheong2.global.security.redis.repository.RedisTokensRepository;
 import com.example.simcheong2.global.security.redis.service.RedisUtilService;
 import com.example.simcheong2.global.service.JwtTokenService;
 import com.example.simcheong2.global.service.TokensGenerateService;
@@ -95,20 +92,6 @@ public class AuthService {
         // 로그인된 액세스토큰 삭제.
         redisUtilService.deleteData(userInputId);
         log.debug("레디스 서버에서 토큰 삭제 완료.");
-    }
-
-    @Transactional
-    public Tokens test(LoginDto loginDto){
-        Integer userId = 1234;
-        String inputId = "school";
-        Tokens tokens = tokensGenerateService.generate(userId,inputId);
-        log.debug("access token :" + tokens.getAccessToken());
-        log.debug("refresh token :" + tokens.getRefreshToken());
-        redisUtilService.setRefreshToken(userId.toString(), tokens.getRefreshToken());
-        // key : inputId, value : "login" 으로 redis 에 7200 초 동안 저장
-        // 중복 로그인을 방지 하기 위함이라네요.
-        redisUtilService.setAccessToken(inputId, "login");
-        return tokens;
     }
 
     @Transactional
