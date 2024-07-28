@@ -1,7 +1,7 @@
 import { NavigationContainer } from "@react-navigation/native";
 import React from "react";
 import { Image, StyleSheet, Text, View } from "react-native";
-import Tabs from "../../navigation/home/Tabs";
+import Tabs from '../../navigation/home/Tabs';
 
 const styles = StyleSheet.create({
     container: {
