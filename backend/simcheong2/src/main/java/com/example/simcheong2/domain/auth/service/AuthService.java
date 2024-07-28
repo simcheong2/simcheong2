@@ -2,6 +2,8 @@ package com.example.simcheong2.domain.auth.service;
 
 import com.example.simcheong2.domain.auth.entity.Tokens;
 import com.example.simcheong2.domain.auth.entity.dto.LoginDto;
+import com.example.simcheong2.domain.auth.entity.dto.LogoutDto;
+import com.example.simcheong2.domain.auth.entity.dto.ReissueDto;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.entity.dto.UserDTO;
 import com.example.simcheong2.domain.user.repository.UserRepository;
@@ -12,6 +14,7 @@ import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
 import com.example.simcheong2.global.security.redis.repository.RedisTokensRepository;
 import com.example.simcheong2.global.security.redis.service.RedisUtilService;
+import com.example.simcheong2.global.service.JwtTokenService;
 import com.example.simcheong2.global.service.TokensGenerateService;
 import com.example.simcheong2.global.sms.SmsUtil;
 import com.example.simcheong2.global.sms.SmsValidationCodeGenerator;
@@ -38,6 +41,7 @@ public class AuthService {
     private final TokensGenerateService tokensGenerateService;
     private final RedisUtilService redisUtilService;
     private final RedisTokensRepository redisTokensRepository;
+    private final JwtTokenService jwtTokenService;
 
     private final BCryptPasswordEncoder passwordEncoder;
 
@@ -48,6 +52,7 @@ public class AuthService {
 
     private final UserRepository userRepository;
 
+    @Transactional
     public Tokens login(LoginDto loginDto){
         Optional<User> isExist =  userRepository.findByInputId(loginDto.getInputId());
         if(isExist.isEmpty()){
@@ -77,6 +82,27 @@ public class AuthService {
 
         return tokens;
     }
+    @Transactional
+    public void logout(LogoutDto logoutDto){
+        String accessToken = logoutDto.getAccessToken();
+        //
+        log.debug("userId = {}",tokensGenerateService.extractMemberId(accessToken));
+        String userInputId = tokensGenerateService.extractMemberId(accessToken);
+        Optional<User> isExist = userRepository.findByInputId(userInputId);
+        if(isExist.isEmpty()){
+            throw new CustomException(ErrorCode.BAD_REQUEST,"유저를 찾을 수 없는 logout 요청입니다.");
+        }
+        User user = isExist.get();
+        String userId = user.getUserId().toString();
+
+        // 리프레쉬 토큰 삭제.
+        redisUtilService.deleteData(userId);
+        // 로그인된 액세스토큰 삭제.
+        redisUtilService.deleteData(userInputId);
+        log.debug("레디스 서버에서 토큰 삭제 완료.");
+    }
+
+    @Transactional
     public Tokens test(LoginDto loginDto){
         Integer userId = 1234;
         String inputId = "school";
@@ -89,6 +115,8 @@ public class AuthService {
         redisUtilService.setAccessToken(inputId, "login");
         return tokens;
     }
+
+    @Transactional
     public void createCode(String phone) {
         Optional<UserDTO> user = userValidationService.isPhoneNumberAlreadyRegistered(phone);
         if (user.isPresent()) {
@@ -106,4 +134,16 @@ public class AuthService {
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
+    @Transactional
+    public void reissue(ReissueDto reissueDto){
+        log.debug("refreshToken input = {}",reissueDto.getRefreshToken());
+        String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());
+        String redisRefreshToken = redisUtilService.getData(userId);
+        log.debug("refreshToken in redis= {}",redisRefreshToken);
+        Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
+        if(isExist.isEmpty()){
+            throw new CustomException(ErrorCode.BAD_REQUEST,"refreshToken 으로 유저를 찾을 수 없음.");
+        }
+        User user = isExist.get();
+    }
 }

@@ -5,6 +5,8 @@ import com.example.simcheong2.domain.auth.controller.response.SmsCheckResponse;
 import com.example.simcheong2.domain.auth.controller.response.TokenResponse;
 import com.example.simcheong2.domain.auth.entity.Tokens;
 import com.example.simcheong2.domain.auth.entity.dto.LoginDto;
+import com.example.simcheong2.domain.auth.entity.dto.LogoutDto;
+import com.example.simcheong2.domain.auth.entity.dto.ReissueDto;
 import com.example.simcheong2.domain.auth.service.AuthService;
 import com.example.simcheong2.domain.user.entity.dto.UserSaveDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
@@ -37,6 +39,13 @@ public class AuthController {
         log.debug("userId = {}",tokensGenerateService.extractMemberId(tokens.getAccessToken()));
         return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(),tokens.getRefreshToken()));
     }
+    @PostMapping("/logout")
+    public ResponseEntity<Boolean> logout(@RequestBody @Valid LogoutRequest request) {
+        String accessToken = request.getAccessToken();
+        LogoutDto logoutDto =new LogoutDto(accessToken);
+        authService.logout(logoutDto);
+        return ResponseEntity.ok(true);
+    }
 
     // 코드 검사
     @GetMapping("/validations/sms")
@@ -68,15 +77,11 @@ public class AuthController {
         userCreateService.signUp(userSaveDTO);
         return ResponseEntity.ok(true);
     }
-
-    @PostMapping("/logout")
-    public ResponseEntity<Boolean> logout(@RequestBody @Valid LogoutRequest request) {
-        return ResponseEntity.ok(true);
-    }
-
     // 재발급
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponse> reissue(@RequestBody @Valid ReissueRequest request) {
+        ReissueDto reissueDto = new ReissueDto(request.getRefreshToken());
+        authService.reissue(reissueDto);
         return ResponseEntity.ok(new TokenResponse("", ""));
     }
 
