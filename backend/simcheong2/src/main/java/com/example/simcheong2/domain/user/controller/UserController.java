@@ -8,6 +8,7 @@ import com.example.simcheong2.domain.user.entity.dto.UserSaveDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
 import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
+import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -50,7 +51,7 @@ public class UserController {
     }
     @GetMapping("/my-page")
     public ResponseEntity<MyPageResponse> myPage() {
-        int userId = 3;
+        int userId = SecurityUtil.getCurrentUserId();
         MyPageResponse response = userSearchService.getMyPageInfo(userId).toResponse();
         return ResponseEntity.ok(response);
     }
