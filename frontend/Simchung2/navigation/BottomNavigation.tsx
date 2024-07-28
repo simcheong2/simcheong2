@@ -15,7 +15,10 @@ const BottomNavigation = () => {
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Tab.Navigator
-                initialRouteName="Home">
+                initialRouteName="Home"
+                screenOptions={{
+                    unmountOnBlur: true
+                }}>
                 <Tab.Screen
                     name="Home"
                     component={HomeScreen}
@@ -34,7 +37,9 @@ const BottomNavigation = () => {
                         tabBarIcon: ({ color, size }) => (
                             <Icon name="search" color={color} size={size} />
                         ),
-                    }} />
+                        headerShown: false,
+                    }}
+                />
                 <Tab.Screen
                     name="Photo"
                     component={PhotoScreen}
@@ -43,6 +48,7 @@ const BottomNavigation = () => {
                         tabBarIcon: ({ color, size }) => (
                             <Icon name="add-photo-alternate" color={color} size={size} />
                         ),
+                        headerShown: false,
                     }} />
                 <Tab.Screen
                     name="MyPage"

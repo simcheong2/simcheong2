@@ -33,7 +33,6 @@ const Follow = () => {
 
     const handleComment = (data: Comments[]) => {
         setModal(3);
-        console.log(modal);
         setComments(data);
     }
 
