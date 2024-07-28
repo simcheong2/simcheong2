@@ -72,7 +72,8 @@ public class AuthController {
                 request.getPhone(),
                 request.getIsForeign(),
                 request.getIsDisabled(),
-                request.getSex()
+                request.getSex(),
+                request.getSessionId()
         );
         userCreateService.signUp(userSaveDTO);
         return ResponseEntity.ok(true);

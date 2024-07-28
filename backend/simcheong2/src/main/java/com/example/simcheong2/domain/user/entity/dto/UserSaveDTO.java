@@ -21,5 +21,5 @@ public class UserSaveDTO {
     private Boolean isForeign;
     private Boolean isDisabled;
     private Sex sex;
-
+    private String sessionId;
 }

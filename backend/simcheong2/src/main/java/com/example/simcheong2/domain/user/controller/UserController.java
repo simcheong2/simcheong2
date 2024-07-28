@@ -32,23 +32,6 @@ public class UserController {
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
-    @PostMapping("/signup")
-    public ResponseEntity<Boolean> signup(@RequestBody @Valid SignupRequest request) {
-        UserSaveDTO userSaveDTO = new UserSaveDTO(
-                request.getId(),
-                request.getPassword(),
-                request.getEmail(),
-                request.getName(),
-                request.getNickname(),
-                request.getOpeningDate(),
-                request.getPhone(),
-                request.getIsForeign(),
-                request.getIsDisabled(),
-                request.getSex()
-        );
-        userCreateService.signUp(userSaveDTO);
-        return ResponseEntity.ok(true);
-    }
     @GetMapping("/my-page")
     public ResponseEntity<MyPageResponse> myPage() {
         int userId = SecurityUtil.getCurrentUserId();
