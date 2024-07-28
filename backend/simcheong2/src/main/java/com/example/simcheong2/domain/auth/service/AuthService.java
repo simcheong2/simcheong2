@@ -42,10 +42,19 @@ public class AuthService {
     private final SmsUtil smsUtil;
 
     private final RedisTemplate<String, String> smsRedisTemplate;
-
+  
     private final UserRepository userRepository;
 
-    @Transactional
+    public void validateSmsCode(String phone, String targetCode) {
+        // 이미 등록된 유저 번호는 아닌지 확인
+        checkExistUser(phone);
+        // 레디스에 등록된 번호가 맞는지 일단 확인
+        String code = Optional.ofNullable(smsRedisTemplate.opsForValue().get(phone))
+                .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST, "해당 휴대폰 번호로 보낸 인증번호가 없습니다. 인증 요청 먼저 해주세요."));
+        if (!code.equals(targetCode.trim())) throw new CustomException(ErrorCode.BAD_REQUEST, "인증번호가 일치하지 않습니다.");
+        smsRedisTemplate.delete(phone); // 레디스에서 제거
+    }
+
     public Tokens login(LoginDto loginDto){
         Optional<User> isExist =  userRepository.findByInputId(loginDto.getInputId());
         if(isExist.isEmpty()){
@@ -73,7 +82,7 @@ public class AuthService {
 
         return tokens;
     }
-    @Transactional
+  
     public void logout(LogoutDto logoutDto){
         String accessToken = logoutDto.getAccessToken();
         //
@@ -93,14 +102,17 @@ public class AuthService {
         log.debug("레디스 서버에서 토큰 삭제 완료.");
     }
 
-    @Transactional
     public void createCode(String phone) {
+        checkExistUser(phone);
+        isAlreadySendCode(phone);
+        sendCode(phone);
+    }
+
+    private void checkExistUser(String phone) {
         Optional<UserDTO> user = userValidationService.isPhoneNumberAlreadyRegistered(phone);
         if (user.isPresent()) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "이미 가입된 전화번호입니다.");
         }
-        isAlreadySendCode(phone);
-        sendCode(phone);
     }
 
     private void isAlreadySendCode(String phone) {
@@ -112,12 +124,11 @@ public class AuthService {
 
     private void sendCode(String phone) {
         String code = codeGenerator.generatorCode();
-//        smsUtil.sendOne(phone, code); // 하면 진짜 전송됨ㅋㅋ
+        smsUtil.sendOne(phone, code); // 하면 진짜 전송됨ㅋㅋ
         log.info("{}에게 {}를 전송함", phone, code);
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
-    @Transactional
     public void reissue(ReissueDto reissueDto){
         log.debug("refreshToken input = {}",reissueDto.getRefreshToken());
         String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());

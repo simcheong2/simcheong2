@@ -27,6 +27,7 @@ public class AuthController {
     private final AuthService authService;
     private final UserCreateService userCreateService;
     private final TokensGenerateService tokensGenerateService;
+
     @PostMapping("/login")
     //로그인 되면 레디스에 토큰이 저장되고, 포스트맨 리턴으로 토큰이 올거임.
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
@@ -48,6 +49,7 @@ public class AuthController {
     // 코드 검사
     @GetMapping("/validations/sms")
     public ResponseEntity<SmsCheckResponse> checkCode(@RequestBody @Valid SmsValidationRequest request) {
+        authService.validateSmsCode(request.getPhone(), request.getCode());
         return ResponseEntity.ok(new SmsCheckResponse(true));
     }
 

@@ -61,9 +61,12 @@ public class PostController {
         return ResponseEntity.ok(true);
     }
 
-    // 게시글 좋아요
+    // 게시글 좋아요 / 좋아요 취소. Restful 하지 않으나, 프론트와 논의 끝에 개발 편의성으로 이렇게 정함
     @PostMapping("/like")
     public ResponseEntity<Boolean> likePost(@RequestBody @Valid LikeRequest request) {
+        int userId = 1;
+        int postId = Math.toIntExact(request.getId()); // 지금 엔티티 id 타입이 인티저임. 나중에 한 번에 수정해야할듯.
+        likeService.likePost(userId, postId);
         return ResponseEntity.ok(true);
     }
 }

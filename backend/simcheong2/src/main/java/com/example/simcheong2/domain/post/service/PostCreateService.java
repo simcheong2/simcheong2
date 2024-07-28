@@ -16,6 +16,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
@@ -42,7 +43,7 @@ public class PostCreateService {
 
     private void createPost(User user, List<ImageAnalysisResultDTO> imageAnalysisResultDTOS, String content) {
         log.info("게시물 추가");
-        user.addPost(new Post(content, createImages(imageAnalysisResultDTOS)));
+        user.addPost(new Post(content, new HashSet<>(createImages(imageAnalysisResultDTOS))));
     }
 
     public static List<Image> createImages(List<ImageAnalysisResultDTO> imageAnalysisResultDTOS) {

@@ -36,7 +36,7 @@ public class Post extends BaseEntity {
     private Set<Comment> postComments;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Image> postImages;
+    private Set<Image> postImages;
 
     @OneToMany(mappedBy = "post", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<UserPostLike> postUserPostLikes;
@@ -44,7 +44,7 @@ public class Post extends BaseEntity {
     @OneToMany(mappedBy = "blamedPost", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<PostBlame> blamedPostPostBlames;
 
-    public Post(String content, List<Image> postImages) {
+    public Post(String content, Set<Image> postImages) {
         this.content = content;
         this.postImages = postImages;
         postImages.forEach(image -> image.updatePost(this));
@@ -52,5 +52,11 @@ public class Post extends BaseEntity {
 
     public void updateUser(User user) {
         this.user = user;
+    }
+
+    public boolean isSelfLiked() {
+        return postUserPostLikes.stream().anyMatch(
+                userPostLike -> userPostLike.getUser().getUserId() == this.user.getUserId()
+        );
     }
 }

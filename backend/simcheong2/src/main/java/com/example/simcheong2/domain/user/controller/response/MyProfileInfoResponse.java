@@ -2,17 +2,15 @@ package com.example.simcheong2.domain.user.controller.response;
 
 import com.example.simcheong2.domain.user.entity.dto.Sex;
 import jakarta.validation.constraints.Email;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class MyProfileInfoResponse {
     @NonNull
-    private Integer followCount;
+    private Integer followingCount;
 
     @NonNull
     private Integer followerCount;

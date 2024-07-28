@@ -17,4 +17,7 @@ import java.util.Date;
 public class SmsValidationRequest {
     @Size(min = 1, max = 7, message = "인증 코드 길이는 1글자 이상 7글자 이하입니다.")
     private String code;
+
+    @PhoneNumber
+    private String phone;
 }

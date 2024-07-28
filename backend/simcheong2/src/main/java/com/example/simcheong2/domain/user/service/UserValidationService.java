@@ -3,6 +3,8 @@ package com.example.simcheong2.domain.user.service;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.entity.dto.UserDTO;
 import com.example.simcheong2.domain.user.repository.UserRepository;
+import com.example.simcheong2.global.exception.model.CustomException;
+import com.example.simcheong2.global.exception.model.ErrorCode;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;

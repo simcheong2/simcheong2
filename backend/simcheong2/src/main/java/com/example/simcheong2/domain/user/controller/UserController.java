@@ -50,13 +50,12 @@ public class UserController {
     }
     @GetMapping("/my-page")
     public ResponseEntity<MyPageResponse> myPage() {
-        return ResponseEntity.ok(new MyPageResponse(
-                new MyProfileInfoResponse(0, 0, "", "", "", Sex.MALE, true),
-                new ArrayList<>())
-        );
+        int userId = 3;
+        MyPageResponse response = userSearchService.getMyPageInfo(userId).toResponse();
+        return ResponseEntity.ok(response);
     }
 
-    @PostMapping("/other-page")
+    @GetMapping("/other-page")
     public ResponseEntity<OtherPageResponse> otherPage() {
         return ResponseEntity.ok(new OtherPageResponse(
                 new OtherProfileInfoResponse("", "", true, true, Sex.MALE, true, 0, 0, ""),
