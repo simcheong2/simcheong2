@@ -10,5 +10,5 @@ import lombok.NonNull;
 @NoArgsConstructor
 public class SmsCheckResponse {
     @NonNull
-    private Boolean isSuccess;
+    private String sessionId;
 }
