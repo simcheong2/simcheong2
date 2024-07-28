@@ -42,10 +42,10 @@ public class AuthService {
     private final SmsUtil smsUtil;
 
     private final RedisTemplate<String, String> smsRedisTemplate;
-  
+
     private final UserRepository userRepository;
 
-    public void validateSmsCode(String phone, String targetCode) {
+    public String validateSmsCode(String phone, String targetCode) {
         // 이미 등록된 유저 번호는 아닌지 확인
         checkExistUser(phone);
         // 레디스에 등록된 번호가 맞는지 일단 확인
@@ -53,18 +53,22 @@ public class AuthService {
                 .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST, "해당 휴대폰 번호로 보낸 인증번호가 없습니다. 인증 요청 먼저 해주세요."));
         if (!code.equals(targetCode.trim())) throw new CustomException(ErrorCode.BAD_REQUEST, "인증번호가 일치하지 않습니다.");
         smsRedisTemplate.delete(phone); // 레디스에서 제거
+        String sessionId = codeGenerator.generatorCode();
+        log.info("세션 id는 {}, 폰 번호는 {}", sessionId, phone);
+        smsRedisTemplate.opsForValue().set(sessionId, phone, 3, TimeUnit.HOURS); // 인메모리 절약을 위해.. 3시간 뒤에는 제거
+        return sessionId;
     }
 
-    public Tokens login(LoginDto loginDto){
-        Optional<User> isExist =  userRepository.findByInputId(loginDto.getInputId());
-        if(isExist.isEmpty()){
+    public Tokens login(LoginDto loginDto) {
+        Optional<User> isExist = userRepository.findByInputId(loginDto.getInputId());
+        if (isExist.isEmpty()) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "아이디를 찾을 수 없습니다");
         }
         User user = isExist.get();
-        String userPassword =user.getPassword();
+        String userPassword = user.getPassword();
         log.debug("userPassword:" + userPassword);
         log.debug("inputPassword:" + loginDto.getInputPassword());
-        if(!passwordEncoder.matches(loginDto.getInputPassword(), userPassword)){
+        if (!passwordEncoder.matches(loginDto.getInputPassword(), userPassword)) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
@@ -82,15 +86,15 @@ public class AuthService {
 
         return tokens;
     }
-  
-    public void logout(LogoutDto logoutDto){
+
+    public void logout(LogoutDto logoutDto) {
         String accessToken = logoutDto.getAccessToken();
         //
-        log.debug("userId = {}",tokensGenerateService.extractMemberId(accessToken));
+        log.debug("userId = {}", tokensGenerateService.extractMemberId(accessToken));
         String userInputId = tokensGenerateService.extractMemberId(accessToken);
         Optional<User> isExist = userRepository.findByInputId(userInputId);
-        if(isExist.isEmpty()){
-            throw new CustomException(ErrorCode.BAD_REQUEST,"유저를 찾을 수 없는 logout 요청입니다.");
+        if (isExist.isEmpty()) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "유저를 찾을 수 없는 logout 요청입니다.");
         }
         User user = isExist.get();
         String userId = user.getUserId().toString();
@@ -129,14 +133,14 @@ public class AuthService {
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
-    public void reissue(ReissueDto reissueDto){
-        log.debug("refreshToken input = {}",reissueDto.getRefreshToken());
+    public void reissue(ReissueDto reissueDto) {
+        log.debug("refreshToken input = {}", reissueDto.getRefreshToken());
         String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());
         String redisRefreshToken = redisUtilService.getData(userId);
-        log.debug("refreshToken in redis= {}",redisRefreshToken);
+        log.debug("refreshToken in redis= {}", redisRefreshToken);
         Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
-        if(isExist.isEmpty()){
-            throw new CustomException(ErrorCode.BAD_REQUEST,"refreshToken 으로 유저를 찾을 수 없음.");
+        if (isExist.isEmpty()) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
         }
         User user = isExist.get();
     }
