@@ -15,6 +15,7 @@ function SignupScreen() {
         openingDate: '',
         phone: '',
         verificationCode: '',
+        sessionId:'',
     });
     
     const [selectedGender, setSelectedGender] = useState("");
@@ -38,7 +39,8 @@ function SignupScreen() {
             openingDate: formData.openingDate,
             phone: formData.phone,
         };
-
+        console.log(smsData);
+        // setIsVerificationSent(true);
         axios
             .post('http://www.my-first-develop-library.shop:8080/auth/validations/sms', smsData)
             .then((response) => {
@@ -57,10 +59,12 @@ function SignupScreen() {
     };
 
     const handleVerification = () => {
+        // setIsVerified(true);
         axios
             .get(`http://www.my-first-develop-library.shop:8080/auth/validations/sms?code=${formData.verificationCode}`)
             .then((response) => {
                 if (response.status === 200 && response.data.isSuccess) {
+                     formData.sessionId = response.data.sessionId;
                     Alert.alert("Success", "Phone number verified!");
                     setIsVerified(true);
                 } else {
@@ -80,6 +84,7 @@ function SignupScreen() {
             if (!year || !month || !day) throw new Error("Invalid date format");
             const date = new Date(year, month - 1, day);
             formattedDate = date.toISOString();
+            console.log(formattedDate);
         } catch (error) {
             Alert.alert("Error", "생년월일을 올바른 형식으로 입력해주세요. (예: YYYY-MM-DD)");
             return;
@@ -97,7 +102,8 @@ function SignupScreen() {
             isDisabled: selectedDisability === 'disabled',
             nickname: formData.nickname,
         };
-
+        console.log(data);
+        console.log("회원가입완료")
         axios
             .post('http://www.my-first-develop-library.shop:8080/auth/signup', data)
             .then((response) => {
@@ -269,17 +275,17 @@ function SignupScreen() {
                     </View>
                     {isVerificationSent && !isVerified && (
                         <View style={styles.inputSection}>
-                            <View style={[styles.inputWrapper, styles.topInputWrapper]}>
+                            <View style={[styles.inputWrapper, styles.borderInputWrapper]}>
                                 <Icon style={styles.icon} name="lock" size={24} />
                                 <TextInput
                                     style={styles.textInput}
-                                    placeholder="Verification Code"
+                                    placeholder="코드 인증"
                                     value={formData.verificationCode}
                                     onChangeText={(text) => handleChange('verificationCode', text)}
                                 />
                             </View>
                             <TouchableOpacity style={styles.button} onPress={handleVerification}>
-                                <Text style={styles.buttonText}>Verify Code</Text>
+                                <Text style={styles.buttonText}>코드 인증</Text>
                             </TouchableOpacity>
                         </View>
                     )}
@@ -337,6 +343,9 @@ const styles = StyleSheet.create({
     bottomInputWrapper: {
         borderBottomLeftRadius: 8,
         borderBottomRightRadius: 8,
+    },
+    borderInputWrapper: {
+        borderRadius: 8,
     },
     icon: {
         marginRight: 8,
