@@ -12,6 +12,10 @@ function MyPageScreen() {
         onPress={() => navigation.navigate('Signup')}
         title="회원가입"
       />
+      <Button
+        onPress={() => navigation.navigate('Login')}
+        title="로그인"
+      />
     </View>
   );
 }
