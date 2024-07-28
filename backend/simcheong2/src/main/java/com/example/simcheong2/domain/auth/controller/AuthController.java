@@ -31,17 +31,18 @@ public class AuthController {
     @PostMapping("/login")
     //로그인 되면 레디스에 토큰이 저장되고, 포스트맨 리턴으로 토큰이 올거임.
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
-        LoginDto loginDto = new LoginDto(request.getId(),request.getPassword());
+        LoginDto loginDto = new LoginDto(request.getId(), request.getPassword());
 
         //로그인 성공 했다면 토큰 발급
         Tokens tokens = authService.login(loginDto);
-        log.debug("userId = {}",tokensGenerateService.extractMemberId(tokens.getAccessToken()));
-        return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(),tokens.getRefreshToken()));
+        log.debug("userId = {}", tokensGenerateService.extractMemberId(tokens.getAccessToken()));
+        return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(), tokens.getRefreshToken()));
     }
+
     @PostMapping("/logout")
     public ResponseEntity<Boolean> logout(@RequestBody @Valid LogoutRequest request) {
         String accessToken = request.getAccessToken();
-        LogoutDto logoutDto =new LogoutDto(accessToken);
+        LogoutDto logoutDto = new LogoutDto(accessToken);
         authService.logout(logoutDto);
         return ResponseEntity.ok(true);
     }
@@ -49,15 +50,15 @@ public class AuthController {
     // 코드 검사
     @GetMapping("/validations/sms")
     public ResponseEntity<SmsCheckResponse> checkCode(@RequestBody @Valid SmsValidationRequest request) {
-        authService.validateSmsCode(request.getPhone(), request.getCode());
-        return ResponseEntity.ok(new SmsCheckResponse(true));
+        String sessionId = authService.validateSmsCode(request.getPhone(), request.getCode());
+        return ResponseEntity.ok(new SmsCheckResponse(sessionId));
     }
 
     // 코드 생성 요청
     @PostMapping("/validations/sms")
-    public ResponseEntity<SmsCheckResponse> createCode(@RequestBody @Valid SmsCheckRequest request) {
+    public ResponseEntity<Boolean> createCode(@RequestBody @Valid SmsCheckRequest request) {
         authService.createCode(request.getPhone());
-        return ResponseEntity.ok(new SmsCheckResponse(true));
+        return ResponseEntity.ok(true);
     }
 
     @PostMapping("/signup")
@@ -78,6 +79,7 @@ public class AuthController {
         userCreateService.signUp(userSaveDTO);
         return ResponseEntity.ok(true);
     }
+
     // 재발급
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponse> reissue(@RequestBody @Valid ReissueRequest request) {

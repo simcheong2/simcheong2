@@ -32,6 +32,7 @@ public class UserController {
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
+
     @GetMapping("/my-page")
     public ResponseEntity<MyPageResponse> myPage() {
         int userId = SecurityUtil.getCurrentUserId();
