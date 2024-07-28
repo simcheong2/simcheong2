@@ -23,7 +23,7 @@ type BottomTabParamList = {
 };
 
 export type ScreenNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList>,
+  BottomTabNavigationProp<BottomTabParamList, 'MyPage','Signup'>,
   NativeStackNavigationProp<RootStackParamList>
 >;
 
