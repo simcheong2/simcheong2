@@ -49,7 +49,7 @@ function LoginScreen() {
     const handleLogin = async () => {
         try {
             const response = await axios.post(`${BaseUrl}/auth/login`, formData);
-            
+
             if (response.status === 200) {
                 const { accessToken, refreshToken } = response.data;
                 await AsyncStorage.setItem('accessToken', accessToken);
