@@ -1,13 +1,11 @@
 package com.example.simcheong2.domain.image.controller.response;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+import lombok.*;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class ImagesResponse {
     @NonNull
     private String imageUrl;

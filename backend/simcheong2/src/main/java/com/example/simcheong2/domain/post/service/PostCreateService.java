@@ -42,13 +42,13 @@ public class PostCreateService {
 
     private void createPost(User user, List<ImageAnalysisResultDTO> imageAnalysisResultDTOS, String content) {
         log.info("게시물 추가");
-        user.addPost(new Post(content, createImages(imageAnalysisResultDTOS, content)));
+        user.addPost(new Post(content, createImages(imageAnalysisResultDTOS)));
     }
 
-    public static List<Image> createImages(List<ImageAnalysisResultDTO> imageAnalysisResultDTOS, String content) {
+    public static List<Image> createImages(List<ImageAnalysisResultDTO> imageAnalysisResultDTOS) {
         AtomicInteger index = new AtomicInteger();
         return imageAnalysisResultDTOS.stream()
-                .map(dto -> new Image(dto.getImageUrl(), content, index.getAndIncrement()))
+                .map(dto -> new Image(dto.getImageUrl(), dto.getAnalyzedText(), index.getAndIncrement()))
                 .collect(Collectors.toList());
     }
 
