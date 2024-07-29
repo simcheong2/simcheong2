@@ -73,6 +73,10 @@ function LoginScreen() {
         }
     };
 
+    const handleGotoSignUp = () =>{
+        navigation.navigate("Signup");
+    }
+
     return (
         <View style={styles.container}>
             <Image source={require('../assets/images/logo.png')} style={styles.logo} />
@@ -103,7 +107,7 @@ function LoginScreen() {
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>로그인</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSignup}>
+            <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
                 <Text style={styles.buttonTextSignup}>회원가입</Text>
             </TouchableOpacity>
         </View>
