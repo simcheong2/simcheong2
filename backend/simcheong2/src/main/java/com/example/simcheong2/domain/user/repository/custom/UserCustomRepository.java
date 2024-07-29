@@ -9,4 +9,5 @@ public interface UserCustomRepository {
     Optional<User> getMyPageInfo(int userId);
 
     Optional<List<User>> getMyFollows(int userId);
+    Optional<List<User>> getMyFollowers(int userId);
 }

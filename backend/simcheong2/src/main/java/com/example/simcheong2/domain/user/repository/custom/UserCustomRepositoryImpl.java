@@ -1,6 +1,5 @@
 package com.example.simcheong2.domain.user.repository.custom;
 
-import com.example.simcheong2.domain.follow.entity.QFollow;
 import com.example.simcheong2.domain.user.entity.User;
 import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -51,5 +50,18 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
         );
     }
 
-
+    @Override
+    public Optional<List<User>> getMyFollowers(int userId) { // 나를 팔로우 하고 있는 사람들
+        return Optional.ofNullable(
+                jpaQueryFactory.selectFrom(user)
+                        .leftJoin(user.followerFollows).fetchJoin()
+                        .where(user.userId.in(
+                                JPAExpressions
+                                        .select(follow.follower.userId)
+                                        .from(follow)
+                                        .where(follow.following.userId.eq(userId))
+                        ))
+                        .fetch()
+        );
+    }
 }
