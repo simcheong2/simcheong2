@@ -49,7 +49,12 @@ public class PostController {
     // 추천 피드
     @GetMapping("/recommend")
     public ResponseEntity<List<FeedResponse>> recommendPosts() {
-        return ResponseEntity.ok(new ArrayList<>());
+        int userId = SecurityUtil.getCurrentUserId();
+
+        List<FeedResponse> feeds = postSearchService.getRecommendFeeds().stream()
+                .map(PostFeedDTO::toResponse)
+                .toList();
+        return ResponseEntity.ok(feeds);
     }
 
     //게시글등록
