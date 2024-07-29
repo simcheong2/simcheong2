@@ -4,18 +4,22 @@ import { MyProfile, Posts } from '../../interface/user/Profile';
 
 interface MyPageProps{
     myProfile: MyProfile
+    filterClick: (item: Posts) => void
+    feedClick: ()=>void
 }
 
-const MyPage = ({ myProfile }: MyPageProps) => { const profileUrl = { uri: `${myProfile.profile.profileUrl}` }
-
+const Profile = ({ myProfile,filterClick, feedClick }: MyPageProps) => {
+    const profileUrl = { uri: `${myProfile.profile.profileUrl}` }
     // Calculate the size for grid items
     const { width } = Dimensions.get('window');
     const itemSize = (width) / 2; // Adjusted to maintain margins
 
     const renderPost: ListRenderItem<Posts> = ({ item }) => (
-        <View style={[styles.postContainer, { width: itemSize, height: itemSize }]}>
+        <TouchableOpacity
+            style={[styles.postContainer, { width: itemSize, height: itemSize }]}
+            onPress={()=>filterClick(item)}>
             <Image source={{ uri: item.images[0].imageUrl }} style={styles.postImage} />
-        </View>
+        </TouchableOpacity >
     );
 
     return(
@@ -25,7 +29,7 @@ const MyPage = ({ myProfile }: MyPageProps) => { const profileUrl = { uri: `${my
             </View>
             <View style={styles['my-profile']}>
                 <Image style={styles['profile-image']} source={profileUrl} resizeMode="cover"/>
-                <TouchableOpacity style={styles.touchOpacity}>
+                <TouchableOpacity style={styles.touchOpacity} onPress={feedClick}>
                     <Text style={styles.bold}>{myProfile.posts.length}</Text>
                     <Text style={styles.medium}>게시물</Text>
                 </TouchableOpacity>
@@ -147,4 +151,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default MyPage
+export default Profile

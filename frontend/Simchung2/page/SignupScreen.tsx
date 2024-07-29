@@ -1,25 +1,34 @@
-import React, { useState } from "react";
-import Icon from "react-native-vector-icons/MaterialIcons";
-import { TouchableOpacity, StyleSheet, Text, TextInput, View, ScrollView, KeyboardAvoidingView, Platform } from "react-native";
+import React, { useState } from 'react';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import {
+    TouchableOpacity,
+    StyleSheet,
+    Text,
+    TextInput,
+    View,
+    ScrollView,
+    KeyboardAvoidingView,
+    Platform,
+} from 'react-native';
 import { useNavigation } from '@react-navigation/native';
-import { ScreenNavigationProp } from "../types/navigationTypes";
+import { ScreenNavigationProp } from '../types/navigationTypes';
 
 function SignupScreen() {
-    const [selectedGender, setSelectedGender] = useState("");
-    const [selectedDisability, setSelectedDisability] = useState("");
+    const [selectedGender, setSelectedGender] = useState('');
+    const [selectedDisability, setSelectedDisability] = useState('');
     const navigation = useNavigation<ScreenNavigationProp>();
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
-            behavior={Platform.OS === "ios" ? "padding" : "height"}
+            behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={80}
         >
             <ScrollView contentContainerStyle={styles.scrollContainer}>
                 <View style={styles.container}>
                     <View style={styles.header}>
-                    <TouchableOpacity onPress={() => navigation.goBack()}>
-                     <Icon name="chevron-left" size={48} />
-                    </TouchableOpacity>
+                        <TouchableOpacity onPress={() => navigation.goBack()}>
+                            <Icon name="chevron-left" size={48} />
+                        </TouchableOpacity>
                         <Text style={styles.headerText}>회원가입</Text>
                     </View>
                     <View style={styles.inputSection}>
@@ -140,28 +149,28 @@ const styles = StyleSheet.create({
     container: {
         flexGrow: 1,
         padding: 16,
-        backgroundColor: "#ffffff",
+        backgroundColor: '#ffffff',
     },
     header: {
         marginTop: 24,
-        flexDirection: "row",
-        alignItems: "center",
+        flexDirection: 'row',
+        alignItems: 'center',
     },
     headerText: {
         fontSize: 24,
-        fontWeight: "bold",
-        color: "#555555",
+        fontWeight: 'bold',
+        color: '#555555',
         marginLeft: 80,
     },
     inputSection: {
         marginVertical: 16,
     },
     inputWrapper: {
-        flexDirection: "row",
-        alignItems: "center",
-        backgroundColor: "#F3F4F6",
+        flexDirection: 'row',
+        alignItems: 'center',
+        backgroundColor: '#F3F4F6',
         padding: 8,
-        borderColor: "#555555",
+        borderColor: '#555555',
         borderWidth: 1,
     },
     topInputWrapper: {
@@ -179,45 +188,45 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     button: {
-        backgroundColor: "#334792",
+        backgroundColor: '#334792',
         padding: 12,
         borderRadius: 8,
-        alignItems: "center",
+        alignItems: 'center',
         marginTop: 16,
-    
+
     },
     buttonText: {
-        color: "#fff",
+        color: '#fff',
         fontSize: 16,
     },
     choiceTabContainer: {
         flexDirection: 'row',
         flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: "#F3F4F6",
+        alignItems: 'center',
+        justifyContent: 'center',
+        backgroundColor: '#F3F4F6',
         borderWidth: 1,
-        borderColor: "#555555",
+        borderColor: '#555555',
     },
     choiceTab: {
         flex: 1,
         padding: 10,
-        backgroundColor: "#F3F4F6",
-        alignItems: "center",
-        justifyContent: "center",
+        backgroundColor: '#F3F4F6',
+        alignItems: 'center',
+        justifyContent: 'center',
     },
     tabIcon: {
         marginLeft: 8,
     },
     choiceTabText: {
-        color: "#555555",
+        color: '#555555',
     },
     choicedTab: {
-        backgroundColor: "#334792",
-        borderColor: "#334792",
+        backgroundColor: '#334792',
+        borderColor: '#334792',
     },
     choicedTabText: {
-        color: "#fff",
+        color: '#fff',
     },
 });
 

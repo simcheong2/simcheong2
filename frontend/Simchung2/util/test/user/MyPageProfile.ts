@@ -52,5 +52,66 @@ export const myProfile: MyProfile = {
             isLiked: false,
             createdDate: "2024-07-28T21:50:50.116Z"
         },
+        {
+            images:[
+                {
+                    imageUrl: imageData[3],
+                    imageText: 'text',
+                },
+                {
+                    imageUrl: imageData[0],
+                    imageText: 'data',
+                },
+            ],
+            content: '지금은 시각장애인 어플에 대해 공부중입니다.',
+            likeCount: 11000,
+            commentCount: 20000,
+            isLiked: false,
+            createdDate: "2024-07-28T21:50:50.116Z"
+        },
+        {
+            images:[
+                {
+                    imageUrl: imageData[1],
+                    imageText: 'text',
+                },
+                {
+                    imageUrl: imageData[2],
+                    imageText: 'data',
+                },
+            ],
+            content: '지금은 시각장애인 어플에 대해 공부중입니다.',
+            likeCount: 11000,
+            commentCount: 20000,
+            isLiked: false,
+            createdDate: "2024-07-28T21:50:50.116Z"
+        },
+    ]
+};
+
+export const EmptyProfile: MyProfile = {
+    profile: {
+        followerCount: 0,
+        followingCount: 0,
+        email: '',
+        profileUrl: '',
+        nickname: '',
+        sex: 'MALE',
+        isDisabled: true,
+    },
+    posts:[
+        {
+            images:[
+                {
+                    imageUrl: '',
+                    imageText: '',
+                },
+            ],
+            content: '',
+            likeCount: 0,
+            commentCount: 0,
+            isLiked: false,
+            createdDate: ""
+        },
     ]
 };
