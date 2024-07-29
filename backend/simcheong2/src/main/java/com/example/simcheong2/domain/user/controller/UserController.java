@@ -1,10 +1,8 @@
 package com.example.simcheong2.domain.user.controller;
 
-import com.example.simcheong2.domain.auth.controller.request.SignupRequest;
 import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.Sex;
-import com.example.simcheong2.domain.user.entity.dto.UserSaveDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
 import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
@@ -15,6 +13,7 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -28,6 +27,7 @@ public class UserController {
     private final UserSearchService userSearchService;
     private final UserUpdateService userUpdateService;
     private final UserCreateService userCreateService;
+
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
@@ -46,5 +46,16 @@ public class UserController {
                 new OtherProfileInfoResponse("", "", true, true, Sex.MALE, true, 0, 0, ""),
                 new ArrayList<>()
         ));
+    }
+
+    @PostMapping("/profile-url")
+    public ResponseEntity<ProfileChangeResponse> changeProfileUrl(
+            @RequestPart MultipartFile image
+    ) {
+        int userId = SecurityUtil.getCurrentUserId();
+        String url = userUpdateService.updateProfileUrl(userId, image);
+        return ResponseEntity.ok(ProfileChangeResponse.builder()
+                .profileUrl(url)
+                .build());
     }
 }

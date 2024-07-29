@@ -124,4 +124,8 @@ public class User extends BaseEntity {
         if (this.isFollow(other)) return true;
         return false;
     }
+
+    public void updateProfileUrl(String profileUrl) {
+        this.profileImage = profileUrl;
+    }
 }
