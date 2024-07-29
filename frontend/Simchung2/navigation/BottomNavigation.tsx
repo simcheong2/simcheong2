@@ -58,6 +58,7 @@ const BottomNavigation = () => {
                         tabBarIcon: ({ color, size }) => (
                             <Icon name="people-alt" color={color} size={size} />
                         ),
+                        headerShown: false,
                     }} />
             </Tab.Navigator>
             <CustomSheet snapPoint={['25%','50%','95%']}>
