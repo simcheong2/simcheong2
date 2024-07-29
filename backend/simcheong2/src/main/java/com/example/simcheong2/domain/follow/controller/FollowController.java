@@ -44,7 +44,7 @@ public class FollowController {
     }
 
     //내 팔로우 목록
-    @PostMapping("/my-follows")
+    @GetMapping("/my-follows")
     public ResponseEntity<List<FollowUserInfoResponse>> getMyFollows() {
         int userId = SecurityUtil.getCurrentUserId();
         List<FollowUserInfoDTO> follow = followSearchService.searchMyFollows(userId);
@@ -53,18 +53,18 @@ public class FollowController {
                 .collect(Collectors.toList()));
     }
 
-    @PostMapping("/my-followers")
+    @GetMapping("/my-followers")
     public ResponseEntity<List<FollowerUserInfoResponse>> getMyFollowers() {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @PostMapping("/other-follows")
+    @GetMapping("/other-follows")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollows(
             @RequestBody @Valid OtherFollowRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
 
-    @PostMapping("/other-followers")
+    @GetMapping("/other-followers")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollowers(
             @RequestBody @Valid OtherFollowRequest request) {
         return ResponseEntity.ok(new ArrayList<>());

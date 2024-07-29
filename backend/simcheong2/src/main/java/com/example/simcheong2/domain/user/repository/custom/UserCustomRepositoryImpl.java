@@ -1,13 +1,17 @@
 package com.example.simcheong2.domain.user.repository.custom;
 
+import com.example.simcheong2.domain.follow.entity.QFollow;
 import com.example.simcheong2.domain.user.entity.User;
+import com.querydsl.jpa.JPAExpressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.List;
 import java.util.Optional;
 
 import static com.example.simcheong2.domain.comment.entity.QComment.comment;
+import static com.example.simcheong2.domain.follow.entity.QFollow.*;
 import static com.example.simcheong2.domain.image.entity.QImage.*;
 import static com.example.simcheong2.domain.post.entity.QPost.*;
 import static com.example.simcheong2.domain.user.entity.QUser.user;
@@ -32,4 +36,20 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                         .fetchOne()
         );
     }
+
+    @Override
+    public Optional<List<User>> getMyFollows(int userId) {
+        return Optional.ofNullable(
+                jpaQueryFactory.selectFrom(user)
+                        .where(user.userId.in(
+                                JPAExpressions
+                                        .select(follow.following.userId)
+                                        .from(follow)
+                                        .where(follow.follower.userId.eq(userId))
+                        ))
+                        .fetch()
+        );
+    }
+
+
 }

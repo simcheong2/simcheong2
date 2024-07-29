@@ -7,12 +7,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class FollowUserInfoResponse {
-    @NonNull
     private String nickname;
 
-    @NonNull
     private String profileUrl;
 
-    @NonNull
     private Boolean isDisabled;
 }

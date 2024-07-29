@@ -1,5 +1,6 @@
 package com.example.simcheong2.domain.user.service;
 
+import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
 import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user.entity.dto.MyPageDTO;
 import com.example.simcheong2.domain.user.repository.UserRepository;
@@ -9,6 +10,10 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Slf4j
 @Service
