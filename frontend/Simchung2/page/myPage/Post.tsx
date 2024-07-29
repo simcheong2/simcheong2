@@ -1,36 +1,19 @@
-import React, { useState } from 'react';
-import {
-    Button,
-    Dimensions,
-    FlatList,
-    Image,
-    ListRenderItem,
-    StyleSheet,
-    Text,
-    TouchableOpacity,
-    View,
-} from 'react-native';
+import React from 'react';
+import { Dimensions, FlatList, Image, ListRenderItem, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Images } from '../../interface/feed/Feed';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import LonIcons from 'react-native-vector-icons/Ionicons';
-import { Comments, FeedItemResponse, Images } from '../../interface/feed/Feed';
 import { formatComma } from '../../util/common/Common';
+import { Posts, Profile } from '../../interface/user/Profile';
 
-export interface FeedItem {
-    userName: string,
-    feedContent: string,
-    userImgUrl: string,
-    imgUrl: string,
-    favoriteCnt: string,
-    commentCnt: string,
+interface PostProps{
+    post: Posts
+    profile: Profile
+    onPress: ()=>void
 }
 
-interface FeedProps {
-    feed: FeedItemResponse;
-    onPress: (comments: Comments[]) => void;
-}
-
-const Feed = ({ feed, onPress }: FeedProps) => {
-    const userImgSrc = { uri: `${feed.otherUserInfoResponse.profileUrl}` };
+const Post = ({post, profile, onPress}:PostProps) => {
+    const userImgSrc = { uri: `${profile.profileUrl}` };
     const { width } = Dimensions.get('window');
 
     const renderItems: ListRenderItem<Images> = ({ item }) => (
@@ -46,16 +29,16 @@ const Feed = ({ feed, onPress }: FeedProps) => {
                     style={styles['profile-image']}
                     source={userImgSrc}
                     resizeMode="cover" />
-                <View style={styles['user-container']} accessibilityLabel={`${feed.post.images[0].imageUrl}`}>
-                    <Text style={styles.userName}>{feed.otherUserInfoResponse.nickname}</Text>
-                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.post.content}</Text>
+                <View style={styles['user-container']}>
+                    <Text style={styles.userName}>{profile.nickname}</Text>
+                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{post.content}</Text>
                 </View>
                 <TouchableOpacity style={styles.iconButton}>
                     <Icon name="more-horiz" size={24} style={styles.icon} />
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={feed.post.images.flatMap((images) => images)}
+                data={post.images.flatMap((images) => images)}
                 renderItem={renderItems}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal={true}
@@ -65,13 +48,13 @@ const Feed = ({ feed, onPress }: FeedProps) => {
                 pagingEnabled
             />
             <View style={styles.favorite}>
-                <TouchableOpacity style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
+                <TouchableOpacity style={styles['comment-container']} onPress={onPress}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(feed.post.likeCount)}</Text>
+                    <Text style={styles['comment-count']}>{formatComma(post.likeCount)}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles['favorite-container']}>
                     <Icon name="favorite-outline" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(feed.post.commentCount)}</Text>
+                    <Text style={styles['comment-count']}>{formatComma(post.commentCount)}</Text>
                 </TouchableOpacity>
             </View>
         </View>
@@ -158,4 +141,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default Feed;
+export default Post
