@@ -34,6 +34,8 @@ public class FollowController {
 
     @DeleteMapping
     public ResponseEntity<Boolean> unfollowUser(@RequestBody @Valid FollowNicknameRequest request) {
+        int userId = SecurityUtil.getCurrentUserId();
+        followUpdateService.unfollow(userId, request.getNickname());
         return ResponseEntity.ok(true);
     }
 
