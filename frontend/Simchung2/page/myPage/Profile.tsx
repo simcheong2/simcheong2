@@ -6,9 +6,10 @@ interface MyPageProps{
     myProfile: MyProfile
     filterClick: (item: Posts) => void
     feedClick: ()=>void
+    editClick: ()=>void
 }
 
-const Profile = ({ myProfile,filterClick, feedClick }: MyPageProps) => {
+const Profile = ({ myProfile,filterClick, feedClick, editClick }: MyPageProps) => {
     const profileUrl = { uri: `${myProfile.profile.profileUrl}` }
     // Calculate the size for grid items
     const { width } = Dimensions.get('window');
@@ -43,7 +44,10 @@ const Profile = ({ myProfile,filterClick, feedClick }: MyPageProps) => {
                 </TouchableOpacity>
             </View>
             <View style={styles['profile-edit']}>
-                <TouchableOpacity style={styles['edit-button']}>
+                <TouchableOpacity
+                    style={styles['edit-button']}
+                    onPress={editClick}
+                >
                     <Text style={{fontSize:12, color: "#fff"}}>프로필 편집</Text>
                 </TouchableOpacity>
             </View>

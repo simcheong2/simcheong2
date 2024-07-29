@@ -11,6 +11,7 @@ type RootStackParamList = {
 type FeedStackParamList = {
   Profile: undefined;
   Feed: { profile: MyProfile };
+  Edit: { profile: MyProfile };
 }
 
 type BottomTabParamList = {
@@ -25,4 +26,4 @@ export type ScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<RootStackParamList>
 >;
 
-export type FeedNavigationProp = NativeStackNavigationProp<FeedStackParamList, 'Feed'>
+export type FeedNavigationProp = NativeStackNavigationProp<FeedStackParamList, 'Feed' | 'Edit'>

@@ -8,7 +8,7 @@ import { FeedNavigationProp } from '../../../types/navigationTypes';
 const MyPageScreen = () => {
     const navigation = useNavigation<FeedNavigationProp>();
     const [filterProfile, setFilterProfile] = useState<MyProfile>(EmptyProfile);
-    const [profile, setProfile] = useState<MyProfile>(EmptyProfile)
+    const [profile, setProfile] = useState<MyProfile>(EmptyProfile);
 
     const onFilterHandler = (item: Posts) => {
         const updatedPosts = profile.posts.filter(post => post !== item);
@@ -16,22 +16,33 @@ const MyPageScreen = () => {
         const updatedProfile = { ...profile, posts: updatedPosts };
         setFilterProfile(updatedProfile);
         navigation.navigate('Feed', { profile: updatedProfile });
-    }
+    };
 
     const onFeedHandler = () => {
-        navigation.navigate('Feed', {profile: profile});
-    }
+        navigation.navigate('Feed', { profile: profile });
+    };
 
-    useEffect(()=>{
-        setProfile(myProfile)
-        return ()=>{
-            setProfile(EmptyProfile)
-        }
-    })
+    const onEditHandler = () => {
+        navigation.navigate('Edit', { profile: profile });
+    };
 
-    return(
-        <Profile myProfile={profile} filterClick={onFilterHandler} feedClick={onFeedHandler}/>
-    )
-}
+    useEffect(() => {
+        setProfile(myProfile);
+        console.log(profile)
+        return () => {
+            setProfile(EmptyProfile);
+            console.log("Empty")
+        };
+    });
 
-export default MyPageScreen
+    return (
+        <Profile
+            myProfile={profile}
+            filterClick={onFilterHandler}
+            feedClick={onFeedHandler}
+            editClick={onEditHandler}
+        />
+    );
+};
+
+export default MyPageScreen;

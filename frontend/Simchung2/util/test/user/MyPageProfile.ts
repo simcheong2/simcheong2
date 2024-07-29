@@ -94,7 +94,7 @@ export const EmptyProfile: MyProfile = {
         followerCount: 0,
         followingCount: 0,
         email: '',
-        profileUrl: '',
+        profileUrl: 'https://via.placeholder.com/150',
         nickname: '',
         sex: 'MALE',
         isDisabled: true,
