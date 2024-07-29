@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Alert, StyleSheet, Text, View, Pressable } from 'react-native';
 import * as ImagePicker from 'expo-image-picker';
-import ImageViewer from '../../../components/image/ImageViewer';
 
 const TextFields = () => {
     const [name, setName] = useState<string>('');
@@ -27,7 +26,6 @@ const TextFields = () => {
     return (
         <View style={styles.container}>
             <View style={styles.imageContainer}>
-                <ImageViewer selectedImage={selectImage} />
             </View>
             <View style={styles.footerContainer}>
                 <View>
