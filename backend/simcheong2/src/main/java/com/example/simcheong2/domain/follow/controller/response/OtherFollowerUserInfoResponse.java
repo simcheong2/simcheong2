@@ -4,10 +4,10 @@ import io.swagger.v3.oas.annotations.media.Schema;
 import lombok.*;
 
 @Data
-@AllArgsConstructor
-@NoArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @Builder(toBuilder = true)
-public class FollowerUserInfoResponse {
+@NoArgsConstructor
+public class OtherFollowerUserInfoResponse {
     private String nickname;
 
     private String profileUrl;
@@ -16,4 +16,7 @@ public class FollowerUserInfoResponse {
 
     @Schema(description = "내가 이 사람을 팔로우 하고 있는지 여부.")
     private Boolean isFollow;
+
+    @Schema(description = "나 자신에 대한 프로필인지 여부")
+    private Boolean isMine;
 }

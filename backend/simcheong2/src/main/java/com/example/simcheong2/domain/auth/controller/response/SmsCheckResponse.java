@@ -9,6 +9,5 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class SmsCheckResponse {
-    @NonNull
     private String sessionId;
 }

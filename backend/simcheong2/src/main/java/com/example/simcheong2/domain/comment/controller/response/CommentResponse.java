@@ -7,9 +7,6 @@ import lombok.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class CommentResponse {
-    @NonNull
     private String nickname;
-
-    @NonNull
     private String comment;
 }
