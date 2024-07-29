@@ -46,11 +46,14 @@ public class FollowSearchService {
                 .collect(Collectors.toList());
     }
 
+    // 다른 사람이 누구 팔로우 하는지
     public List<OtherFollowUserInfoDTO> searchOtherFollows(int userId, String otherNickname) {
         User me = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다. 잠시 후 다시 시도해주세요."));
         User other = userRepository.findByNickname(otherNickname)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다. 잠시 후 다시 시도해주세요."));
+
+        checkPossibleVisible(other, me);
 
         return userRepository.getFollows(other.getUserId())
                 .orElseGet(ArrayList::new)
@@ -65,10 +68,19 @@ public class FollowSearchService {
         User other = userRepository.findByNickname(otherNickname)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다. 잠시 후 다시 시도해주세요."));
 
+        checkPossibleVisible(other, me);
+
         return userRepository.getFollowers(other.getUserId())
                 .orElseGet(ArrayList::new)
                 .stream()
                 .map(user -> OtherFollowerUserInfoDTO.from(me, user))
                 .collect(Collectors.toList());
     }
+
+    private void checkPossibleVisible(User other, User me) {
+        if (!other.getPostVisible() && !other.isFollow(me)) {
+            throw new CustomException(ErrorCode.BAD_REQUEST, "비공개 유저는 승인된 팔로워만 접근할 수 없습니다.");
+        }
+    }
+
 }
