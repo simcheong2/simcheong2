@@ -5,6 +5,8 @@ import com.example.simcheong2.domain.follow.controller.request.OtherFollowReques
 import com.example.simcheong2.domain.follow.controller.response.FollowUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.FollowerUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.OtherFollowUserInfoResponse;
+import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
+import com.example.simcheong2.domain.follow.service.FollowSearchService;
 import com.example.simcheong2.domain.follow.service.FollowUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
@@ -16,6 +18,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "팔로우 API")
 @RestController
@@ -24,6 +27,7 @@ import java.util.List;
 @RequestMapping("/follow")
 public class FollowController {
     private final FollowUpdateService followUpdateService;
+    private final FollowSearchService followSearchService;
 
     @PostMapping
     public ResponseEntity<Boolean> followUser(@RequestBody @Valid FollowNicknameRequest request) {
@@ -42,7 +46,11 @@ public class FollowController {
     //내 팔로우 목록
     @PostMapping("/my-follows")
     public ResponseEntity<List<FollowUserInfoResponse>> getMyFollows() {
-        return ResponseEntity.ok(new ArrayList<>());
+        int userId = SecurityUtil.getCurrentUserId();
+        List<FollowUserInfoDTO> follow = followSearchService.searchMyFollows(userId);
+        return ResponseEntity.ok(follow.stream()
+                .map(FollowUserInfoDTO::toResponse)
+                .collect(Collectors.toList()));
     }
 
     @PostMapping("/my-followers")
