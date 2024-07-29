@@ -7,6 +7,7 @@ import com.example.simcheong2.domain.follow.controller.response.FollowerUserInfo
 import com.example.simcheong2.domain.follow.controller.response.OtherFollowUserInfoResponse;
 import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
 import com.example.simcheong2.domain.follow.entity.dto.FollowerUserInfoDTO;
+import com.example.simcheong2.domain.follow.entity.dto.OtherFollowUserInfoDTO;
 import com.example.simcheong2.domain.follow.service.FollowSearchService;
 import com.example.simcheong2.domain.follow.service.FollowUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
@@ -66,7 +67,11 @@ public class FollowController {
     @GetMapping("/other-follows")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollows(
             @RequestBody @Valid OtherFollowRequest request) {
-        return ResponseEntity.ok(new ArrayList<>());
+        int userId = SecurityUtil.getCurrentUserId();
+        List<OtherFollowUserInfoDTO> otherFollows = followSearchService.searchOtherFollows(userId, request.getNickname());
+        return ResponseEntity.ok(otherFollows.stream()
+                .map(OtherFollowUserInfoDTO::toResponse)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/other-followers")

@@ -2,6 +2,7 @@ package com.example.simcheong2.domain.follow.service;
 
 import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
 import com.example.simcheong2.domain.follow.entity.dto.FollowerUserInfoDTO;
+import com.example.simcheong2.domain.follow.entity.dto.OtherFollowUserInfoDTO;
 import com.example.simcheong2.domain.follow.repository.FollowRepository;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.repository.UserRepository;
@@ -36,11 +37,24 @@ public class FollowSearchService {
 
     public List<FollowerUserInfoDTO> searchMyFollowers(int userId) {
         User me = userRepository.findByUserId(userId)
-                .orElseThrow(()->new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다"));
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다"));
         return userRepository.getMyFollowers(userId)
                 .orElseGet(ArrayList::new)
                 .stream()
-                .map(user -> FollowerUserInfoDTO.from(me,user))
+                .map(user -> FollowerUserInfoDTO.from(me, user))
+                .collect(Collectors.toList());
+    }
+
+    public List<OtherFollowUserInfoDTO> searchOtherFollows(int userId, String otherNickname) {
+        User me = userRepository.findByUserId(userId)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다. 잠시 후 다시 시도해주세요."));
+        User other = userRepository.findByNickname(otherNickname)
+                .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "유저가 존재하지 않습니다. 잠시 후 다시 시도해주세요."));
+
+        return userRepository.getMyFollows(other.getUserId())
+                .orElseGet(ArrayList::new)
+                .stream()
+                .map(user -> OtherFollowUserInfoDTO.from(me, user))
                 .collect(Collectors.toList());
     }
 }
