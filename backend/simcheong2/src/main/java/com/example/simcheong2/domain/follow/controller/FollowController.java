@@ -5,12 +5,15 @@ import com.example.simcheong2.domain.follow.controller.request.OtherFollowReques
 import com.example.simcheong2.domain.follow.controller.response.FollowUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.FollowerUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.OtherFollowUserInfoResponse;
+import com.example.simcheong2.domain.follow.controller.response.OtherFollowerUserInfoResponse;
 import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
 import com.example.simcheong2.domain.follow.entity.dto.FollowerUserInfoDTO;
 import com.example.simcheong2.domain.follow.entity.dto.OtherFollowUserInfoDTO;
+import com.example.simcheong2.domain.follow.entity.dto.OtherFollowerUserInfoDTO;
 import com.example.simcheong2.domain.follow.service.FollowSearchService;
 import com.example.simcheong2.domain.follow.service.FollowUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +21,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -64,6 +66,7 @@ public class FollowController {
                 .collect(Collectors.toList()));
     }
 
+    @Operation(description = "요청바디에 넘긴 유저가 팔로우하고 있는 사람들의 목록을 조회")
     @GetMapping("/other-follows")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollows(
             @RequestBody @Valid OtherFollowRequest request) {
@@ -74,9 +77,15 @@ public class FollowController {
                 .collect(Collectors.toList()));
     }
 
+    @Operation(description = "요청바디에 넘긴 유저를 팔로우하고 있는 사람들의 목록을 조회")
     @GetMapping("/other-followers")
-    public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollowers(
+    public ResponseEntity<List<OtherFollowerUserInfoResponse>> getOtherFollowers(
             @RequestBody @Valid OtherFollowRequest request) {
-        return ResponseEntity.ok(new ArrayList<>());
+        int userId = SecurityUtil.getCurrentUserId();
+        List<OtherFollowerUserInfoDTO> otherFollows = followSearchService.searchOtherFollowers(userId, request.getNickname());
+
+        return ResponseEntity.ok(otherFollows.stream()
+                .map(OtherFollowerUserInfoDTO::toResponse)
+                .collect(Collectors.toList()));
     }
 }

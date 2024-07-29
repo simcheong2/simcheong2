@@ -8,6 +8,6 @@ import java.util.Optional;
 public interface UserCustomRepository {
     Optional<User> getMyPageInfo(int userId);
 
-    Optional<List<User>> getMyFollows(int userId);
-    Optional<List<User>> getMyFollowers(int userId);
+    Optional<List<User>> getFollows(int userId);
+    Optional<List<User>> getFollowers(int userId);
 }

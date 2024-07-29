@@ -37,7 +37,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     @Override
-    public Optional<List<User>> getMyFollows(int userId) {
+    public Optional<List<User>> getFollows(int userId) {
         return Optional.ofNullable(
                 jpaQueryFactory.selectFrom(user)
                         .where(user.userId.in(
@@ -51,7 +51,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     @Override
-    public Optional<List<User>> getMyFollowers(int userId) { // 나를 팔로우 하고 있는 사람들
+    public Optional<List<User>> getFollowers(int userId) { // 나를 팔로우 하고 있는 사람들
         return Optional.ofNullable(
                 jpaQueryFactory.selectFrom(user)
                         .leftJoin(user.followerFollows).fetchJoin()
