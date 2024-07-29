@@ -3,8 +3,11 @@ import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } fro
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from '../types/navigationTypes';
 
 function LoginScreen() {
+    const navigation = useNavigation< ScreenNavigationProp>();
     const [isChecked, setIsChecked] = useState(false);
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
@@ -60,7 +63,8 @@ function LoginScreen() {
                     await AsyncStorage.setItem('isChecked', 'false');
                 }
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
-                // navigate to the main screen or perform further actions
+                navigation.replace("Home");
+            
             } else {
                 Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
             }
