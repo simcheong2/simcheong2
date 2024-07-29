@@ -10,6 +10,7 @@ const Tabs = () => {
         <Tab.Navigator 
             initialRouteName="Follow"
             screenOptions={{
+                swipeEnabled: false,
                 tabBarIndicatorStyle: {
                     backgroundColor: '#555555', // 하단 경계선의 색상을 검은색으로 변경
                     width: '10%', // 경계선의 너비를 10%로 설정

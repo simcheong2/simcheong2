@@ -20,7 +20,7 @@ interface Post{
     isReport: boolean,
 }
 
-interface Images{
+export interface Images{
     imageUrl: string,
     imageText: string,
 }
