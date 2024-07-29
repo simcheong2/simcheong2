@@ -28,7 +28,6 @@ const MyPageScreen = () => {
 
     useEffect(() => {
         setProfile(myProfile);
-        console.log(profile)
         return () => {
             setProfile(EmptyProfile);
             console.log("Empty")
