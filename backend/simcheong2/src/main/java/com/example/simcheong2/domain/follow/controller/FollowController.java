@@ -5,6 +5,8 @@ import com.example.simcheong2.domain.follow.controller.request.OtherFollowReques
 import com.example.simcheong2.domain.follow.controller.response.FollowUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.FollowerUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.OtherFollowUserInfoResponse;
+import com.example.simcheong2.domain.follow.service.FollowUpdateService;
+import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -21,33 +23,40 @@ import java.util.List;
 @RequiredArgsConstructor
 @RequestMapping("/follow")
 public class FollowController {
+    private final FollowUpdateService followUpdateService;
+
     @PostMapping
-    public ResponseEntity<Boolean> followUser(@RequestBody @Valid FollowNicknameRequest request){
+    public ResponseEntity<Boolean> followUser(@RequestBody @Valid FollowNicknameRequest request) {
+        int userId = SecurityUtil.getCurrentUserId();
+        followUpdateService.follow(userId, request.getNickname());
         return ResponseEntity.ok(true);
     }
 
     @DeleteMapping
-    public ResponseEntity<Boolean> unfollowUser(@RequestBody @Valid FollowNicknameRequest request){
+    public ResponseEntity<Boolean> unfollowUser(@RequestBody @Valid FollowNicknameRequest request) {
         return ResponseEntity.ok(true);
     }
 
     //내 팔로우 목록
     @PostMapping("/my-follows")
-    public ResponseEntity<List<FollowUserInfoResponse>> getMyFollows(){
+    public ResponseEntity<List<FollowUserInfoResponse>> getMyFollows() {
         return ResponseEntity.ok(new ArrayList<>());
     }
+
     @PostMapping("/my-followers")
-    public ResponseEntity<List<FollowerUserInfoResponse>> getMyFollowers(){
+    public ResponseEntity<List<FollowerUserInfoResponse>> getMyFollowers() {
         return ResponseEntity.ok(new ArrayList<>());
     }
+
     @PostMapping("/other-follows")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollows(
-            @RequestBody @Valid OtherFollowRequest request){
+            @RequestBody @Valid OtherFollowRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
+
     @PostMapping("/other-followers")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollowers(
-            @RequestBody @Valid OtherFollowRequest request){
+            @RequestBody @Valid OtherFollowRequest request) {
         return ResponseEntity.ok(new ArrayList<>());
     }
 }
