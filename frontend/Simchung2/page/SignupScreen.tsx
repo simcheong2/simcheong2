@@ -23,7 +23,7 @@ function SignupScreen() {
     const [selectedDisability, setSelectedDisability] = useState("");
     const [isVerificationSent, setIsVerificationSent] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
-    const [isLoading, setIsLoading] = useState(false); 
+    const [isLoading, setIsLoading] = useState(false);
     const navigation = useNavigation<ScreenNavigationProp>();
 
     const handleChange = (name: string, value: string) => {
@@ -34,7 +34,7 @@ function SignupScreen() {
     };
 
     const handleVerificationRequest = () => {
-        setIsLoading(true); 
+        setIsLoading(true);
         const smsData = {
             name: formData.name,
             phone: formData.phone,
@@ -92,7 +92,7 @@ function SignupScreen() {
                 console.error(error);
             })
             .finally(() => {
-                setIsLoading(false); 
+                setIsLoading(false);
             });
     };
 
@@ -140,7 +140,7 @@ function SignupScreen() {
                 console.error(error);
             })
             .finally(() => {
-                setIsLoading(false); 
+                setIsLoading(false);
             });
     };
 
