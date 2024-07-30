@@ -1,13 +1,11 @@
 package com.example.simcheong2.domain.user.controller.response;
-import jakarta.validation.constraints.Pattern;
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
-import lombok.NonNull;
+
+import lombok.*;
 
 @Data
-@AllArgsConstructor
+@AllArgsConstructor(access = AccessLevel.PROTECTED)
 @NoArgsConstructor
+@Builder(toBuilder = true)
 public class UserSearchResponse {
     private String nickname;
 

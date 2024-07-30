@@ -37,7 +37,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     @Override
-    public Optional<User> getOtherPageInfo(String nickname){
+    public Optional<User> getOtherPageInfo(String nickname) {
         return Optional.ofNullable(
                 jpaQueryFactory.selectFrom(user)
                         .leftJoin(user.followingFollows).fetchJoin()
@@ -48,7 +48,7 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                         .leftJoin(post.postComments, comment).fetchJoin()
                         .where(user.nickname.eq(nickname))
                         .fetchOne()
-          );
+        );
     }
 
     @Override
@@ -76,6 +76,17 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
                                         .from(follow)
                                         .where(follow.following.userId.eq(userId))
                         ))
+                        .fetch()
+        );
+    }
+
+    @Override
+    public Optional<List<User>> getAllUsersStartsWithNicknameAndNotInUserId(String nickname, int userId) {
+        return Optional.ofNullable(
+                jpaQueryFactory.selectFrom(user)
+                        .where(user.userId.ne(userId)
+                                .and(user.nickname.startsWith(nickname)))
+                        .orderBy(user.nickname.asc())
                         .fetch()
         );
     }

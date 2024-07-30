@@ -11,6 +11,8 @@ public interface UserCustomRepository {
     Optional<User> getOtherPageInfo(String nickname);
 
     Optional<List<User>> getFollows(int userId);
-  
+
     Optional<List<User>> getFollowers(int userId);
+
+    Optional<List<User>> getAllUsersStartsWithNicknameAndNotInUserId(String nickname, int userId);
 }
