@@ -1,6 +1,7 @@
 package com.example.simcheong2.domain.comment.entity;
 
 import com.example.simcheong2.domain.comment_blame.entity.CommentBlame;
+import com.example.simcheong2.domain.image.entity.Image;
 import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.user.entity.User;
 import jakarta.persistence.*;
@@ -38,4 +39,16 @@ public class Comment {
 
     @OneToMany(mappedBy = "blamedComment", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<CommentBlame> blamedCommentCommentBlames;
+
+    public Comment(String content) {
+        this.content = content;
+    }
+
+    public void updateUser(User user) {
+        this.user = user;
+    }
+
+    public void updatePost(Post post){
+        this.post = post;
+    }
 }

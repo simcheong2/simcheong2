@@ -111,6 +111,11 @@ public class User extends BaseEntity {
         post.updateUser(this);
     }
 
+    public void addComment(Comment comment){
+        this.userComments.add(comment);
+        comment.updateUser(this);
+    }
+
     // 너가 얘 other를 팔로우 하고 있니?
     public boolean isFollow(User other) {
         return followerFollows.stream().anyMatch(
