@@ -48,14 +48,14 @@ public class AuthController {
     }
 
     // 코드 검사
-    @GetMapping("/validations/sms")
+    @PostMapping("/sms-verifications")
     public ResponseEntity<SmsCheckResponse> checkCode(@RequestBody @Valid SmsValidationRequest request) {
         String sessionId = authService.validateSmsCode(request.getPhone(), request.getCode());
         return ResponseEntity.ok(new SmsCheckResponse(sessionId));
     }
 
     // 코드 생성 요청
-    @PostMapping("/validations/sms")
+    @PostMapping("/sms-code")
     public ResponseEntity<Boolean> createCode(@RequestBody @Valid SmsCheckRequest request) {
         authService.createCode(request.getPhone());
         return ResponseEntity.ok(true);
