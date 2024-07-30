@@ -2,11 +2,9 @@ import React, { useEffect, useState } from 'react';
 import Profile from '../Profile';
 import { EmptyProfile, myProfile } from '../../../util/test/user/MyPageProfile';
 import { MyProfile, Posts } from '../../../interface/user/Profile';
-import { useNavigation } from '@react-navigation/native';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
 import { FeedNavigationProp } from '../../../types/navigationTypes';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getStorage } from '../../../util/common/Storage.ts';
 import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
 
@@ -15,6 +13,7 @@ const MyPageScreen = () => {
     const [filterProfile, setFilterProfile] = useState<MyProfile>(EmptyProfile);
     const [profile, setProfile] = useState<MyProfile>(EmptyProfile);
     const accessToken = useRecoilValue(accessTokenAtom);
+    const isFocused = useIsFocused();
 
     const onFilterHandler = (item: Posts) => {
         const updatedPosts = profile.posts.filter(post => post !== item);
@@ -40,7 +39,6 @@ const MyPageScreen = () => {
             }
         }).then((response)=>{
             if(response.status===200){
-                console.log(response.data);
                 setProfile(response.data);
             }
             else{
@@ -53,7 +51,7 @@ const MyPageScreen = () => {
             setProfile(EmptyProfile);
             console.log("Empty")
         };
-    },[accessToken]);
+    },[isFocused]);
 
     return (
         <Profile
