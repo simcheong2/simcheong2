@@ -1,15 +1,13 @@
 package com.example.simcheong2.domain.user.service;
 
-import com.example.simcheong2.domain.follow.entity.dto.FollowUserInfoDTO;
 import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.entity.dto.MyPageDTO;
 import com.example.simcheong2.domain.user.entity.dto.OtherPageDTO;
+import com.example.simcheong2.domain.user.entity.dto.UserSearchDTO;
 import com.example.simcheong2.domain.user.repository.UserRepository;
 import com.example.simcheong2.global.exception.model.CustomException;
 import com.example.simcheong2.global.exception.model.ErrorCode;
-import com.example.simcheong2.global.service.SecurityUtil;
-import kotlin.OptIn;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -34,10 +32,19 @@ public class UserSearchService {
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "등록된 유저가 아니거나 유저 정보를 불러올 수 없습니다."));
     }
 
-    public OtherPageDTO getOtherPageInfo(String nickname,Integer myID ) {
+    public OtherPageDTO getOtherPageInfo(String nickname, Integer myID) {
         User me = userRepository.findByUserId(myID).get();
         return userRepository.getOtherPageInfo(nickname)
-                .map(user -> OtherPageDTO.from(user,me))
+                .map(user -> OtherPageDTO.from(user, me))
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "등록된 유저가 아니거나 유저 정보를 불러올 수 없습니다."));
+    }
+
+    public List<UserSearchDTO> searchNickname(int userId, String nickname) {
+        List<User> users = userRepository.getAllUsersStartsWithNicknameAndNotInUserId(nickname, userId)
+                .orElse(new ArrayList<>());
+
+        return users.stream()
+                .map(UserSearchDTO::from)
+                .collect(Collectors.toList());
     }
 }

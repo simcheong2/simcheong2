@@ -3,7 +3,7 @@ package com.example.simcheong2.domain.user.controller;
 import com.example.simcheong2.domain.user.controller.request.OtherProfileInfoRequest;
 import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
-import com.example.simcheong2.domain.user.entity.dto.Sex;
+import com.example.simcheong2.domain.user.entity.dto.UserSearchDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
 import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
@@ -16,8 +16,8 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Tag(name = "유저 정보 API")
 @RequestMapping("/users")
@@ -31,7 +31,11 @@ public class UserController {
 
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
-        return ResponseEntity.ok(new ArrayList<>());
+        int userId = SecurityUtil.getCurrentUserId();
+        List<UserSearchDTO> response = userSearchService.searchNickname(userId, request.getNickname());
+        return ResponseEntity.ok(response.stream()
+                .map(UserSearchDTO::toResponse)
+                .collect(Collectors.toList()));
     }
 
     @GetMapping("/my-page")
