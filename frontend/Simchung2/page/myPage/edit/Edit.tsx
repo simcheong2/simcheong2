@@ -29,7 +29,7 @@ const Edit = ({profile}:EditProps) => {
                     <Text style={styles['header-title']}>프로필 편집</Text>
                 </View>
             </View>
-            <ProfileEdit profile={profile}/>
+            <CameraTest/>
         </View>
     )
 }

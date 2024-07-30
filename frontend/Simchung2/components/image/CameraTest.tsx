@@ -41,8 +41,8 @@ const CameraTest = () => {
         const { width, height } = imageInfo;
 
         // Calculate new dimensions
-        const newWidth = width * 0.2;
-        const newHeight = height * 0.2;
+        const newWidth = width * 0.3;
+        const newHeight = height * 0.3;
 
         // Manipulate the image (resize it)
         const manipulatedImage = await ImageManipulator.manipulateAsync(
