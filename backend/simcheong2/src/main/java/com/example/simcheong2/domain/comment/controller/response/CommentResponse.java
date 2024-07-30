@@ -8,5 +8,6 @@ import lombok.*;
 @Builder(toBuilder = true)
 public class CommentResponse {
     private String nickname;
+
     private String comment;
 }

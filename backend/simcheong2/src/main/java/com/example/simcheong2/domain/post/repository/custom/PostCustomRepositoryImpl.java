@@ -5,6 +5,8 @@ import com.example.simcheong2.domain.post.entity.QPost;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -33,4 +35,18 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                         .fetch()
         );
     }
+    @Override
+    public Optional<List<Post>> findRecentPosts(Integer userId){
+        return Optional.ofNullable(
+                jpaQueryFactory
+                        .selectFrom(post)
+                        .where(
+                            post.user.postVisible.eq(true)
+                                    .and(post.user.userId.ne(userId))
+                        )
+                        .orderBy(post.createdDate.desc())
+                        .fetch()
+        );
+    };
+
 }

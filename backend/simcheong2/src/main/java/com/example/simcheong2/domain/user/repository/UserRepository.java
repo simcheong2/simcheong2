@@ -14,4 +14,5 @@ public interface UserRepository extends JpaRepository<User, Integer>, UserCustom
     Optional<User> findByInputId(String inputId);
 
     Optional<User> findByNickname(String nickname);
+
 }

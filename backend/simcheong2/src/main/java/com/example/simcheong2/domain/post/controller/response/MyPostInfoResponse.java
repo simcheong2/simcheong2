@@ -11,21 +11,15 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class MyPostInfoResponse {
-    @NonNull
     private List<ImagesResponse> images;
 
-    @NonNull
     private String content;
 
-    @NonNull
     private Integer likeCount;
 
-    @NonNull
     private Integer commentCount;
 
-    @NonNull
     private Boolean isLiked;
 
-    @NonNull
     private LocalDateTime createdDate;
 }

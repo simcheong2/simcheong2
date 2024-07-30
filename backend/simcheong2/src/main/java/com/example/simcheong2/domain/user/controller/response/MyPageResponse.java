@@ -13,9 +13,7 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class MyPageResponse {
-    @NonNull
     private MyProfileInfoResponse profile;
 
-    @NonNull
     private List<MyPostInfoResponse> posts;
 }

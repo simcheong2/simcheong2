@@ -12,13 +12,10 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class FeedResponse {
-    @NonNull
     private OtherUserInfoResponse otherUserInfoResponse;
 
-    @NonNull
     private OtherPostInfoResponse posts;
 
-    @NonNull
     private List<CommentResponse> comments;
 }
 

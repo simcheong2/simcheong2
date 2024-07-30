@@ -125,6 +125,12 @@ public class User extends BaseEntity {
         return false;
     }
 
+    public boolean isReported() {
+        return blamedUserUserBlames.stream().anyMatch(
+                userBlame -> userBlame.getBlamedUser().getUserId() == this.userId
+        );
+    }
+
     public void updateProfileUrl(String profileUrl) {
         this.profileImage = profileUrl;
     }

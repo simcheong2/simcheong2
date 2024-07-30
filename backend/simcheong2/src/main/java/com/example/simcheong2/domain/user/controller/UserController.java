@@ -1,5 +1,6 @@
 package com.example.simcheong2.domain.user.controller;
 
+import com.example.simcheong2.domain.user.controller.request.OtherProfileInfoRequest;
 import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.Sex;
@@ -41,11 +42,11 @@ public class UserController {
     }
 
     @GetMapping("/other-page")
-    public ResponseEntity<OtherPageResponse> otherPage() {
-        return ResponseEntity.ok(new OtherPageResponse(
-                new OtherProfileInfoResponse("", "", true, true, Sex.MALE, true, 0, 0, ""),
-                new ArrayList<>()
-        ));
+    public ResponseEntity<OtherPageResponse> otherPage(@RequestBody @Valid OtherProfileInfoRequest request) {
+        int userId = SecurityUtil.getCurrentUserId();
+
+        OtherPageResponse response = userSearchService.getOtherPageInfo(request.getNickname(), userId).toResponse();
+        return ResponseEntity.ok(response);
     }
 
     @PostMapping("/profile-url")

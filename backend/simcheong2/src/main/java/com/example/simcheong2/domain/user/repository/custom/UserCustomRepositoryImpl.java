@@ -37,6 +37,21 @@ public class UserCustomRepositoryImpl implements UserCustomRepository {
     }
 
     @Override
+    public Optional<User> getOtherPageInfo(String nickname){
+        return Optional.ofNullable(
+                jpaQueryFactory.selectFrom(user)
+                        .leftJoin(user.followingFollows).fetchJoin()
+                        .leftJoin(user.followerFollows).fetchJoin()
+                        .leftJoin(user.userPosts, post).fetchJoin()
+                        .leftJoin(post.postImages, image).fetchJoin()
+                        .leftJoin(post.postUserPostLikes, userPostLike).fetchJoin()
+                        .leftJoin(post.postComments, comment).fetchJoin()
+                        .where(user.nickname.eq(nickname))
+                        .fetchOne()
+          );
+    }
+
+    @Override
     public Optional<List<User>> getFollows(int userId) {
         return Optional.ofNullable(
                 jpaQueryFactory.selectFrom(user)

@@ -59,4 +59,10 @@ public class Post extends BaseEntity {
                 userPostLike -> userPostLike.getUser().getUserId() == this.user.getUserId()
         );
     }
+
+    public boolean isReported(){
+        return blamedPostPostBlames.stream().anyMatch(
+                postBlame -> postBlame.getBlamedPost().getPostId() == this.postId
+        );
+    }
 }
