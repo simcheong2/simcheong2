@@ -9,9 +9,7 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class UserSearchResponse {
-    @NonNull
     private String nickname;
 
-    @NonNull
     private String profileUrl;
 }

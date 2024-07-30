@@ -6,4 +6,6 @@ import java.util.Optional;
 
 public interface UserCustomRepository {
     Optional<User> getMyPageInfo(int userId);
+
+    Optional<User> getOtherPageInfo(String nickname);
 }

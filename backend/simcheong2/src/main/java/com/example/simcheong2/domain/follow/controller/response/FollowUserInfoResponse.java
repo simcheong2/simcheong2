@@ -9,12 +9,9 @@ import lombok.NonNull;
 @AllArgsConstructor
 @NoArgsConstructor
 public class FollowUserInfoResponse {
-    @NonNull
     private String nickname;
 
-    @NonNull
     private String profileUrl;
 
-    @NonNull
     private Boolean isDisabled;
 }

@@ -6,6 +6,7 @@ import com.example.simcheong2.domain.user.controller.response.MyProfileInfoRespo
 import com.example.simcheong2.domain.user.entity.User;
 import lombok.*;
 
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -44,6 +45,7 @@ public class MyPageDTO {
     public MyPageResponse toResponse() {
         return MyPageResponse.builder()
                 .posts(posts.stream()
+                        .sorted(Comparator.comparing(MyPostInfoDTO::getCreatedDate).reversed())
                         .map(MyPostInfoDTO::toResponse)
                         .collect(Collectors.toList()))
                 .profile(MyProfileInfoResponse.builder()

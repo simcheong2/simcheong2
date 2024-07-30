@@ -118,10 +118,18 @@ public class User extends BaseEntity {
         );
     }
 
+
+
     // other가 너 게시물에 좋아요 누를 수 있니?
     public boolean isPossibleLike(User other) {
         if (this.postVisible) return true;
         if (this.isFollow(other)) return true;
         return false;
+    }
+
+    public boolean isReported(){
+        return blamedUserUserBlames.stream().anyMatch(
+                userBlame -> userBlame.getBlamedUser().getUserId() == this.userId
+        );
     }
 }

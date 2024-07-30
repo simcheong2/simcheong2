@@ -6,6 +6,7 @@ import com.example.simcheong2.domain.post.entity.Post;
 import lombok.*;
 
 import java.time.LocalDateTime;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,7 +16,7 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 @ToString
 @Builder(toBuilder = true)
-public class MyPostInfoDTO {
+public class MyPostInfoDTO implements Comparator<MyPostInfoDTO> {
     private List<ImageDTO> images;
     private String content;
     private Integer likeCount;
@@ -49,4 +50,10 @@ public class MyPostInfoDTO {
                 .createdDate(createdDate)
                 .build();
     }
+
+    @Override
+    public int compare(MyPostInfoDTO o1, MyPostInfoDTO o2) {
+        return o1.createdDate.compareTo(o2.createdDate);
+    }
+
 }
