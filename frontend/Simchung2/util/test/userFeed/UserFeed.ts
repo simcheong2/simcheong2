@@ -36,7 +36,7 @@ export const userFeeds = [
             isReport: false,
             isFollow: true
         },
-        post: {
+        posts: {
             images:[
                 {
                     imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtRCGjNQ-eOBVSrPManpSmj8FJIv3f_pNq6w&s",
@@ -54,8 +54,9 @@ export const userFeeds = [
             content: "이 이미지에는 축구 유니폼을 입은 사람이 트로피를 들고 환호하는 장면이 담겨 있습니다.",
             likeCount: 27000,
             commentCount: 27000,
-            isLike: false,
-            isReport: false,
+            isLiked: false,
+            isReported: false,
+            createdAt: "2024-07-30T10:06:07.856717"
         },
         comments:[
             {
@@ -80,23 +81,24 @@ export const EmptyComments: Comments[] = [
 export const EmptyFeeds: FeedItemResponse[] = [
     {
         otherUserInfoResponse: {
-            profileUrl:'',
+            profileUrl:'https://via.placeholder.com/150',
             nickname:'',
             isReport:false,
             isFollow:false
         },
-        post:{
+        posts:{
             images:[
                 {
-                    imageUrl: '',
+                    imageUrl: 'https://via.placeholder.com/150',
                     imageText: '',
                 }
             ],
             content: '',
             likeCount: 0,
             commentCount: 0,
-            isLike: false,
-            isReport: false,
+            isLiked: false,
+            isReported: false,
+            createdAt: '',
         },
         comments:[
             {
