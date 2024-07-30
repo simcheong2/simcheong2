@@ -46,16 +46,16 @@ const Feed = ({ feed, onPress }: FeedProps) => {
                     style={styles['profile-image']}
                     source={userImgSrc}
                     resizeMode="cover" />
-                <View style={styles['user-container']} accessibilityLabel={`${feed.post.images[0].imageUrl}`}>
+                <View style={styles['user-container']} accessibilityLabel={`${feed.posts.images[0].imageUrl}`}>
                     <Text style={styles.userName}>{feed.otherUserInfoResponse.nickname}</Text>
-                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.post.content}</Text>
+                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.posts.content}</Text>
                 </View>
                 <TouchableOpacity style={styles.iconButton}>
                     <Icon name="more-horiz" size={24} style={styles.icon} />
                 </TouchableOpacity>
             </View>
             <FlatList
-                data={feed.post.images.flatMap((images) => images)}
+                data={feed.posts.images.flatMap((images) => images)}
                 renderItem={renderItems}
                 keyExtractor={(item, index) => index.toString()}
                 horizontal={true}
@@ -67,11 +67,11 @@ const Feed = ({ feed, onPress }: FeedProps) => {
             <View style={styles.favorite}>
                 <TouchableOpacity style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(feed.post.likeCount)}</Text>
+                    <Text style={styles['comment-count']}>{formatComma(feed.posts.likeCount)}</Text>
                 </TouchableOpacity>
                 <TouchableOpacity style={styles['favorite-container']}>
                     <Icon name="favorite-outline" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(feed.post.commentCount)}</Text>
+                    <Text style={styles['comment-count']}>{formatComma(feed.posts.commentCount)}</Text>
                 </TouchableOpacity>
             </View>
         </View>

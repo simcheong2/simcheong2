@@ -6,7 +6,7 @@ import { MyProfile } from '../interface/user/Profile';
 type RootStackParamList = {
   Signup: undefined;
   Login : undefined;
-  Home : undefined;
+  BottomNavigation : undefined;
 };
 
 type FeedStackParamList = {
