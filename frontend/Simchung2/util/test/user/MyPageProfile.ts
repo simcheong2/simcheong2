@@ -103,7 +103,7 @@ export const EmptyProfile: MyProfile = {
         {
             images:[
                 {
-                    imageUrl: '',
+                    imageUrl: 'https://via.placeholder.com/150',
                     imageText: '',
                 },
             ],

@@ -5,6 +5,7 @@ import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
 import { ScreenNavigationProp } from '../types/navigationTypes';
+import { setStorage } from '../util/common/Storage.ts';
 
 function LoginScreen() {
     const navigation = useNavigation< ScreenNavigationProp>();
@@ -31,7 +32,7 @@ function LoginScreen() {
                         const response = await axios.post(`${BaseUrl}/auth/reissue`, { refreshToken });
                         if (response.status === 200) {
                             const { accessToken } = response.data;
-                            await AsyncStorage.setItem('accessToken', accessToken);
+                            await setStorage('accessToken', accessToken);
                             Alert.alert("자동 로그인 성공", "자동 로그인에 성공하였습니다.");
                             // 여기 아래에, 아마 조합된 url이 추가 되지 않을까 싶네요.
                         } else {
@@ -55,16 +56,16 @@ function LoginScreen() {
 
             if (response.status === 200) {
                 const { accessToken, refreshToken } = response.data;
-                await AsyncStorage.setItem('accessToken', accessToken);
-                await AsyncStorage.setItem('refreshToken', refreshToken);
+                await setStorage('accessToken', accessToken);
+                await setStorage('refreshToken', refreshToken);
                 if (isChecked) {
-                    await AsyncStorage.setItem('isChecked', 'true');
+                    await setStorage('isChecked', 'true');
                 } else {
-                    await AsyncStorage.setItem('isChecked', 'false');
+                    await setStorage('isChecked', 'false');
                 }
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
-                navigation.replace("Home");
-
+                navigation.navigate('BottomNavigation');
+            
             } else {
                 Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
             }
