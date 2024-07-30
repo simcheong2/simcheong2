@@ -1,5 +1,4 @@
-import { NavigationContainer } from "@react-navigation/native";
-import React from "react";
+import React, { useEffect } from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
 import Tabs from '../../navigation/home/Tabs';
 
@@ -30,6 +29,7 @@ const styles = StyleSheet.create({
 })
 
 const HomeScreen = () => {
+
     return(
         <View accessibilityLabel="심청2 홈 화면 입니다. 당신의 친구들과의 추억을 즐겨보세요." style={styles.container}>
             <View style={styles.header}>

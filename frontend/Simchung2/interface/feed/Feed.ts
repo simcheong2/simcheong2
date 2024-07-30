@@ -1,6 +1,6 @@
 export interface FeedItemResponse{
     otherUserInfoResponse: OtherUserInfoResponse;
-    post: Post;
+    posts: Post;
     comments: Comments[];
 }
 
@@ -15,9 +15,10 @@ interface Post{
     images: Images[],
     content: string,
     likeCount: number,
+    createdAt: string,
     commentCount: number,
-    isLike: boolean,
-    isReport: boolean,
+    isLiked: boolean,
+    isReported: boolean,
 }
 
 export interface Images{
