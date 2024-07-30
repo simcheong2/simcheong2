@@ -1,10 +1,13 @@
-import React, { useState } from "react";
+import React, { useState,useEffect } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from 'axios';
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from '../types/navigationTypes';
 
 function LoginScreen() {
+    const navigation = useNavigation< ScreenNavigationProp>();
     const [isChecked, setIsChecked] = useState(false);
     const [secureTextEntry, setSecureTextEntry] = useState(true);
     const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
@@ -17,40 +20,62 @@ function LoginScreen() {
         setSecureTextEntry(!secureTextEntry);
     };
 
-    const [formData, setFormData] = useState({ id: '', pwd: '' });
-
-    const handleLogin = async () => {
-       
-        try {
-            const response = await axios.post(`${BaseUrl}/auth/login`, formData);
-            if (response.status === 200) {
-                const { accessToken, refreshToken } = response.data;
-                await AsyncStorage.setItem('accessToken', accessToken);
-                await AsyncStorage.setItem('refreshToken', refreshToken);
-                Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
-            }else if(response.status === 401){
+    const [formData, setFormData] = useState({ id: '', password: '' });
+    useEffect(() => {
+        const autoLogin = async () => {
+            const storedIsChecked = await AsyncStorage.getItem('isChecked');
+            if (storedIsChecked === 'true') {
                 const refreshToken = await AsyncStorage.getItem('refreshToken');
                 if (refreshToken) {
                     try {
-                        const tokenResponse = await axios.post(`${BaseUrl}/auth/reissue`, { refreshToken });
-                        if (tokenResponse.status === 200) {
-                            const { accessToken: newAccessToken } = tokenResponse.data;
-                            await AsyncStorage.setItem('accessToken', newAccessToken);
-                    
+                        const response = await axios.post(`${BaseUrl}/auth/reissue`, { refreshToken });
+                        if (response.status === 200) {
+                            const { accessToken } = response.data;
+                            await AsyncStorage.setItem('accessToken', accessToken);
+                            Alert.alert("자동 로그인 성공", "자동 로그인에 성공하였습니다.");
+                            // 여기 아래에, 아마 조합된 url이 추가 되지 않을까 싶네요.
                         } else {
                             Alert.alert("토큰 재발급 실패", "다시 로그인해 주세요.");
                         }
-                    } catch (tokenError) {
+                    } catch (error) {
                         Alert.alert("토큰 재발급 에러", "다시 로그인해 주세요.");
                     }
                 } else {
                     Alert.alert("리프레시 토큰 없음", "다시 로그인해 주세요.");
                 }
             }
+        };
+
+        autoLogin();
+    }, []);
+
+    const handleLogin = async () => {
+        try {
+            const response = await axios.post(`${BaseUrl}/auth/login`, formData);
+
+            if (response.status === 200) {
+                const { accessToken, refreshToken } = response.data;
+                await AsyncStorage.setItem('accessToken', accessToken);
+                await AsyncStorage.setItem('refreshToken', refreshToken);
+                if (isChecked) {
+                    await AsyncStorage.setItem('isChecked', 'true');
+                } else {
+                    await AsyncStorage.setItem('isChecked', 'false');
+                }
+                Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
+                navigation.replace("Home");
+            
+            } else {
+                Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
+            }
         } catch (error) {
             Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
         }
     };
+
+    const handleGotoSignUp = () =>{
+        navigation.navigate("Signup");
+    }
 
     return (
         <View style={styles.container}>
@@ -66,8 +91,8 @@ function LoginScreen() {
                     style={styles.passwordInput}
                     placeholder="비밀번호"
                     secureTextEntry={secureTextEntry}
-                    value={formData.pwd}
-                    onChangeText={(text) => setFormData({ ...formData, pwd: text })}
+                    value={formData.password}
+                    onChangeText={(text) => setFormData({ ...formData, password: text })}
                 />
                 <TouchableOpacity onPress={toggleSecureTextEntry}>
                     <Icon name={secureTextEntry ? "eye-off-outline" : "eye-outline"} size={24} style={styles.icon} />
@@ -82,7 +107,7 @@ function LoginScreen() {
             <TouchableOpacity style={styles.button} onPress={handleLogin}>
                 <Text style={styles.buttonText}>로그인</Text>
             </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSignup}>
+            <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
                 <Text style={styles.buttonTextSignup}>회원가입</Text>
             </TouchableOpacity>
         </View>
