@@ -2,8 +2,11 @@ import React, { useRef, useState } from 'react';
 import { useCameraPermissions } from 'expo-camera';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera/legacy';
+import axios from 'axios';
+import { Blob } from 'buffer'
 
 const CameraTest = () => {
+    const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OWlkIiwiZXhwIjoxNzI0OTAyNjE0LCJraW5kIjoiYWNjZXNzVG9rZW4ifQ.Zv7FqfwkQy4_FJ_OmQXKiy-ZPKVF7PBSSfeLafcd1KHvjOd-Vg-9gYBns7jicyzBopkyixy83NzfIBTG0Kp8Mw';
     const [facing, setFacing] = useState<CameraType>(CameraType.back);
     const [permission, requestPermission] = useCameraPermissions();
     const [photo, setPhoto] = useState<string | null>(null);
@@ -32,6 +35,43 @@ const CameraTest = () => {
         if (cameraRef.current) {
             const photo = await cameraRef.current.takePictureAsync();
             setPhoto(photo.uri);
+            const fileName = photo.uri.split('/').pop();
+            const fileType = fileName?.split('.').pop();
+            const mimeType = `image/${fileType}`;
+            uploadPhoto(photo.uri, mimeType, fileName!!);
+        }
+    };
+
+    const uploadPhoto = async (uri: string, type: string, name: string) => {
+        const formData = new FormData()
+        formData.append('images',{
+            uri,
+            name,
+            type
+        });
+
+        // JSON 요청 본문을 문자열로 변환합니다.
+        const requestPayload = JSON.stringify({
+            content: "여기 놀러왔어요~"
+        });
+        const blob = new Blob([requestPayload], { type: "application/json" });
+
+        // JSON 요청 본문을 FormData에 추가합니다.
+        formData.append('request', blob);
+
+        try {
+            await axios.post('http://www.my-first-develop-library.shop:8080//posts', formData, {
+                headers: {
+                    'Content-Type': 'multipart/form-data',
+                    "Authorization": `Bearer ${accessToken}`,
+                }
+            }).then((response)=>{
+                console.log(response.data);
+            }).catch((error)=>{
+                console.error(error);
+            });
+        } catch (error) {
+            console.error(error);
         }
     };
 
@@ -55,7 +95,7 @@ const CameraTest = () => {
             )}
         </View>
     );
-}
+};
 
 const styles = StyleSheet.create({
     container: {
@@ -100,4 +140,4 @@ const styles = StyleSheet.create({
     },
 });
 
-export default CameraTest
+export default CameraTest;
