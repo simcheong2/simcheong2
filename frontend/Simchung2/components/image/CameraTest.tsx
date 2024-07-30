@@ -3,10 +3,10 @@ import { useCameraPermissions } from 'expo-camera';
 import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera/legacy';
 import axios from 'axios';
-import { Blob } from 'buffer'
+import * as ImageManipulator from 'expo-image-manipulator';
 
 const CameraTest = () => {
-    const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OWlkIiwiZXhwIjoxNzI0OTAyNjE0LCJraW5kIjoiYWNjZXNzVG9rZW4ifQ.Zv7FqfwkQy4_FJ_OmQXKiy-ZPKVF7PBSSfeLafcd1KHvjOd-Vg-9gYBns7jicyzBopkyixy83NzfIBTG0Kp8Mw';
+    const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OWlkIiwiZXhwIjoxNzI0OTEwNDU2LCJraW5kIjoiYWNjZXNzVG9rZW4ifQ.DvKqqgTuvudlzJVQJYz8zhURG3amw8yVcb-MGzdfMD95__GMZbw4frBgWbRfOnzFfQECf4aNPmKHX3n8GTLS4g';
     const [facing, setFacing] = useState<CameraType>(CameraType.back);
     const [permission, requestPermission] = useCameraPermissions();
     const [photo, setPhoto] = useState<string | null>(null);
@@ -32,46 +32,63 @@ const CameraTest = () => {
     };
 
     const takePicture = async () => {
-        if (cameraRef.current) {
-            const photo = await cameraRef.current.takePictureAsync();
-            setPhoto(photo.uri);
-            const fileName = photo.uri.split('/').pop();
-            const fileType = fileName?.split('.').pop();
-            const mimeType = `image/${fileType}`;
-            uploadPhoto(photo.uri, mimeType, fileName!!);
-        }
+        // cameraRef가 없으면 해당 함수가 실행되지 않게 가드
+        if (!cameraRef.current) return;
+
+        const photos = await cameraRef.current?.takePictureAsync();
+
+        const imageInfo = await ImageManipulator.manipulateAsync(photos.uri);
+        const { width, height } = imageInfo;
+
+        // Calculate new dimensions
+        const newWidth = width * 0.3;
+        const newHeight = height * 0.3;
+
+        // Manipulate the image (resize it)
+        const manipulatedImage = await ImageManipulator.manipulateAsync(
+            photos.uri,
+            [{ resize: { width: newWidth, height: newHeight } }],
+            { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true },
+        );
+
+        setPhoto(manipulatedImage.uri);
+
+        console.log(manipulatedImage.uri);
+
+        const fileName = manipulatedImage.uri.split('/').pop();
+        const fileType = fileName?.split('.').pop();
+        const mimeType = `image/${fileType}`;
+        await uploadPhoto(manipulatedImage.uri, manipulatedImage.base64!!, mimeType, fileName!!);
     };
 
-    const uploadPhoto = async (uri: string, type: string, name: string) => {
-        const formData = new FormData()
-        formData.append('images',{
+    const uploadPhoto = async (uri: string, base64Data: string, mimeType: string, fileName: string) => {
+        const formData = new FormData();
+
+        // Append image file
+        formData.append('images', {
             uri,
-            name,
-            type
+            name: fileName,
+            type: 'image/jpeg',
         });
 
-        // JSON 요청 본문을 문자열로 변환합니다.
-        const requestPayload = JSON.stringify({
-            content: "여기 놀러왔어요~"
-        });
-        const blob = new Blob([requestPayload], { type: "application/json" });
-
-        // JSON 요청 본문을 FormData에 추가합니다.
-        formData.append('request', blob);
+        // Append request JSON object as a Blob
+        const content = { 'string': JSON.stringify({ content: 'Sample' }), type: 'application/json' };
+        formData.append('request', content);
 
         try {
-            await axios.post('http://www.my-first-develop-library.shop:8080//posts', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                    "Authorization": `Bearer ${accessToken}`,
-                }
-            }).then((response)=>{
-                console.log(response.data);
-            }).catch((error)=>{
-                console.error(error);
-            });
+            const response = await axios.post(
+                'http://www.my-first-develop-library.shop:8080/posts',
+                formData,
+                {
+                    headers: {
+                        Authorization: `Bearer ${accessToken}`,
+                        'Content-Type': 'multipart/form-data',
+                    },
+                },
+            );
+            console.log('Success', response.data);
         } catch (error) {
-            console.error(error);
+            console.error('Error', error);
         }
     };
 
