@@ -4,6 +4,7 @@ import { TouchableOpacity, StyleSheet, Text, TextInput, View, ScrollView, Keyboa
 import { useNavigation } from '@react-navigation/native';
 import { ScreenNavigationProp } from "../types/navigationTypes";
 import axios from 'axios';
+import Loading from "./loading/Loading";
 
 function SignupScreen() {
     const [formData, setFormData] = useState({
@@ -22,6 +23,7 @@ function SignupScreen() {
     const [selectedDisability, setSelectedDisability] = useState("");
     const [isVerificationSent, setIsVerificationSent] = useState(false);
     const [isVerified, setIsVerified] = useState(false);
+    const [isLoading, setIsLoading] = useState(false); 
     const navigation = useNavigation<ScreenNavigationProp>();
 
     const handleChange = (name: string, value: string) => {
@@ -32,7 +34,7 @@ function SignupScreen() {
     };
 
     const handleVerificationRequest = () => {
-
+        setIsLoading(true); 
         const smsData = {
             name: formData.name,
             phone: formData.phone,
@@ -52,11 +54,13 @@ function SignupScreen() {
             .catch((error) => {
                 Alert.alert("Error", "Verification request failed. Please try again.");
                 console.error(error);
-            });
+            }).finally(()=>{
+                setIsLoading(false);
+            })
     };
 
     const handleVerification = () => {
-
+        setIsLoading(true);
         const codeData = {
             code: formData.verificationCode,
             phone: formData.phone,
@@ -86,11 +90,15 @@ function SignupScreen() {
                     Alert.alert("Error", "Verification failed. Please try again.");
                 }
                 console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false); 
             });
     };
 
 
     const handleSignup = () => {
+        setIsLoading(true);
         let formattedDate;
         try {
             const [year, month, day] = formData.openingDate.split('-').map(Number);
@@ -130,11 +138,14 @@ function SignupScreen() {
             .catch((error) => {
                 Alert.alert("Error", "Signup failed. Please try again.");
                 console.error(error);
+            })
+            .finally(() => {
+                setIsLoading(false); 
             });
     };
 
     return (
-        <KeyboardAvoidingView
+        isLoading?(<Loading/>):(<KeyboardAvoidingView
             style={{ flex: 1 }}
             behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
             keyboardVerticalOffset={80}
@@ -313,7 +324,7 @@ function SignupScreen() {
                     )}
                 </View>
             </ScrollView>
-        </KeyboardAvoidingView>
+        </KeyboardAvoidingView>)
     );
 }
 

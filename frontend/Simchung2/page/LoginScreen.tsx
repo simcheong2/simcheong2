@@ -1,4 +1,4 @@
-import React, { useState,useEffect } from "react";
+import React, { useState, useEffect } from "react";
 import { Image, StyleSheet, Text, TextInput, TouchableOpacity, View, Alert } from "react-native";
 import Icon from "react-native-vector-icons/MaterialCommunityIcons";
 import axios from 'axios';
@@ -9,9 +9,11 @@ import { setStorage } from '../util/common/Storage.ts';
 import Loading from './loading/Loading';
 
 function LoginScreen() {
-    const navigation = useNavigation< ScreenNavigationProp>();
+    const navigation = useNavigation<ScreenNavigationProp>();
     const [isChecked, setIsChecked] = useState(false);
     const [secureTextEntry, setSecureTextEntry] = useState(true);
+    const [isLoading, setIsLoading] = useState(false); 
+
     const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
 
     const toggleCheckbox = () => {
@@ -52,6 +54,7 @@ function LoginScreen() {
     }, []);
 
     const handleLogin = async () => {
+        setIsLoading(true); // 로딩 시작
         try {
             const response = await axios.post(`${BaseUrl}/auth/login`, formData);
 
@@ -66,53 +69,58 @@ function LoginScreen() {
                 }
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
                 navigation.navigate('BottomNavigation');
-            
             } else {
                 Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
             }
         } catch (error) {
             Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
+        } finally {
+            setIsLoading(false); 
         }
     };
 
-    const handleGotoSignUp = () =>{
+    const handleGotoSignUp = () => {
         navigation.navigate("Signup");
-    }
+    };
 
     return (
-        <View style={styles.container}>
-            <Image source={require('../assets/images/logo.png')} style={styles.logo} />
-            <TextInput
-                style={styles.input}
-                placeholder="아이디"
-                value={formData.id}
-                onChangeText={(text) => setFormData({ ...formData, id: text })}
-            />
-            <View style={styles.passwordContainer}>
+        isLoading ? (
+            <Loading />
+        ) : (
+            <View style={styles.container}>
+                <Image source={require('../assets/images/logo.png')} style={styles.logo} />
                 <TextInput
-                    style={styles.passwordInput}
-                    placeholder="비밀번호"
-                    secureTextEntry={secureTextEntry}
-                    value={formData.password}
-                    onChangeText={(text) => setFormData({ ...formData, password: text })}
+                    style={styles.input}
+                    placeholder="아이디"
+                    value={formData.id}
+                    onChangeText={(text) => setFormData({ ...formData, id: text })}
                 />
-                <TouchableOpacity onPress={toggleSecureTextEntry}>
-                    <Icon name={secureTextEntry ? "eye-off-outline" : "eye-outline"} size={24} style={styles.icon} />
+                <View style={styles.passwordContainer}>
+                    <TextInput
+                        style={styles.passwordInput}
+                        placeholder="비밀번호"
+                        secureTextEntry={secureTextEntry}
+                        value={formData.password}
+                        onChangeText={(text) => setFormData({ ...formData, password: text })}
+                    />
+                    <TouchableOpacity onPress={toggleSecureTextEntry}>
+                        <Icon name={secureTextEntry ? "eye-off-outline" : "eye-outline"} size={24} style={styles.icon} />
+                    </TouchableOpacity>
+                </View>
+                <View style={styles.saveIdContainer}>
+                    <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>
+                        <Icon name={isChecked ? "checkbox-marked" : "checkbox-blank-outline"} size={24} />
+                    </TouchableOpacity>
+                    <Text>자동 로그인</Text>
+                </View>
+                <TouchableOpacity style={styles.button} onPress={handleLogin}>
+                    <Text style={styles.buttonText}>로그인</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
+                    <Text style={styles.buttonTextSignup}>회원가입</Text>
                 </TouchableOpacity>
             </View>
-            <View style={styles.saveIdContainer}>
-                <TouchableOpacity onPress={toggleCheckbox} style={styles.checkbox}>
-                    <Icon name={isChecked ? "checkbox-marked" : "checkbox-blank-outline"} size={24} />
-                </TouchableOpacity>
-                <Text>자동 로그인</Text>
-            </View>
-            <TouchableOpacity style={styles.button} onPress={handleLogin}>
-                <Text style={styles.buttonText}>로그인</Text>
-            </TouchableOpacity>
-            <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
-                <Text style={styles.buttonTextSignup}>회원가입</Text>
-            </TouchableOpacity>
-        </View>
+        )
     );
 }
 
@@ -133,9 +141,9 @@ const styles = StyleSheet.create({
         borderWidth: 1,
         borderRadius: 5,
         marginBottom: 16,
-        paddingLeft:22,
-        paddingTop:10,
-        paddingBottom:10,
+        paddingLeft: 22,
+        paddingTop: 10,
+        paddingBottom: 10,
     },
     passwordContainer: {
         flexDirection: 'row',
