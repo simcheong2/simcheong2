@@ -25,8 +25,8 @@ import java.util.stream.Collectors;
 @ToString
 @Builder(toBuilder = true)
 public class OtherPageDTO {
-    private Integer followingCount; // 다른사람을 팔로우하는 사람들
-    private Integer followerCount; // 다른사람이 팔로우한 사람들
+    private Integer followingCount; // 다른사람이 팔로우하는 사람들
+    private Integer followerCount; // 다른사람을 팔로우하는 사람들. 이 사람의 인싸력임.
     private String email;
     private String profileUrl;
     private String nickname;
@@ -43,8 +43,8 @@ public class OtherPageDTO {
             throw new CustomException(ErrorCode.BAD_REQUEST,"다른사람 페이지 불러오는 중에 다른사람 정보 = 자신의 정보인 오류 발생");
         }
         return OtherPageDTO.builder()
-                .followingCount(other.getFollowingFollows().size())
-                .followerCount(other.getFollowerFollows().size())
+                .followingCount(other.getFollowerFollows().size())
+                .followerCount(other.getFollowingFollows().size())
                 .email(other.getEmail())
                 .profileUrl(other.getProfileImage())
                 .nickname(other.getNickname())

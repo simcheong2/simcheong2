@@ -48,6 +48,7 @@ public class FollowController {
     }
 
     //내 팔로우 목록
+    @Operation(summary = "내가 팔로우 하는 사람들의 정보")
     @GetMapping("/my-follows")
     public ResponseEntity<List<FollowUserInfoResponse>> getMyFollows() {
         int userId = SecurityUtil.getCurrentUserId();
@@ -57,6 +58,7 @@ public class FollowController {
                 .collect(Collectors.toList()));
     }
 
+    @Operation(summary = "나를 팔로우 하는 사람들의 정보. 내 인싸력 검증 지표")
     @GetMapping("/my-followers")
     public ResponseEntity<List<FollowerUserInfoResponse>> getMyFollowers() {
         int userId = SecurityUtil.getCurrentUserId();
@@ -77,7 +79,7 @@ public class FollowController {
                 .collect(Collectors.toList()));
     }
 
-    @Operation(description = "요청바디에 넘긴 유저를 팔로우하고 있는 사람들의 목록을 조회")
+    @Operation(description = "요청바디에 넘긴 유저를 팔로우하고 있는 사람들의 목록을 조회. 이 사람의 인싸력 검증 지표")
     @GetMapping("/other-followers")
     public ResponseEntity<List<OtherFollowerUserInfoResponse>> getOtherFollowers(
             @RequestBody @Valid OtherFollowRequest request) {

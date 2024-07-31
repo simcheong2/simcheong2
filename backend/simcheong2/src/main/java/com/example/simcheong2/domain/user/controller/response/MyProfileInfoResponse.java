@@ -1,6 +1,7 @@
 package com.example.simcheong2.domain.user.controller.response;
 
 import com.example.simcheong2.domain.user.entity.dto.Sex;
+import io.swagger.v3.oas.annotations.media.Schema;
 import jakarta.validation.constraints.Email;
 import lombok.*;
 
@@ -9,8 +10,9 @@ import lombok.*;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class MyProfileInfoResponse {
+    @Schema(description = "내가 팔로우하는 사람들의 숫자")
     private Integer followingCount;
-
+    @Schema(description = "나를 팔로우하는 사람들의 숫자. 내가 얼마나 인기인인지 지표")
     private Integer followerCount;
 
     @Email
