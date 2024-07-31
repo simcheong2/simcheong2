@@ -47,10 +47,8 @@ public class PostController {
     }
 
     // 추천 피드
-    @GetMapping("/recommend")
+    @GetMapping("/random")
     public ResponseEntity<List<FeedResponse>> recommendPosts() {
-        int userId = SecurityUtil.getCurrentUserId();
-
         List<FeedResponse> feeds = postSearchService.getRecommendFeeds().stream()
                 .map(PostFeedDTO::toResponse)
                 .toList();
