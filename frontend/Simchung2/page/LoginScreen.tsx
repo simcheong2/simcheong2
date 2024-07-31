@@ -112,7 +112,6 @@ function LoginScreen() {
             <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
                 <Text style={styles.buttonTextSignup}>회원가입</Text>
             </TouchableOpacity>
-            <Loading/>
         </View>
     );
 }
