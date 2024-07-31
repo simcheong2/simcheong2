@@ -115,7 +115,7 @@ public class AuthService {
     }
 
     private void checkExistUser(String phone) {
-        Optional<UserDTO> user = userValidationService.isPhoneNumberAlreadyRegistered(phone);
+        Optional<UserDTO> user = userValidationService.isPhoneNumberAlreadyRegistered(phone.replace("-", ""));
         if (user.isPresent()) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "이미 가입된 전화번호입니다.");
         }
@@ -130,8 +130,7 @@ public class AuthService {
 
     private void sendCode(String phone) {
         String code = codeGenerator.generatorCode();
-        smsUtil.sendOne(phone, code); // 하면 진짜 전송됨ㅋㅋ
-        log.info("{}에게 {}를 전송함", phone, code);
+        smsUtil.sendOne(phone, code);
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
