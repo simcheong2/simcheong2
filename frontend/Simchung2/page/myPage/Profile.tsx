@@ -7,9 +7,10 @@ interface MyPageProps{
     filterClick: (item: Posts) => void
     feedClick: ()=>void
     editClick: ()=>void
+    followClick: (follow:'follow'|'follower')=>void
 }
 
-const Profile = ({ myProfile,filterClick, feedClick, editClick }: MyPageProps) => {
+const Profile = ({ myProfile,filterClick, feedClick, editClick, followClick }: MyPageProps) => {
     const profileUrl = { uri: `${myProfile.profile.profileUrl}` }
     // Calculate the size for grid items
     const { width } = Dimensions.get('window');
@@ -34,11 +35,11 @@ const Profile = ({ myProfile,filterClick, feedClick, editClick }: MyPageProps) =
                     <Text style={styles.bold}>{myProfile.posts.length}</Text>
                     <Text style={styles.medium}>게시물</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.touchOpacity}>
+                <TouchableOpacity style={styles.touchOpacity} onPress={()=>followClick('follower')}>
                     <Text style={styles.bold}>{myProfile.profile.followerCount}</Text>
                     <Text style={styles.medium}>팔로워</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.touchOpacity}>
+                <TouchableOpacity style={styles.touchOpacity} onPress={()=>followClick('follow')}>
                     <Text style={styles.bold}>{myProfile.profile.followingCount}</Text>
                     <Text style={styles.medium}>팔로잉</Text>
                 </TouchableOpacity>

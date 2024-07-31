@@ -6,6 +6,7 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useNavigation } from '@react-navigation/native';
 import { ScreenNavigationProp } from '../types/navigationTypes';
 import { setStorage } from '../util/common/Storage.ts';
+import Loading from './loading/Loading';
 
 function LoginScreen() {
     const navigation = useNavigation< ScreenNavigationProp>();
@@ -111,6 +112,7 @@ function LoginScreen() {
             <TouchableOpacity style={styles.buttonSignup} onPress={handleGotoSignUp}>
                 <Text style={styles.buttonTextSignup}>회원가입</Text>
             </TouchableOpacity>
+            <Loading/>
         </View>
     );
 }

@@ -31,7 +31,7 @@ const Edit = ({ profile }: EditProps) => {
 
         const { manipulatedImage, fileName, mimeType } = await ImageResize(selectUri);
         upload(manipulatedImage.uri, fileName, mimeType);
-        navigation.navigate('Profile',{refresh: true});
+        navigation.goBack();
     };
 
     const selectImage = (uri: string) => {
@@ -106,7 +106,7 @@ const styles = StyleSheet.create({
     },
 
     'header-title': {
-        fontSize: 24,
+        fontSize: 16,
         fontWeight: 'bold',
         color: '#555',
     },
