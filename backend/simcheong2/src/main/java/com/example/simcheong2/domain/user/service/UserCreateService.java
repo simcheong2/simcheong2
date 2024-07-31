@@ -51,14 +51,16 @@ public class UserCreateService {
                 .build();
 
         // 이미 회원이 존재할 경우 에러 처리.
-        if (userRepository.findByInputId(userSaveDTO.getInputId()).isPresent()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST, "중복 아이디 존재.");
+        if(userRepository.findByInputId(userSaveDTO.getInputId()).isPresent()){
+            throw new CustomException(ErrorCode.BAD_REQUEST,"중복 아이디 존재.");
+        };
+        if(userRepository.findByNickname(userSaveDTO.getNickname()).isPresent()){
+            throw new CustomException(ErrorCode.BAD_REQUEST,"중복 닉네임 존재.");
+        };
+        if(userRepository.findByPhone(userSaveDTO.getPhone().replaceAll("-","")).isPresent()){
+            throw new CustomException(ErrorCode.BAD_REQUEST,"중복 전화번호 존재.");
         }
-        ;
-        if (userRepository.findByNickname(userSaveDTO.getNickname()).isPresent()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST, "중복 닉네임 존재.");
-        }
-        ;
+      
         User userResult = null;
         try {
             userResult = userRepository.save(user);

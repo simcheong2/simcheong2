@@ -50,6 +50,11 @@ public class Post extends BaseEntity {
         postImages.forEach(image -> image.updatePost(this));
     }
 
+    public void addComment(Comment comment){
+        this.postComments.add(comment);
+        comment.updatePost(this);
+    }
+
     public void updateUser(User user) {
         this.user = user;
     }
