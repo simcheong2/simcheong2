@@ -32,20 +32,17 @@ function SignupScreen() {
     };
 
     const handleVerificationRequest = () => {
+      
         const smsData = {
             name: formData.name,
-            isForeign: false,
-            sex: selectedGender === 'male' ? 'MALE' : 'FEMALE',
-            openingDate: formData.openingDate,
             phone: formData.phone,
         };
-        console.log(smsData);
-        // setIsVerificationSent(true);
+
         axios
-            .post('http://www.my-first-develop-library.shop:8080/auth/validations/sms', smsData)
+            .post('http://www.my-first-develop-library.shop:8080/auth/sms-code', smsData)
             .then((response) => {
                 console.log('Response', response);
-                if (response.status === 200 && response.data.isSuccess) {
+                if (response.data==true) {
                     Alert.alert("Success", "Verification code sent!");
                     setIsVerificationSent(true);
                 } else {
@@ -59,12 +56,23 @@ function SignupScreen() {
     };
 
     const handleVerification = () => {
-        // setIsVerified(true);
+ 
+        const codeData = {
+            code: formData.verificationCode,
+            phone: formData.phone,
+        };
+        console.log(codeData);
+        const config={  headers: {
+            "Content-Type": 'application/json',
+        }};
         axios
-            .get(`http://www.my-first-develop-library.shop:8080/auth/validations/sms?code=${formData.verificationCode}`)
+            .post(
+                'http://www.my-first-develop-library.shop:8080/auth/sms-verifications',codeData,config
+                
+            )
             .then((response) => {
-                if (response.status === 200 && response.data.isSuccess) {
-                     formData.sessionId = response.data.sessionId;
+                if (response.status === 200) {
+                    formData.sessionId = response.data.sessionId;
                     Alert.alert("Success", "Phone number verified!");
                     setIsVerified(true);
                 } else {
@@ -72,24 +80,28 @@ function SignupScreen() {
                 }
             })
             .catch((error) => {
-                Alert.alert("Error", "Verification failed. Please try again.");
+                if (error.response && error.response.status === 403) {
+                    Alert.alert("Error", "Forbidden. Please check your permissions.");
+                } else {
+                    Alert.alert("Error", "Verification failed. Please try again.");
+                }
                 console.error(error);
             });
     };
+    
 
     const handleSignup = () => {
         let formattedDate;
         try {
             const [year, month, day] = formData.openingDate.split('-').map(Number);
             if (!year || !month || !day) throw new Error("Invalid date format");
-            const date = new Date(year, month - 1, day);
-            formattedDate = date.toISOString();
+            formattedDate = formData.openingDate.replace(/-/g, ''); 
             console.log(formattedDate);
         } catch (error) {
             Alert.alert("Error", "생년월일을 올바른 형식으로 입력해주세요. (예: YYYY-MM-DD)");
             return;
         }
-
+    
         const data = {
             id: formData.id,
             password: formData.password,
@@ -101,15 +113,15 @@ function SignupScreen() {
             phone: formData.phone,
             isDisabled: selectedDisability === 'disabled',
             nickname: formData.nickname,
+            sessionId: formData.sessionId,
         };
-        console.log(data);
-        console.log("회원가입완료")
+
         axios
             .post('http://www.my-first-develop-library.shop:8080/auth/signup', data)
             .then((response) => {
                 console.log('Response', response);
                 if (response.status === 200) {
-                    Alert.alert("Success", "Signup successful!");
+                    Alert.alert("회원가입이 완료되었습니다!");
                     navigation.goBack();
                 } else {
                     Alert.alert("Error", "Signup failed. not status 200!!");
@@ -120,7 +132,7 @@ function SignupScreen() {
                 console.error(error);
             });
     };
-
+    
     return (
         <KeyboardAvoidingView
             style={{ flex: 1 }}
