@@ -66,7 +66,7 @@ function LoginScreen() {
                 }
                 Alert.alert("로그인 성공", "로그인에 성공하였습니다.");
                 navigation.navigate('BottomNavigation');
-
+            
             } else {
                 Alert.alert("로그인 실패", "아이디 또는 비밀번호를 확인해주세요.");
             }
