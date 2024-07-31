@@ -1,9 +1,13 @@
 import React from "react";
 import { Text } from "react-native";
+import { SelectType } from '../types/SelectType';
 
-function FollowScreen() {
+// @ts-ignore
+function FollowScreen({route}) {
+    const {isMine} = route.params;
+
     return(
-        <Text>Follow</Text>
+        <Text>{isMine.select}</Text>
     )
 }
 

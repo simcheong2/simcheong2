@@ -2,19 +2,22 @@ import React, { useEffect, useState } from 'react';
 import Profile from '../Profile';
 import { EmptyProfile, myProfile } from '../../../util/test/user/MyPageProfile';
 import { MyProfile, Posts } from '../../../interface/user/Profile';
-import { useNavigation } from '@react-navigation/native';
-import { FeedNavigationProp } from '../../../types/navigationTypes';
+import { useIsFocused, useNavigation } from '@react-navigation/native';
+import { FeedNavigationProp, ScreenNavigationProp } from '../../../types/navigationTypes';
 import axios from 'axios';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import { getStorage } from '../../../util/common/Storage.ts';
 import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
+import { SelectType } from '../../../types/SelectType';
 
 const MyPageScreen = () => {
     const navigation = useNavigation<FeedNavigationProp>();
+    const followNavigation = useNavigation<ScreenNavigationProp>()
     const [filterProfile, setFilterProfile] = useState<MyProfile>(EmptyProfile);
     const [profile, setProfile] = useState<MyProfile>(EmptyProfile);
     const accessToken = useRecoilValue(accessTokenAtom);
+    const isFocused = useIsFocused();
+    const [isMine, setIsMine] = useState<SelectType>({select: 'other'})
+
 
     const onFilterHandler = (item: Posts) => {
         const updatedPosts = profile.posts.filter(post => post !== item);
@@ -40,7 +43,6 @@ const MyPageScreen = () => {
             }
         }).then((response)=>{
             if(response.status===200){
-                console.log(response.data);
                 setProfile(response.data);
             }
             else{
@@ -53,7 +55,20 @@ const MyPageScreen = () => {
             setProfile(EmptyProfile);
             console.log("Empty")
         };
-    },[accessToken]);
+    },[isFocused]);
+
+    const onFollowHandler = (follow:'follow'|'follower') => {
+        switch (follow){
+            case 'follow': {
+                followNavigation.navigate('Follow', {isMine: isMine})
+                break;
+            }
+            case 'follower':{
+                followNavigation.navigate('Follow', {isMine: isMine})
+                break;
+            }
+        }
+    }
 
     return (
         <Profile
@@ -61,6 +76,7 @@ const MyPageScreen = () => {
             filterClick={onFilterHandler}
             feedClick={onFeedHandler}
             editClick={onEditHandler}
+            followClick={onFollowHandler}
         />
     );
 };

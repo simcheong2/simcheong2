@@ -8,7 +8,8 @@ const Stack = createNativeStackNavigator();
 
 const MyPageNavigation = () => {
     return(
-        <Stack.Navigator initialRouteName="Profile">
+        <Stack.Navigator
+            initialRouteName="Profile">
             <Stack.Screen name="Profile" component={MyPageScreen} options={{ headerShown: false }}/>
             <Stack.Screen name="Feed" component={MyFeedScreen} options={{ headerShown: false }}/>
             <Stack.Screen name="Edit" component={EditScreen} options={{ headerShown: false }}/>
