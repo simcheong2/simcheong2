@@ -1,6 +1,7 @@
 package com.example.simcheong2.global.sms;
 
 import jakarta.annotation.PostConstruct;
+import lombok.extern.slf4j.Slf4j;
 import net.nurigo.sdk.NurigoApp;
 import net.nurigo.sdk.message.model.Message;
 import net.nurigo.sdk.message.request.SingleMessageSendingRequest;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
 @Component
+@Slf4j
 public class SmsUtil {
 
     @Value("${coolsms.api.key}")
@@ -33,6 +35,7 @@ public class SmsUtil {
         message.setFrom(fromPhoneNumber);
         message.setTo(to);
         message.setText("[심청이] 아래의 인증번호를 입력해주세요\n" + verificationCode);
+        log.info("{}에게 {}를 전송함", to, verificationCode);
 
         return this.messageService.sendOne(new SingleMessageSendingRequest(message));
     }
