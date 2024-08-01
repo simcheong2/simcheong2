@@ -53,11 +53,13 @@ const Profile = ({ myProfile, filterClick, feedClick, editClick, followClick, fo
                         onPress={editClick}
                     >
                         <Text style={{ fontSize: 12, color: '#fff' }}>프로필 편집</Text>
-                    </TouchableOpacity> : <TouchableOpacity
+                    </TouchableOpacity>
+                    :
+                    <TouchableOpacity
                         style={styles['edit-button']}
                         onPress={followingClick}
                     >
-                        <Text style={{ fontSize: 12, color: '#fff' }}>팔로워</Text>
+                        <Text style={{ fontSize: 12, color: '#fff' }}>{myProfile.profile.isFollow?'팔로우 중':'팔로우'}</Text>
                     </TouchableOpacity>
                 }
             </View>
@@ -78,8 +80,6 @@ const styles = StyleSheet.create({
         width: '100%',
         height: '100%',
         backgroundColor: '#fff',
-        flexDirection: 'column',
-        alignItems: 'center',
     },
 
     header: {

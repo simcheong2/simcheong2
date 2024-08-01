@@ -1,16 +1,26 @@
 import React, { useRef, useState } from 'react';
 import { useCameraPermissions } from 'expo-camera';
-import { Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera/legacy';
 import axios from 'axios';
 import * as ImageManipulator from 'expo-image-manipulator';
+import { useRecoilValue } from 'recoil';
+import accessTokenAtom from '../../recoil/atom/accessTokenAtom';
+import Icon from 'react-native-vector-icons/MaterialIcons';
+import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
+import { ImageResize } from '../../util/common/Common';
+import Loading from '../../page/loading/Loading';
+import { useNavigation } from '@react-navigation/native';
+import { ScreenNavigationProp } from '../../types/navigationTypes';
 
 const CameraTest = () => {
-    const accessToken = 'eyJhbGciOiJIUzUxMiJ9.eyJzdWIiOiJ0ZXN0OWlkIiwiZXhwIjoxNzI0OTEwNDU2LCJraW5kIjoiYWNjZXNzVG9rZW4ifQ.DvKqqgTuvudlzJVQJYz8zhURG3amw8yVcb-MGzdfMD95__GMZbw4frBgWbRfOnzFfQECf4aNPmKHX3n8GTLS4g';
     const [facing, setFacing] = useState<CameraType>(CameraType.back);
     const [permission, requestPermission] = useCameraPermissions();
-    const [photo, setPhoto] = useState<string | null>(null);
+    const [photo, setPhoto] = useState<string[] | null>(null);
     const cameraRef = useRef<Camera | null>(null);
+    const accessToken = useRecoilValue(accessTokenAtom);
+    const [loading, setLoading] = useState<boolean>(false);
+    const navigation = useNavigation<ScreenNavigationProp>()
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -51,25 +61,49 @@ const CameraTest = () => {
             { compress: 1, format: ImageManipulator.SaveFormat.JPEG, base64: true },
         );
 
-        setPhoto(manipulatedImage.uri);
+        if (photo == null) {
+            setPhoto((prev) => {
+                if (prev === null) {
+                    return [manipulatedImage.uri];
+                }
+                return [...prev, manipulatedImage.uri];
+            });
+        } else if (photo.length < 3) {
+            setPhoto((prev) => {
+                if (prev === null) {
+                    return [manipulatedImage.uri];
+                }
+                return [...prev, manipulatedImage.uri];
+            });
+        }
 
         console.log(manipulatedImage.uri);
 
         const fileName = manipulatedImage.uri.split('/').pop();
         const fileType = fileName?.split('.').pop();
         const mimeType = `image/${fileType}`;
-        await uploadPhoto(manipulatedImage.uri, manipulatedImage.base64!!, mimeType, fileName!!);
+        // await uploadPhoto(manipulatedImage.uri, manipulatedImage.base64!!, mimeType, fileName!!);
     };
 
-    const uploadPhoto = async (uri: string, base64Data: string, mimeType: string, fileName: string) => {
+    const uploadPhoto = async () => {
+        setLoading(true);
         const formData = new FormData();
 
-        // Append image file
-        formData.append('images', {
-            uri,
-            name: fileName,
-            type: 'image/jpeg',
-        });
+        if (photo != null) {
+            photo.forEach((picture) => {
+                const fileName = picture.split('/').pop();
+                formData.append('images', {
+                    uri: picture,
+                    name: fileName,
+                    type: 'image/jpeg',
+                });
+            });
+        }
+        else{
+            Alert.alert('업로드 할 이미지가 없습니다.');
+            setLoading(false);
+            return;
+        }
 
         // Append request JSON object as a Blob
         const content = { 'string': JSON.stringify({ content: 'Sample' }), type: 'application/json' };
@@ -87,37 +121,47 @@ const CameraTest = () => {
                 },
             );
             console.log('Success', response.data);
+            setLoading(false);
+            navigation.navigate('Home');
         } catch (error) {
             console.error('Error', error);
+            setLoading(false);
         }
+        setLoading(false);
     };
 
-    return (
-        <View style={styles.container}>
-            <Camera style={styles.camera} type={facing} ref={cameraRef}>
-                <View style={styles.buttonContainer}>
-                    <TouchableOpacity style={styles.button} onPress={toggleCameraFacing}>
-                        <Text style={styles.text}>Flip Camera</Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity style={styles.button} onPress={takePicture}>
-                        <Text style={styles.text}>Take Picture</Text>
-                    </TouchableOpacity>
-                </View>
-            </Camera>
-            {photo && (
-                <View style={styles.previewContainer}>
-                    <Text style={styles.previewText}>Photo Preview:</Text>
-                    <Image source={{ uri: photo }} style={styles.previewImage} />
-                </View>
-            )}
-        </View>
+    return (loading ? <Loading /> :
+            <View style={styles.container}>
+                <Camera style={styles.camera} type={facing} ref={cameraRef}>
+                    <View style={styles.buttonContainer}>
+                        <TouchableOpacity style={[styles.button]} onPress={toggleCameraFacing}>
+                            <Icon style={styles.text} name="screen-rotation" size={48} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button]} onPress={takePicture}>
+                            <Icon style={styles.text} name="camera-alt" size={48} />
+                        </TouchableOpacity>
+                        <TouchableOpacity style={[styles.button]} onPress={uploadPhoto}>
+                            <IconCommunity style={styles.text} name="file-upload-outline" size={48} />
+                        </TouchableOpacity>
+                    </View>
+                </Camera>
+                {photo && (
+                    <View style={styles.previewContainer}>
+                        <Text style={styles.previewText}>사진 미리보기</Text>
+                        {photo.map((picture, index) => (
+                            <View style={styles.previewImageContainer} key={index}>
+                                <Image style={styles.previewImage} source={{ uri: picture }} />
+                            </View>
+                        ))}
+                    </View>)
+                }
+            </View>
     );
 };
 
 const styles = StyleSheet.create({
     container: {
         flex: 1,
-        justifyContent: 'center',
     },
     message: {
         textAlign: 'center',
@@ -125,35 +169,45 @@ const styles = StyleSheet.create({
     },
     camera: {
         flex: 1,
+        position: 'absolute',
+        top: 0,
+        left: 0,
+        width: '100%',
+        height: '100%',
     },
     buttonContainer: {
         flex: 1,
         flexDirection: 'row',
         backgroundColor: 'transparent',
-        margin: 64,
+        marginBottom: 64,
     },
     button: {
         flex: 1,
-        alignSelf: 'flex-end',
+        justifyContent: 'flex-end',
         alignItems: 'center',
     },
     text: {
-        fontSize: 24,
         fontWeight: 'bold',
         color: 'white',
     },
     previewContainer: {
         flex: 1,
-        justifyContent: 'center',
-        alignItems: 'center',
+        flexDirection: 'column',
+        alignItems: 'flex-end',
+        marginRight: 12,
+        marginTop: 120,
     },
     previewText: {
         fontSize: 18,
         marginBottom: 10,
     },
+    previewImageContainer: {
+        alignItems: 'center',
+        marginBottom: 20,
+    },
     previewImage: {
-        width: 300,
-        height: 400,
+        width: 100,
+        height: 100,
     },
 });
 
