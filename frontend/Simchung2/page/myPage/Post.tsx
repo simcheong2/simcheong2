@@ -9,7 +9,7 @@ import { Posts, Profile } from '../../interface/user/Profile';
 interface PostProps{
     post: Posts
     profile: Profile
-    onPress: ()=>void
+    onPress: (postID:number)=>void
     onLike: (postId: number)=>void
 }
 
@@ -49,7 +49,7 @@ const Post = ({post, profile, onPress,onLike}:PostProps) => {
                 pagingEnabled
             />
             <View style={styles.favorite}>
-                <TouchableOpacity style={styles['comment-container']} onPress={onPress}>
+                <TouchableOpacity style={styles['comment-container']} onPress={()=>onPress&&onPress(post.postId)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(post.commentCount)}</Text>
                 </TouchableOpacity>
