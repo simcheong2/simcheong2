@@ -4,16 +4,17 @@ import { SearchResponse } from '../../interface/user/Search';
 
 interface UserProps{
     user: SearchResponse
+    onPress: (nickname: string)=>void
 }
 
-const User = ({user}: UserProps) => {
+const User = ({user, onPress}: UserProps) => {
     const handlePress = () => {
         Alert.alert(`User ${user.nickname} pressed!`);
         // 여기에 추가적인 작업을 수행할 수 있다.
     };
 
     return(
-        <TouchableOpacity style={styles.userContainer} onPress={handlePress}>
+        <TouchableOpacity style={styles.userContainer} onPress={()=>onPress(user.nickname)}>
             <Image
                 source={{ uri: user.profileUrl || 'https://reactjs.org/logo-og.png' }} // 기본 프로필 이미지 URL
                 style={styles.profileImage}
