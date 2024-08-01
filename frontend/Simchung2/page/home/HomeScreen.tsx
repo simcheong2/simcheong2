@@ -1,6 +1,7 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Image, StyleSheet, Text, View } from "react-native";
 import Tabs from '../../navigation/home/Tabs';
+import Snack from '../../components/snack/Snack';
 
 const styles = StyleSheet.create({
     container: {
@@ -28,7 +29,26 @@ const styles = StyleSheet.create({
     }
 })
 
-const HomeScreen = () => {
+const HomeScreen = ({ route = {} }) => {
+    // @ts-ignore
+    const { params } = route || {};
+    const { upload } = params || {};
+
+    const [visible, setVisible] = useState<boolean>(false);
+
+    useEffect(() => {
+        if(upload!=undefined){
+            setVisible(upload);
+        }
+    }, []);
+
+    const onDismissSnackBar = () => {
+        setVisible(false)
+    }
+
+    const onPress = () => {
+
+    }
 
     return(
         <View accessibilityLabel="심청2 홈 화면 입니다. 당신의 친구들과의 추억을 즐겨보세요." style={styles.container}>
@@ -41,6 +61,7 @@ const HomeScreen = () => {
             <View style={styles.tab}>
                 <Tabs/>
             </View>
+            <Snack visible={visible} onDismissSnackBar={onDismissSnackBar} onPress={onPress} content='업로드 완료했습니다.'/>
         </View>
     )
 }

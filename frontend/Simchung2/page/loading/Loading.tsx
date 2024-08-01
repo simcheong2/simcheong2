@@ -50,7 +50,7 @@ const Loading = () => {
     }, [fadeAnim, progressAnims]);
 
     return (
-        <View style={[styles.container, { width: width, height: height + 50 }]}>
+        <View accessibilityLabel='로딩 중입니다.' style={[styles.container, { width: width, height: height + 50 }]}>
             <Animated.Image
                 style={[styles.img, { opacity: fadeAnim }]}
                 source={require('../../assets/images/loading.png')}

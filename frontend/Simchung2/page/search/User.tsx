@@ -14,7 +14,7 @@ const User = ({user, onPress}: UserProps) => {
     };
 
     return(
-        <TouchableOpacity style={styles.userContainer} onPress={()=>onPress(user.nickname)}>
+        <TouchableOpacity accessibilityLabel={user.nickname} style={styles.userContainer} onPress={()=>onPress(user.nickname)}>
             <Image
                 source={{ uri: user.profileUrl || 'https://reactjs.org/logo-og.png' }} // 기본 프로필 이미지 URL
                 style={styles.profileImage}

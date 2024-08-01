@@ -47,17 +47,17 @@ const Feed = ({ feed, onPress, onLike }: FeedProps) => {
     }
 
     return (
-        <View style={[styles.container, { marginTop: 12, marginBottom: 12 }]}>
-            <View style={styles.header}>
+        <View style={[styles.container, { marginTop: 12, marginBottom: 12 }]} accessible={false}>
+            <View style={styles.header} accessible={false}>
                 <Image
                     style={styles['profile-image']}
                     source={userImgSrc}
-                    resizeMode="cover" />
-                <View style={styles['user-container']} accessibilityLabel={`${feed.posts.images[0].imageUrl}`}>
-                    <Text style={styles.userName}>{feed.otherUserInfoResponse.nickname}</Text>
-                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{feed.posts.content}</Text>
+                    resizeMode="cover" accessible={false}/>
+                <View style={styles['user-container']} accessible={false}>
+                    <Text style={styles.userName} accessibilityLabel={`${feed.otherUserInfoResponse.nickname}님 입니다.`}>{feed.otherUserInfoResponse.nickname}</Text>
+                    <Text style={styles.comment} numberOfLines={1} ellipsizeMode="tail" accessibilityLabel={`${feed.posts.content}`}>{feed.posts.content}</Text>
                 </View>
-                <TouchableOpacity style={styles.iconButton}>
+                <TouchableOpacity style={styles.iconButton} >
                     <Icon name="more-horiz" size={24} style={styles.icon} />
                 </TouchableOpacity>
             </View>
@@ -71,12 +71,12 @@ const Feed = ({ feed, onPress, onLike }: FeedProps) => {
                 decelerationRate={"fast"}
                 pagingEnabled
             />
-            <View style={styles.favorite}>
-                <TouchableOpacity style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
+            <View accessible={false} style={styles.favorite}>
+                <TouchableOpacity accessibilityLabel='댓글 창 입니다 확인 하시려면 두번 탭 해주세요.' style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(feed.posts.commentCount)}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles['favorite-container']} onPress={()=>onLike && onLike(feed.posts.postId)}>
+                <TouchableOpacity accessibilityLabel={`좋아요 버튼 입니다. 좋아요를 ${feed.posts.isLiked ? '취소' : ''}하고 싶으면 두번 탭 해주세요.`} style={styles['favorite-container']} onPress={()=>onLike && onLike(feed.posts.postId)}>
                     <Icon name={formatFavorite()} size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(feed.posts.likeCount)}</Text>
                 </TouchableOpacity>

@@ -22,7 +22,7 @@ const Tabs = () => {
                     fontSize: 16, // 탭의 텍스트 크기를 16으로 설정
                 },
             }}>
-            <Tab.Screen 
+            <Tab.Screen
                 name="Recommend" 
                 component={Recommend} 
                 options={{
