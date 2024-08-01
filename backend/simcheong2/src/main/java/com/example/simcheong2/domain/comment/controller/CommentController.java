@@ -15,10 +15,7 @@ import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -38,9 +35,9 @@ public class CommentController {
         commentCreateService.createComment(commentCreateDTO, userId);
         return ResponseEntity.ok(true);
     }
-    @PostMapping("/view")
-    public ResponseEntity<List<CommentResponse>> viewComment(@RequestBody @Valid ViewCommentRequest request){
-        List<CommentResponse> comments = commentSearchService.getComments(request.getPostId()).stream()
+    @GetMapping
+    public ResponseEntity<List<CommentResponse>> viewComment(@RequestParam(name = "postId") Long postId){
+        List<CommentResponse> comments = commentSearchService.getComments(postId).stream()
                 .map(CommentDTO::toResponse)
                 .toList();
         return ResponseEntity.ok(comments);

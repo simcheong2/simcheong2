@@ -24,7 +24,7 @@ import java.io.File;
 @RequiredArgsConstructor
 @Slf4j
 public class OpenAiHelper {
-    @Value("${openai.api.key}")
+    @Value("${spring.ai.openai.api-key}")
     private String apiKey;
 
     private final ChatClient chatClient;

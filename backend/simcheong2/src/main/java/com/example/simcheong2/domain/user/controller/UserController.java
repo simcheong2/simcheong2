@@ -68,7 +68,7 @@ public class UserController {
     public ResponseEntity<String> getAudio(
             HttpServletRequest servletRequest,
             @RequestPart MultipartFile audio
-    ) {
+    ){
         String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
         String transcription = openAiHelper.getTextFromAudioMultipartFile(audio, uploadDirRealPath);
         return ResponseEntity.ok(transcription);
