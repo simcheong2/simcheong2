@@ -18,8 +18,7 @@ import { useNavigation } from '@react-navigation/native';
 import { ScreenNavigationProp, UploadNavigationProp } from '../../types/navigationTypes';
 import Loading from '../../page/loading/Loading';
 import Icon from 'react-native-vector-icons/MaterialIcons';
-import Mic from 'react-native-vector-icons/Feather';
-import { Images } from '../../interface/feed/Feed';
+import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // @ts-ignore
 const VoiceTest = ({ route }) => {
@@ -33,11 +32,38 @@ const VoiceTest = ({ route }) => {
     const navigation = useNavigation<ScreenNavigationProp>();
     const backNavigation = useNavigation<UploadNavigationProp>();
     const [loading, setLoading] = useState<boolean>(false);
+    const pulseAnim = useRef(new Animated.Value(1)).current;
 
-    // Animation state
-    const waveAnim1 = useRef(new Animated.Value(0)).current;
-    const waveAnim2 = useRef(new Animated.Value(0)).current;
-    const waveAnim3 = useRef(new Animated.Value(0)).current;
+    useEffect(() => {
+        if (recording) {
+            startPulsing();
+        } else {
+            stopPulsing();
+        }
+    }, [recording]);
+
+    const startPulsing = () => {
+        Animated.loop(
+            Animated.sequence([
+                Animated.timing(pulseAnim, {
+                    toValue: 1.5,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+                Animated.timing(pulseAnim, {
+                    toValue: 1,
+                    duration: 500,
+                    useNativeDriver: true,
+                }),
+            ]),
+        ).start();
+    };
+
+    const stopPulsing = () => {
+        pulseAnim.setValue(1);
+        // @ts-ignore
+        Animated.timing(pulseAnim).stop();
+    };
 
     async function startRecording() {
         try {
@@ -55,7 +81,6 @@ const VoiceTest = ({ route }) => {
             );
             setRecording(recording);
             console.log('Recording started');
-            startWaveAnimation();
         } catch (err) {
             console.error('Failed to start recording', err);
         }
@@ -73,31 +98,7 @@ const VoiceTest = ({ route }) => {
         const uri = recording?.getURI();
         upload(uri!);
         console.log('Recording stopped and stored at', uri);
-
-        stopWaveAnimation();
     }
-
-    const startWaveAnimation = () => {
-        // @ts-ignore
-        const waveAnimation = (waveAnim) => {
-            waveAnim.setValue(0);
-            Animated.timing(waveAnim, {
-                toValue: 1,
-                duration: 1000,
-                useNativeDriver: true,
-            }).start(() => waveAnimation(waveAnim));
-        };
-
-        waveAnimation(waveAnim1);
-        setTimeout(() => waveAnimation(waveAnim2), 300);
-        setTimeout(() => waveAnimation(waveAnim3), 600);
-    };
-
-    const stopWaveAnimation = () => {
-        waveAnim1.stopAnimation();
-        waveAnim2.stopAnimation();
-        waveAnim3.stopAnimation();
-    };
 
     const upload = (uri: string) => {
         const formData = new FormData();
@@ -142,7 +143,7 @@ const VoiceTest = ({ route }) => {
             return;
         }
 
-        // Append request JSON object as a Blob
+
         const content = { 'string': JSON.stringify({ content: text }), type: 'application/json' };
         formData.append('request', content);
 
@@ -184,6 +185,9 @@ const VoiceTest = ({ route }) => {
                 <View style={styles['text-container']}>
                     <Text style={styles.text}>사진 업로드</Text>
                 </View>
+                <TouchableOpacity onPress={uploadPhoto}>
+                    <IconCommunity name="file-upload-outline" size={36} />
+                </TouchableOpacity>
             </View>
             <FlatList
                 data={photo.flatMap((picture: string) => picture)}
@@ -197,24 +201,15 @@ const VoiceTest = ({ route }) => {
                 pagingEnabled
             />
             <View style={styles['recoding-container']}>
-                <Text>{text}</Text>
+                <Text numberOfLines={3} ellipsizeMode="tail" style={styles['recoding-text']}>{text}</Text>
             </View>
             <View>
                 <TouchableOpacity style={styles.button} onPress={recording ? stopRecording : startRecording}>
-                    <Icon name="mic" size={48} />
+                    <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
+                        <Icon name="mic" size={48} style={{ color: "#fff" }} />
+                    </Animated.View>
                 </TouchableOpacity>
-                {recording && (
-                    <>
-                        <Animated.View
-                            style={[styles.wave, { opacity: waveAnim1, transform: [{ scale: waveAnim1 }] }]} />
-                        <Animated.View
-                            style={[styles.wave, { opacity: waveAnim2, transform: [{ scale: waveAnim2 }] }]} />
-                        <Animated.View
-                            style={[styles.wave, { opacity: waveAnim3, transform: [{ scale: waveAnim3 }] }]} />
-                    </>
-                )}
             </View>
-            <Button title="업로드" onPress={uploadPhoto} />
             {loading && <Loading />}
         </View>
     );
@@ -230,28 +225,36 @@ const styles = StyleSheet.create({
         justifyContent: 'flex-start',
     },
     header: {
+        display: 'flex',
         width: '100%',
         height: 69,
         marginTop: 44,
         padding: 12,
         flexDirection: 'row',
-        alignItems: 'center',
+        justifyContent: 'space-between',
         borderBottomWidth: 1,
         borderBottomColor: '#EFF3F1',
     },
     'text-container': {
-        width: '100%',
         alignItems: 'center',
         justifyContent: 'center',
     },
     text: {
         fontSize: 16,
-        marginRight: 68,
     },
 
-    'recoding-container': {},
+    'recoding-container': {
+        width: "80%",
+        height: 64,
+        flexDirection: 'row',
+        alignItems:'flex-start',
+        justifyContent: 'center',
+        marginBottom: 20,
+    },
 
-    'photo-container': {},
+    'recoding-text': {
+        fontSize: 16,
+    },
 
     button: {
         width: 96,
@@ -262,10 +265,10 @@ const styles = StyleSheet.create({
         backgroundColor: '#ff6347',
     },
 
-
     flatList: {
-        flexGrow: 0, // Prevent FlatList from growing indefinitely
-        marginVertical: 24, // Added margin to separate from bottom
+        flexGrow: 0,
+        marginTop: 24,
+        marginBottom: 16
     },
 
     'image-wrapper': {
@@ -276,13 +279,6 @@ const styles = StyleSheet.create({
     image: {
         width: '50%',
         height: '100%',
-    },
-    wave: {
-        position: 'absolute',
-        width: 96,
-        height: 96,
-        borderRadius: 48,
-        backgroundColor: "#ff6347",
     },
 });
 
