@@ -10,30 +10,13 @@ public class CustomException extends RuntimeException {
     private final HttpStatus status;
     private final String detail;
 
-    public CustomException(ErrorCode errorCode) {
-        super(errorCode.getMessage());
-
-        this.status = errorCode.getHttpStatus();
-        this.detail = errorCode.getMessage();
-    }
-
     /*
      * 비즈니스 exception 처리 시 추가적인 내용이 필요할 경우
      */
     public CustomException(ErrorCode errorCode, String subject) {
-        super(subject + " " + errorCode.getMessage());
+        super(subject);
 
         this.status = errorCode.getHttpStatus();
-        this.detail = subject + " " + errorCode.getMessage();
-    }
-
-    /*
-     * field exception 처리 시 사용
-     */
-    public CustomException(ErrorCode errorCode, Throwable e) {
-        super(errorCode.getMessage(), e);
-
-        this.status = errorCode.getHttpStatus();
-        this.detail = e.getMessage() + " " + errorCode.getMessage();
+        this.detail = subject;
     }
 }

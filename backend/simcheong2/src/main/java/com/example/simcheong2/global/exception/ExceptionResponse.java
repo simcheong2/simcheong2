@@ -22,6 +22,6 @@ public class ExceptionResponse {
     public ExceptionResponse(ErrorCode errorCode, String message) {
         this.statusCode = errorCode.getHttpStatus().value();
         this.error = errorCode.getHttpStatus().name();
-        this.message = errorCode.getMessage() + " " + message;
+        this.message = message;
     }
 }

@@ -138,7 +138,7 @@ public class AuthService {
         log.debug("userId = {}",userId);
         String redisRefreshToken = redisUtilService.getData(userId);
         if(redisRefreshToken == null){
-            throw new CustomException(ErrorCode.NOT_HAVE_AUTHORIZATION);
+            throw new CustomException(ErrorCode.NOT_HAVE_AUTHORIZATION, "인증 만료");
         }
         log.debug("refreshToken in redis= {}", redisRefreshToken);
         if(redisRefreshToken.equals(reissueDto.getRefreshToken())){
