@@ -1,6 +1,5 @@
 package com.example.simcheong2.domain.user.service;
 
-import com.example.simcheong2.domain.post.service.PostSearchService;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.entity.dto.MyPageDTO;
 import com.example.simcheong2.domain.user.entity.dto.OtherPageDTO;
@@ -22,9 +21,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Transactional
 public class UserSearchService {
-    private final UserValidationService userValidationService;
     private final UserRepository userRepository;
-    private final PostSearchService postSearchService;
 
     public MyPageDTO getMyPageInfo(int userId) {
         return userRepository.getMyPageInfo(userId)

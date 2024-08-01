@@ -10,7 +10,6 @@ import com.example.simcheong2.domain.auth.entity.dto.ReissueDto;
 import com.example.simcheong2.domain.auth.service.AuthService;
 import com.example.simcheong2.domain.user.entity.dto.UserSaveDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
-import com.example.simcheong2.global.service.TokensGenerateService;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,16 +25,12 @@ import org.springframework.web.bind.annotation.*;
 public class AuthController {
     private final AuthService authService;
     private final UserCreateService userCreateService;
-    private final TokensGenerateService tokensGenerateService;
 
     @PostMapping("/login")
-    //로그인 되면 레디스에 토큰이 저장되고, 포스트맨 리턴으로 토큰이 올거임.
     public ResponseEntity<TokenResponse> login(@RequestBody @Valid LoginRequest request) {
         LoginDto loginDto = new LoginDto(request.getId(), request.getPassword());
 
-        //로그인 성공 했다면 토큰 발급
         Tokens tokens = authService.login(loginDto);
-        log.debug("userId = {}", tokensGenerateService.extractMemberId(tokens.getAccessToken()));
         return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(), tokens.getRefreshToken()));
     }
 

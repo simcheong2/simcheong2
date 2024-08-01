@@ -29,7 +29,6 @@ import java.util.Optional;
 @Component
 @RequiredArgsConstructor
 public class JwtAuthFilter extends OncePerRequestFilter {
-    private final RedisUtilService redisUtilService;
     private final JwtTokenService jwtTokenService;
     private final UserRepository userRepository;
     @Override
@@ -38,18 +37,11 @@ public class JwtAuthFilter extends OncePerRequestFilter {
             HttpServletResponse response,
             FilterChain filterChain
     )throws IOException, ServletException {
-        log.debug("doFilterInternal start");
         String regexp = "^(Bearer)\s.+$";
-        log.debug("Request = {}", request);
-        log.debug("Response = {}",response);
         String Tokens = request.getHeader("Authorization");
-        log.debug("Tokens = {}",Tokens);
         if(Tokens != null){
-            log.debug("Tokens != null");
             if(Tokens.matches(regexp)){
-                log.debug("Token matches regexp");
                 String accessToken = Tokens.substring(7);
-                log.debug("accessToken = {}",accessToken);
                 try{
                     if(!this.checkAccessToken(accessToken)){
                         this.sendResponse(response, "접근 권한이 없습니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.FORBIDDEN);

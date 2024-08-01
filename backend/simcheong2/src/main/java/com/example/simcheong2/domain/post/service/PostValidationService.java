@@ -1,6 +1,5 @@
 package com.example.simcheong2.domain.post.service;
 
-import com.example.simcheong2.domain.post.repository.PostRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -15,8 +14,6 @@ import java.util.List;
 @RequiredArgsConstructor
 @Transactional
 public class PostValidationService {
-    private final PostRepository postRepository;
-
     private static final long MAX_FILE_SIZE = 20 * 1024 * 1024; // 5MB
 
     public boolean isFileSizeWithinLimit(MultipartFile file) {

@@ -20,7 +20,6 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @Tag(name = "게시글 관련 API")
@@ -37,8 +36,7 @@ public class PostController {
     @GetMapping("/main")
     public ResponseEntity<List<FeedResponse>> mainPosts() {
         int userId = SecurityUtil.getCurrentUserId();
-//        int userId =
-        // 1번 유저가 지금 피드들 요청한거임.
+
         List<FeedResponse> feeds = postSearchService.getFeeds(userId).stream()
                 .map(PostFeedDTO::toResponse)
                 .toList();

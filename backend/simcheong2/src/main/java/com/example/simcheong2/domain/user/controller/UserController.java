@@ -1,11 +1,9 @@
 package com.example.simcheong2.domain.user.controller;
 
 import com.example.simcheong2.global.ai.OpenAiHelper;
-import com.example.simcheong2.global.file.FileHelper;
 
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.UserSearchDTO;
-import com.example.simcheong2.domain.user.service.UserCreateService;
 import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
@@ -28,8 +26,6 @@ import java.util.stream.Collectors;
 public class UserController {
     private final UserSearchService userSearchService;
     private final UserUpdateService userUpdateService;
-    private final UserCreateService userCreateService;
-    private final FileHelper fileHelper;
     private final OpenAiHelper openAiHelper;
 
 

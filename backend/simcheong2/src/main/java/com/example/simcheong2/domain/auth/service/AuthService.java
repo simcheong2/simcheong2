@@ -66,29 +66,18 @@ public class AuthService {
         }
         User user = isExist.get();
         String userPassword = user.getPassword();
-        log.debug("userPassword:" + userPassword);
-        log.debug("inputPassword:" + loginDto.getInputPassword());
         if (!passwordEncoder.matches(loginDto.getInputPassword(), userPassword)) {
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
-        //redisUtilService.setData(user.getUserId().toString(), tokens.getRefreshToken());
-        // key : UserId, value : refreshToken 으로 redis 에 50400 초 동안 저장
-        // reissue 시 보안을 위해 저장을 위함이라네요/
-        // 재발급용 리프레시 토큰을 레디스에 저장
-        log.debug("refreshToken = " + tokens.getRefreshToken());
         redisUtilService.setRefreshToken(user.getUserId().toString(), tokens.getRefreshToken());
-        // 중복 로그인을 방지 하기 위함이라네요.
-        // 이건 없어도 될 것 같음. 중복 로그인을 방지하기 위해 accessToken 을 레디스에 저장한것이긴 함.
-        redisUtilService.setAccessToken(user.getInputId(), "login");
-        log.debug("Expiration time = {}", jwtTokenService.getExpiration(tokens.getAccessToken()));
+
         return tokens;
     }
 
     public void logout(LogoutDto logoutDto) {
         String accessToken = logoutDto.getAccessToken();
-        //
-        log.debug("userId = {}", tokensGenerateService.extractMemberId(accessToken));
+
         String userInputId = tokensGenerateService.extractMemberId(accessToken);
         Optional<User> isExist = userRepository.findByInputId(userInputId);
         if (isExist.isEmpty()) {
@@ -97,13 +86,7 @@ public class AuthService {
         User user = isExist.get();
         String userId = user.getUserId().toString();
 
-        // acc로 찾지말고 refresh 받은거로 redis 다 지워라.
-        // acc, ref 둘다 만료 -> refresh 만료 -> 401 처리를 클라
-
         redisUtilService.deleteData(userId);
-        // 로그인된 액세스토큰 삭제.
-        redisUtilService.deleteData(userInputId);
-        log.debug("레디스 서버에서 토큰 삭제 완료.");
     }
 
     public void createCode(String phone) {
@@ -133,21 +116,17 @@ public class AuthService {
     }
 
     public Tokens reissue(ReissueDto reissueDto) {
-        log.debug("refreshToken input = {}", reissueDto.getRefreshToken());
         String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());
-        log.debug("userId = {}",userId);
         String redisRefreshToken = redisUtilService.getData(userId);
         if(redisRefreshToken == null){
             throw new CustomException(ErrorCode.NOT_HAVE_AUTHORIZATION, "인증 만료");
         }
-        log.debug("refreshToken in redis= {}", redisRefreshToken);
         if(redisRefreshToken.equals(reissueDto.getRefreshToken())){
             Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
             if(isExist.isEmpty()) {
                 throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
             }
             User user = isExist.get();
-            redisUtilService.setAccessToken(user.getInputId(), "login");
             return tokensGenerateService.generateAccessToken(redisRefreshToken, user.getInputId());
         }
         else{

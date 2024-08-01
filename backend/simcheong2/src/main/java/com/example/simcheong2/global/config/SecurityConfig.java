@@ -24,7 +24,6 @@ public class SecurityConfig {
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        log.debug("securityFilterChain start");
         http.csrf((csrf) -> csrf.disable())
                 .addFilterBefore(
                         jwtAuthFilter,
@@ -35,7 +34,6 @@ public class SecurityConfig {
                 .authorizeHttpRequests((authorize) -> authorize
                         .requestMatchers("/auth/login","/auth/signup","/auth/logout","/auth/sms-validation","/auth/sms-code","/auth/reissue").permitAll()
                         .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
-                        // 임시 테스트 할때는 anyRequest().permitAll()로 잠시.
                         .anyRequest().authenticated()
                 )
                 .headers((headers) -> headers
@@ -45,10 +43,4 @@ public class SecurityConfig {
                 );
         return http.build();
     }
-
-//    @Bean
-//    public WebSecurityCustomizer webSecurityCustomizer() {
-//        log.debug("webSecurityCustomizer start");
-//        return web -> web.ignoring().requestMatchers("/auth/**");
-//    }
 }

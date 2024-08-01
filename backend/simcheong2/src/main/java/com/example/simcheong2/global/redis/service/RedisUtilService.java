@@ -6,11 +6,8 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.redis.core.RedisTemplate;
-import org.springframework.data.redis.core.ValueOperations;
 import org.springframework.stereotype.Service;
 
-import java.time.Duration;
-import java.util.Objects;
 import java.util.concurrent.TimeUnit;
 
 @Service
@@ -31,10 +28,6 @@ public class RedisUtilService {
             return result.toString();
         }
         return null;
-    }
-
-    public void setAccessToken(String key, String value) {
-        redisTemplate.opsForValue().set(key, value, ACCESS_TOKEN_EXPIRE_TIME, TimeUnit.SECONDS); // 인메모리 절약을 위해.. 3시간 뒤에는 제거
     }
 
     public void setRefreshToken(String key, String value) {
