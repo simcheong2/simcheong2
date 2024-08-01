@@ -24,8 +24,8 @@ const Edit = ({ profile }: EditProps) => {
 
     useEffect(() => {
         const backAction = () => {
-            navigation.goBack(); 
-            return true; 
+            navigation.goBack();
+            return true;
         };
 
         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
@@ -39,8 +39,8 @@ const Edit = ({ profile }: EditProps) => {
 
     useEffect(() => {
         const backAction = () => {
-            navigation.goBack(); 
-            return true; 
+            navigation.goBack();
+            return true;
         };
 
         const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
