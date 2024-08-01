@@ -12,10 +12,13 @@ import com.example.simcheong2.global.exception.model.ErrorCode;
 import com.example.simcheong2.global.s3.S3Uploader;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.HashSet;
 import java.util.List;
 import java.util.concurrent.atomic.AtomicInteger;
@@ -32,6 +35,9 @@ public class PostCreateService {
 
     private final OpenAiHelper openAiHelper;
     private final S3Uploader s3Uploader;
+
+    @Value("${cloudfrornt.url.domain}")
+    String cloudfrontDomain;
 
     public void createPost(int userId, List<MultipartFile> multipartFiles, String content, String uploadDirRealPath) {
         User user = userRepository.findByUserId(userId)
@@ -66,15 +72,37 @@ public class PostCreateService {
     private ImageAnalysisResultDTO uploadImage(MultipartFile multipartFile, String uploadDirRealPath) {
         try {
             String s3Url = s3Uploader.uploadFile(multipartFile, "static");
+            String cloudFrontUrl = s3ToCloudFrontUrl(s3Url);
+            log.info("cloudFront url: {}", cloudFrontUrl);
             String text = openAiHelper.getTextFromMultipartFile(multipartFile, uploadDirRealPath);
             return ImageAnalysisResultDTO.builder()
-                    .imageUrl(s3Url)
+                    .imageUrl(cloudFrontUrl)
                     .analyzedText(text)
                     .build();
         } catch (Exception e) {
             throw createImageSizeException();
         }
     }
+
+    private String s3ToCloudFrontUrl(String s3Url) {
+        try {
+            // Parse the S3 URL
+            URI s3Uri = new URI(s3Url);
+
+            // Extract the path from the S3 URL
+            String path = s3Uri.getPath();
+
+            // Construct the CloudFront URL
+            URI cloudfrontUri = new URI("https", cloudfrontDomain, path, null, null);
+
+            return cloudfrontUri.toString();
+        } catch (URISyntaxException e) {
+            // Handle the exception if URL parsing fails
+            e.printStackTrace();
+            return null;
+        }
+    }
+
 
     private CustomException createImageSizeException() {
         return new CustomException(ErrorCode.BAD_REQUEST, "이미지 업로드 과정에서 문제가 생겼습니다. 이미지 크기가 너무 큰 것은 아닌지 다시 확인해주세요.");
