@@ -4,7 +4,6 @@ import com.example.simcheong2.domain.comment.entity.Comment;
 import com.example.simcheong2.domain.comment.entity.dto.CommentCreateDTO;
 import com.example.simcheong2.domain.comment.repository.CommentRepository;
 import com.example.simcheong2.domain.post.entity.Post;
-import com.example.simcheong2.domain.post.entity.dto.ImageAnalysisResultDTO;
 import com.example.simcheong2.domain.post.repository.PostRepository;
 import com.example.simcheong2.domain.user.entity.User;
 import com.example.simcheong2.domain.user.repository.UserRepository;
@@ -14,17 +13,12 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.multipart.MultipartFile;
-
-import java.util.HashSet;
-import java.util.List;
 
 @Slf4j
 @Service
 @RequiredArgsConstructor
 @Transactional
 public class CommentCreateService {
-    private final CommentRepository commentRepository;
     private final PostRepository postRepository;
     private final UserRepository userRepository;
     public void createComment(CommentCreateDTO commentCreateDTO, int userId) {

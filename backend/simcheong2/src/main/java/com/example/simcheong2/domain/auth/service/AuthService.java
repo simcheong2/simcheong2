@@ -72,8 +72,6 @@ public class AuthService {
             throw new CustomException(ErrorCode.BAD_REQUEST, "비밀번호가 틀렸습니다");
         }
         Tokens tokens = tokensGenerateService.generate(user.getUserId(), user.getInputId());
-//        log.debug("access token :" + tokens.getAccessToken());
-//        log.debug("refresh token :" + tokens.getRefreshToken());
         //redisUtilService.setData(user.getUserId().toString(), tokens.getRefreshToken());
         // key : UserId, value : refreshToken 으로 redis 에 50400 초 동안 저장
         // reissue 시 보안을 위해 저장을 위함이라네요/

@@ -1,7 +1,6 @@
 package com.example.simcheong2.domain.comment.service;
 import com.example.simcheong2.domain.comment.entity.dto.CommentDTO;
 import com.example.simcheong2.domain.comment.repository.CommentRepository;
-import com.example.simcheong2.domain.post.entity.dto.PostFeedDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
