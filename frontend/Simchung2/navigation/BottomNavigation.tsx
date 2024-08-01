@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import SearchScreen from '../page/SearchScreen';
@@ -8,17 +8,38 @@ import HomeScreen from '../page/home/HomeScreen';
 import { GestureHandlerRootView } from 'react-native-gesture-handler';
 import CustomSheet from '../components/bottomSheet/CustomSheet';
 import FeedComment from '../page/comment/FeedComment';
+import { BackHandler } from 'react-native';
 
 const Tab = createBottomTabNavigator();
 
 const BottomNavigation = () => {
+    useEffect(() => {
+        const onPressBackBtn = (action: boolean) => {
+            const backAction = () => {
+                if (action) {
+                    return true;
+                }
+                return false;
+            };
+
+            BackHandler.addEventListener('hardwareBackPress', backAction);
+
+            return () => {
+                BackHandler.removeEventListener('hardwareBackPress', backAction);
+            };
+        };
+
+        onPressBackBtn(true);
+    }, []);
+
     return (
         <GestureHandlerRootView style={{ flex: 1 }}>
             <Tab.Navigator
                 initialRouteName="Home"
                 screenOptions={{
-                    unmountOnBlur: true
-                }}>
+                    unmountOnBlur: true,
+                }}
+            >
                 <Tab.Screen
                     name="Home"
                     component={HomeScreen}
@@ -28,7 +49,8 @@ const BottomNavigation = () => {
                             <Icon name="home" color={color} size={size} />
                         ),
                         headerShown: false,
-                    }} />
+                    }}
+                />
                 <Tab.Screen
                     name="Search"
                     component={SearchScreen}
@@ -49,7 +71,8 @@ const BottomNavigation = () => {
                             <Icon name="add-photo-alternate" color={color} size={size} />
                         ),
                         headerShown: false,
-                    }} />
+                    }}
+                />
                 <Tab.Screen
                     name="MyPage"
                     component={MyPageScreen}
@@ -59,10 +82,11 @@ const BottomNavigation = () => {
                             <Icon name="people-alt" color={color} size={size} />
                         ),
                         headerShown: false,
-                    }} />
+                    }}
+                />
             </Tab.Navigator>
-            <CustomSheet snapPoint={['25%','50%','95%']}>
-                <FeedComment/>
+            <CustomSheet snapPoint={['25%', '50%', '95%']}>
+                <FeedComment />
             </CustomSheet>
         </GestureHandlerRootView>
     );

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState,useEffect } from 'react';
 import { Alert, Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { MyProfile } from '../../../interface/user/Profile';
 import Icon from 'react-native-vector-icons/MaterialIcons';
@@ -11,15 +11,32 @@ import { ImageResize } from '../../../util/common/Common';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
-
+import { BackHandler } from 'react-native';
 interface EditProps {
     profile: MyProfile;
 }
 
 const Edit = ({ profile }: EditProps) => {
+    const navigation = useNavigation<FeedNavigationProp>();
+    
+    useEffect(() => {
+        const backAction = () => {
+            console.log("backAction??");
+            navigation.goBack(); // 뒤로가기 동작 수행
+            return true; // 기본 동작 막기
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => {
+            console.log("return()=> backAction");
+            backHandler.remove();
+        };
+    }, []);
+
     const { width } = Dimensions.get('window');
     const [selectUri, setSelectUri] = useState<string>(profile.profile.profileUrl);
-    const navigation = useNavigation<FeedNavigationProp>();
+    // const navigation = useNavigation<FeedNavigationProp>();
     const accessToken = useRecoilValue(accessTokenAtom);
 
     const editHandler = async () => {
