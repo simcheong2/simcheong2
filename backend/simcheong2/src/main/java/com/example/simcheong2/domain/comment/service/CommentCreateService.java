@@ -31,15 +31,12 @@ public class CommentCreateService {
         int postId = Math.toIntExact(commentCreateDTO.getPostId()); // 지금 엔티티 id 타입이 인티저임. 나중에 한 번에 수정해야할듯.
         Post post = postRepository.findByPostId(postId)
                 .orElseThrow(() -> new CustomException(ErrorCode.BAD_REQUEST, "등록된 게시물이 아닙니다"));
-        // post -> comment 에 content 내용 추가.
-        // user -> userComment 에 comment 추가.
         User user = userRepository.findByUserId(userId)
                 .orElseThrow(() -> new CustomException(ErrorCode.NOT_FOUND, "등록된 유저가 아닙니다"));
         createComment(user,post, commentCreateDTO.getComment());
     }
 
     private void createComment(User user, Post post, String content) {
-        log.info("게시물 추가");
         Comment newComment = new Comment((content));
         post.addComment(newComment);
         user.addComment(newComment);

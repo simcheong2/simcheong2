@@ -57,9 +57,9 @@ public class UserCreateService {
         if(userRepository.findByNickname(userSaveDTO.getNickname()).isPresent()){
             throw new CustomException(ErrorCode.BAD_REQUEST,"중복 닉네임 존재.");
         };
-        if(userRepository.findByPhone(userSaveDTO.getPhone().replaceAll("-","")).isPresent()){
-            throw new CustomException(ErrorCode.BAD_REQUEST,"중복 전화번호 존재.");
-        }
+//        if(userRepository.findByPhone(userSaveDTO.getPhone().replaceAll("-","")).isPresent()){
+//            throw new CustomException(ErrorCode.BAD_REQUEST,"중복 전화번호 존재.");
+//        }
       
         User userResult = null;
         try {

@@ -20,7 +20,6 @@ public class CommentSearchService {
     public List<CommentDTO> getComments(Long requestId) {
         int postId = Math.toIntExact(requestId);
 
-        // comment 테이블에서, postId를 통해 댓글을 조회함.
         return commentRepository.searchCommentByPostId(postId)
                 .orElseGet(ArrayList::new)
                 .stream()

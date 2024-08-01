@@ -70,4 +70,8 @@ public class Post extends BaseEntity {
                 postBlame -> postBlame.getBlamedPost().getPostId() == this.postId
         );
     }
+
+    public int getLike(){
+        return postUserPostLikes.size();
+    }
 }
