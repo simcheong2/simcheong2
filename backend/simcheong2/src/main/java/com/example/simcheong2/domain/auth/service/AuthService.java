@@ -81,7 +81,7 @@ public class AuthService {
         // 중복 로그인을 방지 하기 위함이라네요.
         // 이건 없어도 될 것 같음. 중복 로그인을 방지하기 위해 accessToken 을 레디스에 저장한것이긴 함.
         redisUtilService.setAccessToken(user.getInputId(), "login");
-
+        log.debug("Expiration time = {}", jwtTokenService.getExpiration(tokens.getAccessToken()));
         return tokens;
     }
 
@@ -132,15 +132,26 @@ public class AuthService {
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
-    public void reissue(ReissueDto reissueDto) {
+    public Tokens reissue(ReissueDto reissueDto) {
         log.debug("refreshToken input = {}", reissueDto.getRefreshToken());
         String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());
+        log.debug("userId = {}",userId);
         String redisRefreshToken = redisUtilService.getData(userId);
-        log.debug("refreshToken in redis= {}", redisRefreshToken);
-        Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
-        if (isExist.isEmpty()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
+        if(redisRefreshToken == null){
+            throw new CustomException(ErrorCode.NOT_HAVE_AUTHORIZATION);
         }
-        User user = isExist.get();
+        log.debug("refreshToken in redis= {}", redisRefreshToken);
+        if(redisRefreshToken.equals(reissueDto.getRefreshToken())){
+            Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
+            if(isExist.isEmpty()) {
+                throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
+            }
+            User user = isExist.get();
+            redisUtilService.setAccessToken(user.getInputId(), "login");
+            return tokensGenerateService.generateAccessToken(redisRefreshToken, user.getInputId());
+        }
+        else{
+            throw new CustomException(ErrorCode.BAD_REQUEST,"요청과 redis 의 refreshToken 이 일치하지 않습니다.");
+        }
     }
 }

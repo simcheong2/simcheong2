@@ -5,7 +5,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -34,7 +33,7 @@ public class SecurityConfig {
                 .sessionManagement((session) -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .authorizeHttpRequests((authorize) -> authorize
-                        .requestMatchers("/auth/login","/auth/signup","/auth/logout","/auth/sms-verifications","/auth/sms-code").permitAll()
+                        .requestMatchers("/auth/login","/auth/signup","/auth/logout","/auth/sms-validation","/auth/sms-code","/auth/reissue").permitAll()
                         .requestMatchers("/v3/**", "/swagger-ui/**").permitAll()
                         // 임시 테스트 할때는 anyRequest().permitAll()로 잠시.
                         .anyRequest().authenticated()

@@ -13,6 +13,11 @@ public enum ErrorCode {
     BAD_REQUEST(HttpStatus.BAD_REQUEST, "Invalid request."),
 
     /*
+     * 401 NOT_HAVE_AUTHORIZATION: 권한 없음
+     */
+    NOT_HAVE_AUTHORIZATION(HttpStatus.UNAUTHORIZED,"Not have Authorization"),
+
+    /*
      * 404 NOT_FOUND: 리소스를 찾을 수 없음
      */
     NOT_FOUND(HttpStatus.NOT_FOUND, "Not found."),

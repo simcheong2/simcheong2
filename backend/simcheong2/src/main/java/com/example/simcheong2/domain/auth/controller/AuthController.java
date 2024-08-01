@@ -48,7 +48,7 @@ public class AuthController {
     }
 
     // 코드 검사
-    @PostMapping("/sms-verifications")
+    @PostMapping("/sms-validation")
     public ResponseEntity<SmsCheckResponse> checkCode(@RequestBody @Valid SmsValidationRequest request) {
         String sessionId = authService.validateSmsCode(request.getPhone(), request.getCode());
         return ResponseEntity.ok(new SmsCheckResponse(sessionId));
@@ -84,8 +84,8 @@ public class AuthController {
     @PostMapping("/reissue")
     public ResponseEntity<TokenResponse> reissue(@RequestBody @Valid ReissueRequest request) {
         ReissueDto reissueDto = new ReissueDto(request.getRefreshToken());
-        authService.reissue(reissueDto);
-        return ResponseEntity.ok(new TokenResponse("", ""));
+        Tokens tokens = authService.reissue(reissueDto);
+        return ResponseEntity.ok(new TokenResponse(tokens.getAccessToken(),tokens.getRefreshToken()));
     }
 
 }
