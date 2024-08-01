@@ -36,39 +36,31 @@ public class JwtTokenService {
                 .compact();
     }
 
-    public String extractSubject(String accessToken) {
-        if (!this.validateToken(accessToken)) throw new CustomException(ErrorCode.BAD_REQUEST, "유효하지 않은 토큰입니다.");
-        Claims claims = parseClaims(accessToken);
-        return claims.getSubject();
+    public String extractSubject(String accessToken){
+        try {
+            if (!this.validateToken(accessToken)) {
+                Claims claims = parseClaims(accessToken);
+                return claims.getSubject();
+            }
+        }
+        catch (Exception e){
+            throw new CustomException(ErrorCode.BAD_REQUEST, "유효하지 않은 토큰입니다.");
+        }
+        return parseClaims(accessToken).getSubject();
     }
 
     private Claims parseClaims(String accessToken) {
-        try {
-            return Jwts.parserBuilder()
-                    .setSigningKey(key)
-                    .build()
-                    .parseClaimsJws(accessToken)
-                    .getBody();
-        } catch (ExpiredJwtException e) {
-            return e.getClaims();
-        }
+        return Jwts.parserBuilder()
+                .setSigningKey(key)
+                .build()
+                .parseClaimsJws(accessToken)
+                .getBody();
     }
 
     // 토근 검증
-    public Boolean validateToken(String token) {
-        try {
-            this.parseClaims(token);
-            return true;
-        } catch (MalformedJwtException e) {
-            log.error("Invalid JWT token: {}", e.getMessage());
-        } catch (ExpiredJwtException e) {
-            log.error("JWT token is expired: {}", e.getMessage());
-        } catch (UnsupportedJwtException e) {
-            log.error("JWT token is unsupported: {}", e.getMessage());
-        } catch (IllegalArgumentException e) {
-            log.error("JWT claims string is empty: {}", e.getMessage());
-        }
-        return false;
+    public Boolean validateToken(String token) throws Exception {
+        this.parseClaims(token);
+        return true;
     }
 
     public Long getExpiration(String token) {
