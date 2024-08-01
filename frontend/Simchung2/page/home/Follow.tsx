@@ -80,7 +80,22 @@ const Follow = () => {
                 Authorization: `Bearer ${accessToken}`,
             },
         }).then((response) => {
-            setLike(!like);
+            setFeeds((prevFeeds) => {
+                return prevFeeds?.map(feed => {
+                    if (feed.posts.postId === postId) {
+                        const num = feed.posts.isLiked ? -1 : +1;
+                        return {
+                            ...feed,
+                            posts: {
+                                ...feed.posts,
+                                likeCount: feed.posts.likeCount+num,  // 또는 다른 로직으로 업데이트
+                                isLiked: !feed.posts.isLiked,
+                            }
+                        };
+                    }
+                    return feed;
+                });
+            });
             console.log(response.data);
         }).catch((error)=>{
             console.log(error.data);
