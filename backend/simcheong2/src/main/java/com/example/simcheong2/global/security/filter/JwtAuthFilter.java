@@ -6,6 +6,9 @@ import com.example.simcheong2.global.exception.model.CommonExceptionResponse;
 import com.example.simcheong2.global.redis.service.RedisUtilService;
 import com.example.simcheong2.global.service.JwtTokenService;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import io.jsonwebtoken.ExpiredJwtException;
+import io.jsonwebtoken.MalformedJwtException;
+import io.jsonwebtoken.UnsupportedJwtException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
@@ -49,11 +52,23 @@ public class JwtAuthFilter extends OncePerRequestFilter {
                 log.debug("accessToken = {}",accessToken);
                 try{
                     if(!this.checkAccessToken(accessToken)){
-                        this.sendResponse(response, "접근 권한이 없습니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.UNAUTHORIZED);
+                        this.sendResponse(response, "접근 권한이 없습니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.FORBIDDEN);
                         return;
                     }
+                } catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+                    this.sendResponse(response, "유효하지 않은 accessToken 입니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.UNAUTHORIZED);
+                    return;
+                } catch (ExpiredJwtException e) {
+                    this.sendResponse(response, "만료된 accessToken 입니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.UNAUTHORIZED);
+                    return;
+                } catch (UnsupportedJwtException e) {
+                    this.sendResponse(response, "지원되지 않는 accessToken 입니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.BAD_REQUEST);
+                    return;
+                } catch (IllegalArgumentException e) {
+                    this.sendResponse(response, "JWT claim string 이 비어 있습니다.","NOT_HAVE_AUTHORIZATION" ,HttpStatus.BAD_REQUEST);
+                    return;
                 } catch (Exception e){
-                    log.debug("doFilterInternal = {}", e.getMessage());
+                    log.error("기타 Exception: {}",e.getMessage());
                 }
             } else {
                 this.sendResponse(response, "Authorization 포멧이 맞지 않습니다","INVALID_REQUEST" ,HttpStatus.BAD_REQUEST);
@@ -62,33 +77,19 @@ public class JwtAuthFilter extends OncePerRequestFilter {
         }
         filterChain.doFilter(request, response);
     }
-    private boolean checkAccessToken(String accessToken){
-        log.debug("checkAccessToken start");
-        String inputId = jwtTokenService.extractSubject(accessToken);
-        Optional<User> exist = userRepository.findByInputId(inputId);
-        if(exist.isEmpty()){
-            log.debug("{} 의 user 를 찾을수 없습니다.",accessToken);
-            return false;
-        }
-        User user = exist.get();
-        Integer memberId = user.getUserId();
-        log.debug("User : " + user.getInputId());
-        String isLogout = redisUtilService.getData(accessToken);
-        //String refreshToken = redisUtilService.getData(memberId.toString());
-        String isLogin = redisUtilService.getData(user.getInputId());
-        log.debug("isLogout = {}, isLogin = {}", isLogout, isLogin);
-
-        if(!(accessToken==null && accessToken.isEmpty()) && isLogout == null && isLogin != null){
-            try {
-                if(jwtTokenService.validateToken(accessToken)){
-                    Authentication authentication = jwtTokenService.getAuthentication(user);
-                    log.debug("authentication = {}", authentication);
-                    SecurityContextHolder.getContext().setAuthentication(authentication);
-                    return true;
+    private boolean checkAccessToken(String accessToken) throws Exception{
+        if(!(accessToken==null && accessToken.isEmpty())){
+            if(jwtTokenService.validateToken(accessToken)){
+                String inputId = jwtTokenService.extractSubject(accessToken);
+                Optional<User> exist = userRepository.findByInputId(inputId);
+                if(exist.isEmpty()){
+                    log.debug("{} 의 user 를 찾을수 없습니다.",accessToken);
+                    return false;
                 }
-            } catch (Exception e){
-                log.debug("checkAccessToken fail = {}", e.getMessage());
-                return false;
+                User user = exist.get();
+                Authentication authentication = jwtTokenService.getAuthentication(user);
+                SecurityContextHolder.getContext().setAuthentication(authentication);
+                return true;
             }
         }
         return false;

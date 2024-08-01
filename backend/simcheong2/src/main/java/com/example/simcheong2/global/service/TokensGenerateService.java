@@ -6,10 +6,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
-import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.Date;
-import java.util.UUID;
 
 @Slf4j
 @Component
@@ -35,6 +32,14 @@ public class TokensGenerateService {
         String accessToken = jwtTokenService.generate(inputId, ACCESS_TOKEN_KIND, accessTokenExpiredAt);
         String refreshToken = jwtTokenService.generate(id, REFRESH_TOKEN_KIND, refreshTokenExpiredAt);
 
+        return Tokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME);
+    }
+
+    public Tokens generateAccessToken(String refreshToken, String inputId){
+        long now = (new Date()).getTime();
+        Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME * 1000);
+
+        String accessToken = jwtTokenService.generate(inputId, ACCESS_TOKEN_KIND, accessTokenExpiredAt);
         return Tokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
