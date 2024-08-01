@@ -86,20 +86,14 @@ public class PostCreateService {
 
     private String s3ToCloudFrontUrl(String s3Url) {
         try {
-            // Parse the S3 URL
             URI s3Uri = new URI(s3Url);
-
-            // Extract the path from the S3 URL
             String path = s3Uri.getPath();
-
-            // Construct the CloudFront URL
             URI cloudfrontUri = new URI("https", cloudfrontDomain, path, null, null);
-
             return cloudfrontUri.toString();
         } catch (URISyntaxException e) {
             // Handle the exception if URL parsing fails
-            e.printStackTrace();
-            return null;
+            log.error("s3에서 cloudFront 변환 실패");
+            return s3Url;
         }
     }
 
