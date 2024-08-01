@@ -30,9 +30,9 @@ public class UserController {
     private final UserCreateService userCreateService;
 
     @GetMapping("/search")
-    public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestBody @Valid UserSearchRequest request) {
+    public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestParam(value = "nickname") String nickname) {
         int userId = SecurityUtil.getCurrentUserId();
-        List<UserSearchDTO> response = userSearchService.searchNickname(userId, request.getNickname());
+        List<UserSearchDTO> response = userSearchService.searchNickname(userId, nickname);
         return ResponseEntity.ok(response.stream()
                 .map(UserSearchDTO::toResponse)
                 .collect(Collectors.toList()));

@@ -29,8 +29,8 @@ public class MyPageDTO {
 
     public static MyPageDTO from(User user) {
         return MyPageDTO.builder()
-                .followingCount(user.getFollowingFollows().size())
-                .followerCount(user.getFollowerFollows().size())
+                .followingCount(user.getFollowerFollows().size())
+                .followerCount(user.getFollowingFollows().size())
                 .email(user.getEmail())
                 .profileUrl(user.getProfileImage())
                 .nickname(user.getNickname())

@@ -22,8 +22,10 @@ public class OtherProfileInfoResponse {
 
     private Boolean isDisabled;
 
+    @Schema(description = "이 사람이 팔로우하는 사람들의 숫자")
     private Integer followingCount;
 
+    @Schema(description = "이 사람을 팔로우하는 사람들의 숫자. 이 사람이 얼마나 인기인인지 지표")
     private Integer followerCount;
 
     @Email

@@ -11,6 +11,8 @@ import java.util.List;
 @NoArgsConstructor
 @Builder(toBuilder = true)
 public class MyPostInfoResponse {
+    private int postId;
+
     private List<ImagesResponse> images;
 
     private String content;
