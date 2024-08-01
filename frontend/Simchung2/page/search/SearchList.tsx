@@ -5,13 +5,14 @@ import User from './User';
 
 interface SearchListProps{
     searchList: SearchResponse[];
+    onPress: (nickname: string)=>void
 }
 
-const SearchList = ({searchList}:SearchListProps) =>{
+const SearchList = ({searchList, onPress}:SearchListProps) =>{
     return(
         <View>
             {searchList.map((search, index)=>(
-                <User key={index} user={search}/>
+                <User key={index} user={search} onPress={onPress}/>
             ))}
         </View>
     )

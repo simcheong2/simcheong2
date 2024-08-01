@@ -13,6 +13,7 @@ export interface Profile{
     nickname: string,
     sex: "MALE" | "FEMALE",
     isDisabled: boolean,
+    isFollow: boolean,
 }
 
 export interface Posts{
@@ -21,5 +22,6 @@ export interface Posts{
     likeCount: number,
     commentCount: number,
     isLiked: boolean,
+    isReported: boolean,
     createdDate: string
 }

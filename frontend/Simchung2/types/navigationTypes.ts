@@ -17,6 +17,12 @@ type FeedStackParamList = {
   Edit: { profile: MyProfile };
 }
 
+type OtherFeedStackParamList = {
+  Other: undefined;
+  OtherProfile: { select: 'my' | 'other', nickname: string };
+  OtherFeed: { profile: MyProfile };
+}
+
 type BottomTabParamList = {
   Home: undefined;
   Search: undefined;
@@ -29,4 +35,6 @@ export type ScreenNavigationProp = CompositeNavigationProp<
   NativeStackNavigationProp<RootStackParamList>
 >;
 
-export type FeedNavigationProp = NativeStackNavigationProp<FeedStackParamList, 'Feed' | 'Edit'>
+export type FeedNavigationProp = NativeStackNavigationProp<FeedStackParamList, 'Feed' | 'Edit' | 'Profile'>
+
+export type OtherNavigationProp = NativeStackNavigationProp<OtherFeedStackParamList, 'OtherProfile' | 'OtherFeed'>
