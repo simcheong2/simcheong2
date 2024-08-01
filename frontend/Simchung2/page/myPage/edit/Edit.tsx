@@ -11,26 +11,31 @@ import { ImageResize } from '../../../util/common/Common';
 import axios from 'axios';
 import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
+import Loading from '../../loading/Loading';
 
 interface EditProps {
     profile: MyProfile;
 }
 
 const Edit = ({ profile }: EditProps) => {
+    const [loading, setLoading] = useState<boolean>(false);
     const { width } = Dimensions.get('window');
     const [selectUri, setSelectUri] = useState<string>(profile.profile.profileUrl);
     const navigation = useNavigation<FeedNavigationProp>();
     const accessToken = useRecoilValue(accessTokenAtom);
 
     const editHandler = async () => {
+        setLoading(true);
         if (selectUri === profile.profile.profileUrl) {
             Alert.alert('똑같은 사진으로는 수정 불가능 합니다.');
             navigation.goBack();
+            setLoading(false);
             return;
         }
 
         const { manipulatedImage, fileName, mimeType } = await ImageResize(selectUri);
         upload(manipulatedImage.uri, fileName, mimeType);
+        setLoading(false);
         navigation.goBack();
     };
 
@@ -46,7 +51,7 @@ const Edit = ({ profile }: EditProps) => {
             type: mimeType,
         });
 
-        console.log(accessToken)
+        console.log(accessToken);
 
         try {
             await axios.post('http://www.my-first-develop-library.shop:8080/users/profile-url',
@@ -67,20 +72,21 @@ const Edit = ({ profile }: EditProps) => {
     };
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
-                    <Icon name="chevron-left" size={36} />
-                </TouchableOpacity>
-                <View style={[styles['header-container'], { width: width - 84 }]}>
-                    <Text style={styles['header-title']}>프로필 편집</Text>
+        loading ? <Loading /> :
+            <View style={styles.container}>
+                <View style={styles.header}>
+                    <TouchableOpacity onPress={() => navigation.goBack()}>
+                        <Icon name="chevron-left" size={36} />
+                    </TouchableOpacity>
+                    <View style={[styles['header-container'], { width: width - 84 }]}>
+                        <Text style={styles['header-title']}>프로필 편집</Text>
+                    </View>
+                    <TouchableOpacity onPress={editHandler}>
+                        <FeatherIcon name="edit" size={24} />
+                    </TouchableOpacity>
                 </View>
-                <TouchableOpacity onPress={editHandler}>
-                    <FeatherIcon name="edit" size={24} />
-                </TouchableOpacity>
+                <ProfileEdit profile={profile} onPress={selectImage} />
             </View>
-            <ProfileEdit profile={profile} onPress={selectImage} />
-        </View>
     );
 };
 

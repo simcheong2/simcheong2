@@ -16,6 +16,7 @@ export const myProfile: MyProfile = {
         nickname: 'Simchung2',
         sex: 'MALE',
         isDisabled: true,
+        isFollow: true,
     },
     posts:[
         {
@@ -33,6 +34,7 @@ export const myProfile: MyProfile = {
             likeCount: 35000,
             commentCount: 2000,
             isLiked: false,
+            isReported: false,
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
@@ -50,6 +52,7 @@ export const myProfile: MyProfile = {
             likeCount: 11000,
             commentCount: 20000,
             isLiked: false,
+            isReported: false,
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
@@ -67,6 +70,7 @@ export const myProfile: MyProfile = {
             likeCount: 11000,
             commentCount: 20000,
             isLiked: false,
+            isReported: false,
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
@@ -84,6 +88,7 @@ export const myProfile: MyProfile = {
             likeCount: 11000,
             commentCount: 20000,
             isLiked: false,
+            isReported: false,
             createdDate: "2024-07-28T21:50:50.116Z"
         },
     ]
@@ -98,6 +103,7 @@ export const EmptyProfile: MyProfile = {
         nickname: '',
         sex: 'MALE',
         isDisabled: true,
+        isFollow: true,
     },
     posts:[
         {
@@ -111,6 +117,7 @@ export const EmptyProfile: MyProfile = {
             likeCount: 0,
             commentCount: 0,
             isLiked: false,
+            isReported: false,
             createdDate: ""
         },
     ]
