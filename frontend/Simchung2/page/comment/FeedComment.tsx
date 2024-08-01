@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import {
   SafeAreaView,
   ScrollView,
@@ -13,10 +13,18 @@ import {
 import { useRecoilValue } from "recoil";
 import commentsAtom from "../../recoil/atom/commentsAtom";
 import { Comments } from "../../interface/feed/Feed";
+import Icon from "react-native-vector-icons/MaterialIcons";
 import Comment from './Comment';
 
 const FeedComment = () => {
   const comments = useRecoilValue<Comments[]>(commentsAtom);
+  const BaseUrl = 'http://www.my-first-develop-library.shop:8080';
+  const formData = useState(
+      {
+        postId:'',
+        content:'',
+      }
+  )
 
   return (
       <KeyboardAvoidingView
@@ -84,6 +92,8 @@ const styles = StyleSheet.create({
     borderColor: "#555555",
     borderWidth: 1,
     paddingHorizontal: 12,
+    padding:6,
+    borderRadius:8,
   },
 });
 
