@@ -19,6 +19,7 @@ import java.util.stream.Collectors;
 @ToString
 @Builder(toBuilder = true)
 public class PostFeedDTO {
+    private int postId;
     private String profileUrl; // fetch
     private String nickname; // fetch
     private Boolean isUserReported; //
@@ -52,6 +53,7 @@ public class PostFeedDTO {
                         .isLiked(isLiked)
                         .isReported(isPostReported)
                         .createdAt(createdAt)
+                        .postId(postId)
                         .build())
                 .comments(comments.stream()
                         .map(CommentDTO::toResponse)
@@ -77,6 +79,7 @@ public class PostFeedDTO {
         );
 
         return PostFeedDTO.builder()
+                .postId(post.getPostId())
                 .profileUrl(post.getUser().getProfileImage())
                 .nickname(post.getUser().getNickname())
                 .isUserReported(userReported) //
