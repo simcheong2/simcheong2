@@ -38,6 +38,14 @@ public class TokensGenerateService {
         return Tokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME);
     }
 
+    public Tokens generateAccessToken(String refreshToken, String inputId){
+        long now = (new Date()).getTime();
+        Date accessTokenExpiredAt = new Date(now + ACCESS_TOKEN_EXPIRE_TIME * 1000);
+
+        String accessToken = jwtTokenService.generate(inputId, ACCESS_TOKEN_KIND, accessTokenExpiredAt);
+        return Tokens.of(accessToken, refreshToken, BEARER_TYPE, ACCESS_TOKEN_EXPIRE_TIME);
+    }
+
     public String extractMemberId(String accessToken) {
         return String.valueOf(jwtTokenService.extractSubject(accessToken));
     }

@@ -18,6 +18,7 @@ import com.example.simcheong2.global.sms.SmsValidationCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -132,15 +133,26 @@ public class AuthService {
         smsRedisTemplate.opsForValue().set(phone, code, 5, TimeUnit.MINUTES);
     }
 
-    public void reissue(ReissueDto reissueDto) {
+    public Tokens reissue(ReissueDto reissueDto) {
         log.debug("refreshToken input = {}", reissueDto.getRefreshToken());
         String userId = jwtTokenService.extractSubject(reissueDto.getRefreshToken());
+        log.debug("userId = {}",userId);
         String redisRefreshToken = redisUtilService.getData(userId);
-        log.debug("refreshToken in redis= {}", redisRefreshToken);
-        Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
-        if (isExist.isEmpty()) {
-            throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
+        if(redisRefreshToken == null){
+            throw new CustomException(ErrorCode.NOT_HAVE_AUTHORIZATION);
         }
-        User user = isExist.get();
+        log.debug("refreshToken in redis= {}", redisRefreshToken);
+        if(redisRefreshToken.equals(reissueDto.getRefreshToken())){
+            Optional<User> isExist = userRepository.findByUserId(Integer.parseInt(userId));
+            if(isExist.isEmpty()) {
+                throw new CustomException(ErrorCode.BAD_REQUEST, "refreshToken 으로 유저를 찾을 수 없음.");
+            }
+            User user = isExist.get();
+            redisUtilService.setAccessToken(user.getInputId(), "login");
+            return tokensGenerateService.generateAccessToken(redisRefreshToken, user.getInputId());
+        }
+        else{
+            throw new CustomException(ErrorCode.BAD_REQUEST,"요청과 redis 의 rereshToken 이 일치하지 않습니다.");
+        }
     }
 }
