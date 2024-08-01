@@ -1,5 +1,8 @@
 package com.example.simcheong2.domain.user.controller;
 
+import com.example.simcheong2.global.ai.OpenAiHelper;
+import com.example.simcheong2.global.file.FileHelper;
+
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.UserSearchDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
@@ -7,6 +10,7 @@ import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
+import jakarta.servlet.http.HttpServletRequest;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -25,6 +29,9 @@ public class UserController {
     private final UserSearchService userSearchService;
     private final UserUpdateService userUpdateService;
     private final UserCreateService userCreateService;
+    private final FileHelper fileHelper;
+    private final OpenAiHelper openAiHelper;
+
 
     @GetMapping("/search")
     public ResponseEntity<List<UserSearchResponse>> searchUsers(@RequestParam(value = "nickname") String nickname) {
@@ -59,5 +66,15 @@ public class UserController {
         return ResponseEntity.ok(ProfileChangeResponse.builder()
                 .profileUrl(url)
                 .build());
+    }
+
+    @PostMapping("/audio")
+    public ResponseEntity<String> getAudio(
+            HttpServletRequest servletRequest,
+            @RequestPart MultipartFile audio
+    ) {
+        String uploadDirRealPath = servletRequest.getSession().getServletContext().getRealPath("/upload/"); // 저장 디렉토리 경로
+        String transcription = openAiHelper.getTextFromAudioMultipartFile(audio, uploadDirRealPath);
+        return ResponseEntity.ok(transcription);
     }
 }
