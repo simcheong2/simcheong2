@@ -64,8 +64,8 @@ const SearchScreen = () => {
     };
 
     return (
-        <View style={styles.container} accessibilityLabel="원하시는 유저를 검색해보세요.">
-            <Text style={styles.title}>아이디 검색</Text>
+        <View style={styles.container} accessibilityLabel="검색 화면 입니다. 원하시는 유저를 검색해보세요.">
+            <Text style={styles.title} accessibilityLabel='원하는 아이디를 검색 하시려면 두번 탭 하세요.'>아이디 검색</Text>
             <View style={styles.searchContainer}>
                 <Icon name="search" style={styles.searchIcon} />
                 <TextInput
@@ -77,7 +77,7 @@ const SearchScreen = () => {
                     onSubmitEditing={handleSearchSubmit}
                 />
                 {search.length > 0 && (
-                    <TouchableOpacity onPress={clearSearch} style={styles.clearIcon}>
+                    <TouchableOpacity onPress={clearSearch} style={styles.clearIcon} accessibilityLabel='검색 삭제 버튼 입니다. 검색어 전체 삭제를 원하시면 두번 탭하세요.'>
                         <Icon name="close-circle" size={20} color="#B0B0B0" />
                     </TouchableOpacity>
                 )}

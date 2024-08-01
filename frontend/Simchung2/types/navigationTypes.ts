@@ -23,18 +23,25 @@ type OtherFeedStackParamList = {
   OtherFeed: { profile: MyProfile };
 }
 
+type UploadStackParamList = {
+  Picture: undefined;
+  Upload: { photo: string[] };
+}
+
 type BottomTabParamList = {
-  Home: undefined;
+  Home: {upload: boolean};
   Search: undefined;
   Photo: undefined;
   MyPage: undefined;
 };
 
 export type ScreenNavigationProp = CompositeNavigationProp<
-  BottomTabNavigationProp<BottomTabParamList>,
+  BottomTabNavigationProp<BottomTabParamList, 'Home'>,
   NativeStackNavigationProp<RootStackParamList>
 >;
 
 export type FeedNavigationProp = NativeStackNavigationProp<FeedStackParamList, 'Feed' | 'Edit' | 'Profile'>
 
 export type OtherNavigationProp = NativeStackNavigationProp<OtherFeedStackParamList, 'OtherProfile' | 'OtherFeed'>
+
+export type UploadNavigationProp = NativeStackNavigationProp<UploadStackParamList, 'Upload'>

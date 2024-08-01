@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react';
 import { useCameraPermissions } from 'expo-camera';
-import { Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
+import { AccessibilityInfo, Alert, Button, Image, StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import { Camera, CameraType } from 'expo-camera/legacy';
 import axios from 'axios';
 import * as ImageManipulator from 'expo-image-manipulator';
@@ -11,7 +11,8 @@ import IconCommunity from 'react-native-vector-icons/MaterialCommunityIcons';
 import { ImageResize } from '../../util/common/Common';
 import Loading from '../../page/loading/Loading';
 import { useNavigation } from '@react-navigation/native';
-import { ScreenNavigationProp } from '../../types/navigationTypes';
+import { ScreenNavigationProp, UploadNavigationProp } from '../../types/navigationTypes';
+import Snack from '../snack/Snack';
 
 const CameraTest = () => {
     const [facing, setFacing] = useState<CameraType>(CameraType.back);
@@ -19,8 +20,7 @@ const CameraTest = () => {
     const [photo, setPhoto] = useState<string[] | null>(null);
     const cameraRef = useRef<Camera | null>(null);
     const accessToken = useRecoilValue(accessTokenAtom);
-    const [loading, setLoading] = useState<boolean>(false);
-    const navigation = useNavigation<ScreenNavigationProp>()
+    const navigation = useNavigation<UploadNavigationProp>()
 
     if (!permission) {
         // Camera permissions are still loading.
@@ -76,71 +76,30 @@ const CameraTest = () => {
                 return [...prev, manipulatedImage.uri];
             });
         }
+        else{
+            AccessibilityInfo.announceForAccessibility('3장 이상은 촬영이 불가능합니다.');
+        }
 
         console.log(manipulatedImage.uri);
-
-        const fileName = manipulatedImage.uri.split('/').pop();
-        const fileType = fileName?.split('.').pop();
-        const mimeType = `image/${fileType}`;
-        // await uploadPhoto(manipulatedImage.uri, manipulatedImage.base64!!, mimeType, fileName!!);
+        // 접근성 알림 추가
+        AccessibilityInfo.announceForAccessibility('촬영이 완료되었습니다');
     };
 
-    const uploadPhoto = async () => {
-        setLoading(true);
-        const formData = new FormData();
+    const navigateToUpload = () => {
+        navigation.navigate('Upload',{photo: photo})
+    }
 
-        if (photo != null) {
-            photo.forEach((picture) => {
-                const fileName = picture.split('/').pop();
-                formData.append('images', {
-                    uri: picture,
-                    name: fileName,
-                    type: 'image/jpeg',
-                });
-            });
-        }
-        else{
-            Alert.alert('업로드 할 이미지가 없습니다.');
-            setLoading(false);
-            return;
-        }
-
-        // Append request JSON object as a Blob
-        const content = { 'string': JSON.stringify({ content: 'Sample' }), type: 'application/json' };
-        formData.append('request', content);
-
-        try {
-            const response = await axios.post(
-                'http://www.my-first-develop-library.shop:8080/posts',
-                formData,
-                {
-                    headers: {
-                        Authorization: `Bearer ${accessToken}`,
-                        'Content-Type': 'multipart/form-data',
-                    },
-                },
-            );
-            console.log('Success', response.data);
-            setLoading(false);
-            navigation.navigate('Home');
-        } catch (error) {
-            console.error('Error', error);
-            setLoading(false);
-        }
-        setLoading(false);
-    };
-
-    return (loading ? <Loading /> :
-            <View style={styles.container}>
-                <Camera style={styles.camera} type={facing} ref={cameraRef}>
-                    <View style={styles.buttonContainer}>
-                        <TouchableOpacity style={[styles.button]} onPress={toggleCameraFacing}>
+    return (
+            <View style={styles.container} accessible={false}>
+                <Camera style={styles.camera} type={facing} ref={cameraRef} accessible={false}>
+                    <View style={styles.buttonContainer} accessible={false}>
+                        <TouchableOpacity accessibilityLabel='화면 전환 버튼 입니다. 화면을 전환 하여 찍고 싶으시면 두번 탭하세요.' style={[styles.button]} onPress={toggleCameraFacing}>
                             <Icon style={styles.text} name="screen-rotation" size={48} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button]} onPress={takePicture}>
+                        <TouchableOpacity accessibilityLabel='카메라 버튼 입니다. 촬영을 원하시면 두번 탭하세요.' style={[styles.button]} onPress={takePicture}>
                             <Icon style={styles.text} name="camera-alt" size={48} />
                         </TouchableOpacity>
-                        <TouchableOpacity style={[styles.button]} onPress={uploadPhoto}>
+                        <TouchableOpacity accessibilityLabel='사진촬영이 끝나 본문을 작성하러 다음으로 이동하고 싶으시면 두번 탭하세요.' style={[styles.button]} onPress={navigateToUpload}>
                             <IconCommunity style={styles.text} name="file-upload-outline" size={48} />
                         </TouchableOpacity>
                     </View>
