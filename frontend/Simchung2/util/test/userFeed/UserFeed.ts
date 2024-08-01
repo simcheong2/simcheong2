@@ -37,6 +37,7 @@ export const userFeeds = [
             isFollow: true
         },
         posts: {
+            postId: 0,
             images:[
                 {
                     imageUrl: "https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTtRCGjNQ-eOBVSrPManpSmj8FJIv3f_pNq6w&s",
@@ -87,6 +88,7 @@ export const EmptyFeeds: FeedItemResponse[] = [
             isFollow:false
         },
         posts:{
+            postId: 0,
             images:[
                 {
                     imageUrl: 'https://via.placeholder.com/150',

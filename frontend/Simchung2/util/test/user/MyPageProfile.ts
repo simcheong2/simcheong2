@@ -20,6 +20,7 @@ export const myProfile: MyProfile = {
     },
     posts:[
         {
+            postId: 0,
             images:[
                 {
                     imageUrl: imageData[0],
@@ -38,6 +39,7 @@ export const myProfile: MyProfile = {
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
+            postId: 0,
             images:[
                 {
                     imageUrl: imageData[2],
@@ -56,6 +58,7 @@ export const myProfile: MyProfile = {
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
+            postId: 0,
             images:[
                 {
                     imageUrl: imageData[3],
@@ -74,6 +77,7 @@ export const myProfile: MyProfile = {
             createdDate: "2024-07-28T21:50:50.116Z"
         },
         {
+            postId: 0,
             images:[
                 {
                     imageUrl: imageData[1],
@@ -107,6 +111,7 @@ export const EmptyProfile: MyProfile = {
     },
     posts:[
         {
+            postId: 0,
             images:[
                 {
                     imageUrl: 'https://via.placeholder.com/150',

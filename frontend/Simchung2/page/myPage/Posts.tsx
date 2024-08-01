@@ -4,11 +4,13 @@ import { MyProfile } from '../../interface/user/Profile';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
 import { FeedNavigationProp } from '../../types/navigationTypes';
-import { useRecoilState } from 'recoil';
+import { useRecoilState, useRecoilValue } from 'recoil';
 import modalAtom from '../../recoil/modalAtom';
 import { Comments } from '../../interface/feed/Feed';
 import commentsAtom from '../../recoil/atom/commentsAtom';
 import Post from './Post';
+import axios from 'axios';
+import accessTokenAtom from '../../recoil/atom/accessTokenAtom';
 
 interface FeedProps {
     profile: MyProfile;
@@ -22,6 +24,21 @@ const Posts = ({ profile }: FeedProps) => {
     const handleComment = () => {
         setModal(3);
     };
+    const accessToken = useRecoilValue(accessTokenAtom)
+
+    const onLikeHandler = (postId: number) => {
+        const PostID = {id: postId}
+        axios.post(`http://www.my-first-develop-library.shop:8080/posts/like`, PostID,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then((response) => {
+
+            console.log(response.data);
+        }).catch((error)=>{
+            console.log(error.data);
+        })
+    }
 
     const navigation = useNavigation<FeedNavigationProp>();
     return (
@@ -38,7 +55,7 @@ const Posts = ({ profile }: FeedProps) => {
                 (<SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
                         {profile.posts.map((post, index) => (
-                            <Post key={index} post={post} onPress={handleComment} profile={profile.profile} />
+                            <Post key={index} post={post} onPress={handleComment} profile={profile.profile} onLike={onLikeHandler}/>
                         ))}
                     </ScrollView>
                 </SafeAreaView>) :

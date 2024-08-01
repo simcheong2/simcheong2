@@ -17,6 +17,7 @@ export interface Profile{
 }
 
 export interface Posts{
+    postId: number,
     images: Images[],
     content: string,
     likeCount: number,

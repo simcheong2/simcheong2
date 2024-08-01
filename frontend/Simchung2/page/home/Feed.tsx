@@ -14,6 +14,7 @@ import Icon from 'react-native-vector-icons/MaterialIcons';
 import LonIcons from 'react-native-vector-icons/Ionicons';
 import { Comments, FeedItemResponse, Images } from '../../interface/feed/Feed';
 import { formatComma } from '../../util/common/Common';
+import profile from '../myPage/Profile';
 
 export interface FeedItem {
     userName: string,
@@ -27,9 +28,10 @@ export interface FeedItem {
 interface FeedProps {
     feed: FeedItemResponse;
     onPress: (comments: Comments[]) => void;
+    onLike: (id: number) => void;
 }
 
-const Feed = ({ feed, onPress }: FeedProps) => {
+const Feed = ({ feed, onPress, onLike }: FeedProps) => {
     const userImgSrc = { uri: `${feed.otherUserInfoResponse.profileUrl}` };
     const { width } = Dimensions.get('window');
 
@@ -38,6 +40,11 @@ const Feed = ({ feed, onPress }: FeedProps) => {
             <Image style={styles.image} source={{ uri: item.imageUrl }} resizeMode="cover" />
         </View>
     );
+
+    const formatFavorite = ():string => {
+        const icon = feed.posts.isLiked ? 'favorite' : 'favorite-outline'
+        return icon
+    }
 
     return (
         <View style={[styles.container, { marginTop: 12, marginBottom: 12 }]}>
@@ -67,11 +74,11 @@ const Feed = ({ feed, onPress }: FeedProps) => {
             <View style={styles.favorite}>
                 <TouchableOpacity style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(feed.posts.likeCount)}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles['favorite-container']}>
-                    <Icon name="favorite-outline" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(feed.posts.commentCount)}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles['favorite-container']} onPress={()=>onLike && onLike(feed.posts.postId)}>
+                    <Icon name={formatFavorite()} size={24} style={styles.icon} />
+                    <Text style={styles['comment-count']}>{formatComma(feed.posts.likeCount)}</Text>
                 </TouchableOpacity>
             </View>
         </View>
