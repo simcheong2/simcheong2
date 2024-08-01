@@ -3,11 +3,10 @@ package com.example.simcheong2.domain.post.repository.custom;
 import com.example.simcheong2.domain.post.entity.Post;
 import com.example.simcheong2.domain.post.entity.QPost;
 import com.querydsl.jpa.JPAExpressions;
+
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.jpa.repository.Query;
 
 import java.util.List;
 import java.util.Optional;
@@ -49,10 +48,8 @@ public class PostCustomRepositoryImpl implements PostCustomRepository {
                                         .and(post.user.userId.ne(userId))
                         )
                         .orderBy(post.createdDate.desc())
+                        .limit(50)
                         .fetch()
         );
     }
-
-    ;
-
 }

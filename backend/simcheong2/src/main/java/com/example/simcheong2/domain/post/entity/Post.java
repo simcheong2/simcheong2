@@ -8,7 +8,6 @@ import com.example.simcheong2.domain.user_post_like.entity.UserPostLike;
 import com.example.simcheong2.global.entity.BaseEntity;
 import jakarta.persistence.*;
 
-import java.util.List;
 import java.util.Set;
 
 import lombok.Getter;
@@ -69,5 +68,9 @@ public class Post extends BaseEntity {
         return blamedPostPostBlames.stream().anyMatch(
                 postBlame -> postBlame.getBlamedPost().getPostId() == this.postId
         );
+    }
+
+    public int getLike(){
+        return postUserPostLikes.size();
     }
 }

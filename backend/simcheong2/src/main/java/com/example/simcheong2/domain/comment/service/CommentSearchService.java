@@ -1,7 +1,6 @@
 package com.example.simcheong2.domain.comment.service;
 import com.example.simcheong2.domain.comment.entity.dto.CommentDTO;
 import com.example.simcheong2.domain.comment.repository.CommentRepository;
-import com.example.simcheong2.domain.post.entity.dto.PostFeedDTO;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -20,7 +19,6 @@ public class CommentSearchService {
     public List<CommentDTO> getComments(Long requestId) {
         int postId = Math.toIntExact(requestId);
 
-        // comment 테이블에서, postId를 통해 댓글을 조회함.
         return commentRepository.searchCommentByPostId(postId)
                 .orElseGet(ArrayList::new)
                 .stream()
