@@ -18,6 +18,7 @@ import java.util.stream.Collectors;
 @ToString
 @Builder(toBuilder = true)
 public class OtherPostInfoDTO implements Comparator<OtherPostInfoDTO> {
+    private int postId;
     private List<ImageDTO> images;
     private String content;
     private Integer likeCount;
@@ -25,6 +26,7 @@ public class OtherPostInfoDTO implements Comparator<OtherPostInfoDTO> {
     private Boolean isLiked;
     private Boolean isReported;
     private LocalDateTime createdDate;
+
     public static OtherPostInfoDTO from(Post post) {
         return OtherPostInfoDTO.builder()
                 .images(post.getPostImages().stream()
@@ -37,6 +39,7 @@ public class OtherPostInfoDTO implements Comparator<OtherPostInfoDTO> {
                 .isLiked(post.isSelfLiked()) // 내가 내 게시글에 좋아요 눌렀는지
                 .isReported(post.isReported())
                 .createdDate(post.getCreatedDate())
+                .postId(post.getPostId())
                 .build();
     }
 
@@ -51,8 +54,10 @@ public class OtherPostInfoDTO implements Comparator<OtherPostInfoDTO> {
                 .isLiked(isLiked)
                 .isReported(isReported)
                 .createdAt(createdDate)
+                .postId(postId)
                 .build();
     }
+
     @Override
     public int compare(OtherPostInfoDTO o1, OtherPostInfoDTO o2) {
         return o1.createdDate.compareTo(o2.createdDate);
