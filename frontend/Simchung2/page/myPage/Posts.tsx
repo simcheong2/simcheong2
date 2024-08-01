@@ -11,6 +11,7 @@ import commentsAtom from '../../recoil/atom/commentsAtom';
 import Post from './Post';
 import axios from 'axios';
 import accessTokenAtom from '../../recoil/atom/accessTokenAtom';
+import postAtom from '../../recoil/atom/postAtom';
 
 interface FeedProps {
     profile: MyProfile;
@@ -19,10 +20,11 @@ interface FeedProps {
 const Posts = ({ profile }: FeedProps) => {
     const [modal, setModal] = useRecoilState<number>(modalAtom);
 
-    const [comments, setComments] = useRecoilState<Comments[]>(commentsAtom);
+    const [postID, setPostID] = useRecoilState<number>(postAtom);
 
-    const handleComment = () => {
+    const handleComment = (postID: number) => {
         setModal(3);
+        setPostID(postID)
     };
     const accessToken = useRecoilValue(accessTokenAtom)
 
