@@ -13,6 +13,7 @@ import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
 import { BackHandler } from 'react-native';
 import Loading from '../../loading/Loading';
+import { BackHandler } from 'react-native';
 
 interface EditProps {
     profile: MyProfile;
@@ -37,6 +38,23 @@ const Edit = ({ profile }: EditProps) => {
     }, []);
 
     const [loading, setLoading] = useState<boolean>(false);
+    const navigation = useNavigation<FeedNavigationProp>();
+
+    useEffect(() => {
+        const backAction = () => {
+            console.log("backAction??");
+            navigation.goBack(); // 뒤로가기 동작 수행
+            return true; // 기본 동작 막기
+        };
+
+        const backHandler = BackHandler.addEventListener('hardwareBackPress', backAction);
+
+        return () => {
+            console.log("return()=> backAction");
+            backHandler.remove();
+        };
+    }, []);
+
     const { width } = Dimensions.get('window');
     const [selectUri, setSelectUri] = useState<string>(profile.profile.profileUrl);
     // const navigation = useNavigation<FeedNavigationProp>();
