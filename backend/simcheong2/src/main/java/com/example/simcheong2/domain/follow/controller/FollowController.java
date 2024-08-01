@@ -1,7 +1,6 @@
 package com.example.simcheong2.domain.follow.controller;
 
 import com.example.simcheong2.domain.follow.controller.request.FollowNicknameRequest;
-import com.example.simcheong2.domain.follow.controller.request.OtherFollowRequest;
 import com.example.simcheong2.domain.follow.controller.response.FollowUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.FollowerUserInfoResponse;
 import com.example.simcheong2.domain.follow.controller.response.OtherFollowUserInfoResponse;
@@ -71,9 +70,9 @@ public class FollowController {
     @Operation(description = "요청바디에 넘긴 유저가 팔로우하고 있는 사람들의 목록을 조회")
     @GetMapping("/other-follows")
     public ResponseEntity<List<OtherFollowUserInfoResponse>> getOtherFollows(
-            @RequestBody @Valid OtherFollowRequest request) {
+            @RequestParam("nickname") String nickname) {
         int userId = SecurityUtil.getCurrentUserId();
-        List<OtherFollowUserInfoDTO> otherFollows = followSearchService.searchOtherFollows(userId, request.getNickname());
+        List<OtherFollowUserInfoDTO> otherFollows = followSearchService.searchOtherFollows(userId, nickname);
         return ResponseEntity.ok(otherFollows.stream()
                 .map(OtherFollowUserInfoDTO::toResponse)
                 .collect(Collectors.toList()));
@@ -82,9 +81,9 @@ public class FollowController {
     @Operation(description = "요청바디에 넘긴 유저를 팔로우하고 있는 사람들의 목록을 조회. 이 사람의 인싸력 검증 지표")
     @GetMapping("/other-followers")
     public ResponseEntity<List<OtherFollowerUserInfoResponse>> getOtherFollowers(
-            @RequestBody @Valid OtherFollowRequest request) {
+            @RequestParam("nickname") String nickname) {
         int userId = SecurityUtil.getCurrentUserId();
-        List<OtherFollowerUserInfoDTO> otherFollows = followSearchService.searchOtherFollowers(userId, request.getNickname());
+        List<OtherFollowerUserInfoDTO> otherFollows = followSearchService.searchOtherFollowers(userId, nickname);
 
         return ResponseEntity.ok(otherFollows.stream()
                 .map(OtherFollowerUserInfoDTO::toResponse)

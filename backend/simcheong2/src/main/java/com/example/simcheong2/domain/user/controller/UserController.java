@@ -1,7 +1,5 @@
 package com.example.simcheong2.domain.user.controller;
 
-import com.example.simcheong2.domain.user.controller.request.OtherProfileInfoRequest;
-import com.example.simcheong2.domain.user.controller.request.UserSearchRequest;
 import com.example.simcheong2.domain.user.controller.response.*;
 import com.example.simcheong2.domain.user.entity.dto.UserSearchDTO;
 import com.example.simcheong2.domain.user.service.UserCreateService;
@@ -9,7 +7,6 @@ import com.example.simcheong2.domain.user.service.UserSearchService;
 import com.example.simcheong2.domain.user.service.UserUpdateService;
 import com.example.simcheong2.global.service.SecurityUtil;
 import io.swagger.v3.oas.annotations.tags.Tag;
-import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.ResponseEntity;
@@ -46,10 +43,10 @@ public class UserController {
     }
 
     @GetMapping("/other-page")
-    public ResponseEntity<OtherPageResponse> otherPage(@RequestBody @Valid OtherProfileInfoRequest request) {
+    public ResponseEntity<OtherPageResponse> otherPage(@RequestParam("nickname") String nickname) {
         int userId = SecurityUtil.getCurrentUserId();
 
-        OtherPageResponse response = userSearchService.getOtherPageInfo(request.getNickname(), userId).toResponse();
+        OtherPageResponse response = userSearchService.getOtherPageInfo(nickname, userId).toResponse();
         return ResponseEntity.ok(response);
     }
 
