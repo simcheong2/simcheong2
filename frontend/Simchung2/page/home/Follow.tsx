@@ -106,8 +106,8 @@ const Follow = () => {
         loading ? <Loading /> :
             <>
                 {feeds ?
-                    (<SafeAreaView style={styles.container}>
-                        <ScrollView style={styles.scrollView}>
+                    (<SafeAreaView style={styles.container} accessible={false}>
+                        <ScrollView style={styles.scrollView} accessible={false}>
                             {feeds.map((feed, index) => (
                                 <Feed key={index} feed={feed} onPress={handleComment} onLike={onLikeHandler}/>
                             ))}

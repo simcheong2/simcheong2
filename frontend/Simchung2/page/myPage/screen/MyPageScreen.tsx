@@ -10,7 +10,6 @@ import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
 import { SelectType } from '../../../types/SelectType';
 import Loading from '../../loading/Loading';
 import { Alert } from 'react-native';
-import { Extrapolate } from 'react-native-reanimated';
 
 const MyPageScreen = ({ route = {} }) => {
     // @ts-ignore
