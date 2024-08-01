@@ -71,7 +71,7 @@ function SignupScreen() {
         }};
         axios
             .post(
-                'http://www.my-first-develop-library.shop:8080/auth/sms-verifications',codeData,config
+                'http://www.my-first-develop-library.shop:8080/auth/sms-validation',codeData,config
 
             )
             .then((response) => {
