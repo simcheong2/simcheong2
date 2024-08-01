@@ -34,20 +34,15 @@ public class PostSearchService {
         int userId = SecurityUtil.getCurrentUserId();
         List<Post> recentList = postRepository.findRecentPosts(userId)
                 .orElseGet(ArrayList::new);
-        List<PostFeedDTO> result = new ArrayList<>();
+
         if(recentList.isEmpty()){
             throw new CustomException(ErrorCode.BAD_REQUEST,"최근 게시물이 존재하지 않습니다.");
         }
-        List<Post> sortedUniquePosts = recentList.stream()
-                .sorted((post1, post2) -> Integer.compare(post2.getLike(), post1.getLike()))
-                .toList();
 
-        for(Post post : sortedUniquePosts){
-            result.add(PostFeedDTO.from(post,userId));
-            if(result.size() == 10){
-                break;
-            }
-        }
-        return result;
+        return recentList.stream()
+                .sorted((post1, post2) -> Integer.compare(post2.getLike(), post1.getLike()))
+                .limit(10)
+                .map(post -> PostFeedDTO.from(post,userId))
+                .toList();
     }
 }
