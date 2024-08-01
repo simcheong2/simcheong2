@@ -50,8 +50,6 @@ const FeedComment = () => {
         })
         .then((response) => {
           if (response.status == 200) {
-              console.log("성공!");
-              console.log(postId);
 
               const postData = response.data;
 
@@ -145,10 +143,6 @@ const FeedComment = () => {
     }).then((response) => {
       console.log('Success', response.data);
       formCommentData.content = response.data
-      // setFormCommentData((prevData) => ({
-      //   ...prevData,
-      //   content: response.data.toString(),
-      // }));
       setText(response.data);
       handleAddComment();
       setText("");
@@ -211,6 +205,7 @@ const FeedComment = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+
   },
   inner: {
     flex: 1,

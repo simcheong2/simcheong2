@@ -1,60 +1,70 @@
 import React, { useCallback, useEffect, useMemo, useRef } from 'react';
-import { View, Text, StyleSheet, Button } from 'react-native';
+import { View, StyleSheet } from 'react-native';
 import {
-  BottomSheetModal,
-  BottomSheetModalProvider,
+    BottomSheetModal,
+    BottomSheetModalProvider,
+    BottomSheetBackdrop,
 } from '@gorhom/bottom-sheet';
-import { useRecoilState, useRecoilValue } from 'recoil';
+import { useRecoilState } from 'recoil';
 import modalAtom from '../../recoil/modalAtom';
 
-interface CustomSheetProps{
+interface CustomSheetProps {
     children?: React.ReactNode;
-    snapPoint: string[]
+    snapPoint: string[];
 }
 
-const CustomSheet = ({children,snapPoint}: CustomSheetProps) => {
-  // ref
-  const bottomSheetModalRef = useRef<BottomSheetModal>(null);
+const CustomSheet = ({ children, snapPoint }: CustomSheetProps) => {
+    // ref
+    const bottomSheetModalRef = useRef<BottomSheetModal>(null);
 
-  const [modalIndex, setModalIndex] = useRecoilState<number>(modalAtom)
+    const [modalIndex, setModalIndex] = useRecoilState<number>(modalAtom);
 
-  // variables
-  const snapPoints = useMemo(() => snapPoint, []);
+    // variables
+    const snapPoints = useMemo(() => snapPoint, [snapPoint]);
 
-  useEffect(()=>{
-    if(modalIndex>0){
-        bottomSheetModalRef.current?.present();
-    }
-  },[modalIndex])
+    useEffect(() => {
+        if (modalIndex > 0) {
+            bottomSheetModalRef.current?.present();
+        }
+    }, [modalIndex]);
 
-  const handleSheetChanges = useCallback((index: number) => {
-    if(index<0){
-        setModalIndex(index)
-    }
-  }, []);
+    const handleSheetChanges = useCallback((index: number) => {
+        if (index < 0) {
+            setModalIndex(index);
+        }
+    }, [setModalIndex]);
 
-  // renders
-  return (
-    <BottomSheetModalProvider>
-        <BottomSheetModal
-          ref={bottomSheetModalRef}
-          index={2}
-          snapPoints={snapPoints}
-          onChange={handleSheetChanges}
-        >
-          <View style={styles.contentContainer}>
-            {children}
-          </View>
-        </BottomSheetModal>
-    </BottomSheetModalProvider>
-  );
+    // renders
+    return (
+        <BottomSheetModalProvider>
+            <BottomSheetModal
+                ref={bottomSheetModalRef}
+                index={2}
+                snapPoints={snapPoints}
+                onChange={handleSheetChanges}
+                backdropComponent={(props) => (
+                    <BottomSheetBackdrop
+                        {...props}
+                        opacity={0.5}
+                        appearsOnIndex={0}
+                        disappearsOnIndex={-1}
+                        pressBehavior="close"
+                    />
+                )}
+            >
+                <View style={styles.contentContainer}>
+                    {children}
+                </View>
+            </BottomSheetModal>
+        </BottomSheetModalProvider>
+    );
 };
 
 const styles = StyleSheet.create({
-  contentContainer: {
-    flex: 1,
-    alignItems: 'center',
-  },
+    contentContainer: {
+        flex: 1,
+        alignItems: 'center',
+    },
 });
 
-export default CustomSheet
+export default CustomSheet;
