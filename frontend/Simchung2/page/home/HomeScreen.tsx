@@ -61,7 +61,7 @@ const HomeScreen = ({ route = {} }) => {
             <View style={styles.tab}>
                 <Tabs/>
             </View>
-            <Snack visible={visible} onDismissSnackBar={onDismissSnackBar} onPress={onPress} content='업로드 완료했습니다.'/>
+            <Snack visible={visible} onDismissSnackBar={onDismissSnackBar} onPress={onPress} content='업로드 완료했습니다.' comment='업로드 완료했습니다.'/>
         </View>
     )
 }
