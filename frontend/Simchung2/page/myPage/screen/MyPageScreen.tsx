@@ -9,6 +9,8 @@ import { useRecoilValue } from 'recoil';
 import accessTokenAtom from '../../../recoil/atom/accessTokenAtom';
 import { SelectType } from '../../../types/SelectType';
 import Loading from '../../loading/Loading';
+import { Alert } from 'react-native';
+import { Extrapolate } from 'react-native-reanimated';
 
 const MyPageScreen = ({ route = {} }) => {
     // @ts-ignore
@@ -44,13 +46,13 @@ const MyPageScreen = ({ route = {} }) => {
         setProfile(myProfile);
         setLoading(true);
 
-        const requestData = select === undefined ? {} : JSON.stringify({ nickname: nickname });
+        const requestData = select === undefined ? {} : { nickname: nickname };
 
-        axios.get(`http://www.my-first-develop-library.shop:8080/users/${select==undefined ? 'my' : 'other'}-page`, {
+        axios.get(`http://www.my-first-develop-library.shop:8080/users/${select == undefined ? 'my' : 'other'}-page`, {
             headers: {
                 Authorization: `Bearer ${accessToken}`,
             },
-            data: requestData
+            params: requestData,
         }).then((response) => {
             if (response.status === 200) {
                 setProfile(response.data);
@@ -71,7 +73,7 @@ const MyPageScreen = ({ route = {} }) => {
     useEffect(() => {
         setIsMine(prevIsMine => ({
             ...prevIsMine,
-            profile: profile
+            profile: profile,
         }));
     }, [profile]);
 
@@ -87,7 +89,7 @@ const MyPageScreen = ({ route = {} }) => {
             case 'follow': {
                 setIsMine(prevIsMine => ({
                     ...prevIsMine,
-                    follow: 'Following'
+                    follow: 'Following',
                 }));
                 setFollowAction('follow');
                 break;
@@ -95,7 +97,7 @@ const MyPageScreen = ({ route = {} }) => {
             case 'follower': {
                 setIsMine(prevIsMine => ({
                     ...prevIsMine,
-                    follow: 'Follower'
+                    follow: 'Follower',
                 }));
                 setFollowAction('follower');
                 break;
@@ -104,8 +106,48 @@ const MyPageScreen = ({ route = {} }) => {
     };
 
     const FollowingHandle = () => {
+        const data = { nickname: nickname };
+        if (profile.profile.isFollow) {
+            axios.delete('http://www.my-first-develop-library.shop:8080/follow',{
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+                data: data
+            }).then((response) => {
+                Alert.alert('팔로우를 취소 했습니다.');
+                setProfile({
+                    ...profile,
+                    profile: {
+                        ...profile.profile,
+                        isFollow: false,
+                        followerCount: profile.profile.followingCount - 1,
+                    },
+                });
+            }).catch((error) => {
+                console.log(error.data);
+            });
+        } else {
+            axios.post(`http://www.my-first-develop-library.shop:8080/follow`, data, {
+                headers: {
+                    Authorization: `Bearer ${accessToken}`,
+                },
+            }).then((response) => {
+                Alert.alert('팔로우 했습니다.');
+                setProfile({
+                    ...profile,
+                    profile: {
+                        ...profile.profile,
+                        isFollow: true,
+                        followerCount: profile.profile.followingCount + 1,
+                    },
+                });
+            }).catch((error) => {
+                console.log(error.data);
+            });
+        }
+    };
 
-    }
+    const data = select === undefined;
 
     return (
         loading ? <Loading /> :
@@ -116,7 +158,7 @@ const MyPageScreen = ({ route = {} }) => {
                 editClick={onEditHandler}
                 followClick={onFollowHandler}
                 followingClick={FollowingHandle}
-                isMine={select === undefined ? true : false}
+                isMine={data}
             />
     );
 };

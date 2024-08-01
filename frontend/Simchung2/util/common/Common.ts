@@ -10,12 +10,12 @@ export const formatComma = (num: number) => {
     }
 };
 
-export const ImageResize = async (uri: string) => {
+export const ImageResize = async (uri: string, resize=0.3) => {
     const imageInfo = await ImageManipulator.manipulateAsync(uri);
     const { width, height } = imageInfo;
 
-    const newWidth = width * 0.3;
-    const newHeight = height * 0.3;
+    const newWidth = width * resize;
+    const newHeight = height * resize;
 
     const manipulatedImage = await ImageManipulator.manipulateAsync(
         uri,

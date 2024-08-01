@@ -35,6 +35,7 @@ const Follow = () => {
     const [feeds, setFeeds] = useState<FeedItemResponse[]>();
     const [comments, setComments] = useRecoilState<Comments[]>(commentsAtom);
     const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
+    const [like, setLike] = useState<boolean>(true);
 
     useEffect(() => {
         getStorage('accessToken').then((v) => {
@@ -70,7 +71,21 @@ const Follow = () => {
             setFeeds(EmptyFeeds);
             setLoading(false);
         };
-    }, [accessToken]);
+    }, [accessToken,like]);
+
+    const onLikeHandler = (postId: number) => {
+        const PostID = {id: postId}
+        axios.post(`http://www.my-first-develop-library.shop:8080/posts/like`, PostID,{
+            headers: {
+                Authorization: `Bearer ${accessToken}`,
+            },
+        }).then((response) => {
+            setLike(!like);
+            console.log(response.data);
+        }).catch((error)=>{
+            console.log(error.data);
+        })
+    }
 
     return (
         loading ? <Loading /> :
@@ -79,7 +94,7 @@ const Follow = () => {
                     (<SafeAreaView style={styles.container}>
                         <ScrollView style={styles.scrollView}>
                             {feeds.map((feed, index) => (
-                                <Feed key={index} feed={feed} onPress={handleComment} />
+                                <Feed key={index} feed={feed} onPress={handleComment} onLike={onLikeHandler}/>
                             ))}
                         </ScrollView>
                     </SafeAreaView>) :

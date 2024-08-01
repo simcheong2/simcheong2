@@ -10,9 +10,10 @@ interface PostProps{
     post: Posts
     profile: Profile
     onPress: ()=>void
+    onLike: (postId: number)=>void
 }
 
-const Post = ({post, profile, onPress}:PostProps) => {
+const Post = ({post, profile, onPress,onLike}:PostProps) => {
     const userImgSrc = { uri: `${profile.profileUrl}` };
     const { width } = Dimensions.get('window');
 
@@ -50,11 +51,11 @@ const Post = ({post, profile, onPress}:PostProps) => {
             <View style={styles.favorite}>
                 <TouchableOpacity style={styles['comment-container']} onPress={onPress}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
-                    <Text style={styles['comment-count']}>{formatComma(post.likeCount)}</Text>
-                </TouchableOpacity>
-                <TouchableOpacity style={styles['favorite-container']}>
-                    <Icon name="favorite-outline" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(post.commentCount)}</Text>
+                </TouchableOpacity>
+                <TouchableOpacity style={styles['favorite-container']} onPress={()=>onLike && onLike(post.postId)}>
+                    <Icon name="favorite-outline" size={24} style={styles.icon} />
+                    <Text style={styles['comment-count']}>{formatComma(post.likeCount)}</Text>
                 </TouchableOpacity>
             </View>
         </View>

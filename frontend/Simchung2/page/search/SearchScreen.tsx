@@ -22,6 +22,7 @@ const SearchScreen = () => {
     const baseURL = 'http://www.my-first-develop-library.shop:8080';
     const [search, setSearch] = useState<string>('');
     const [searchList, setSearchList] = useState<SearchResponse[]>(EmptySearchList);
+    const [text, setText] = useState<string>('원하시는 유저를 검색해보세요.')
     const accessToken = useRecoilValue(accessTokenAtom);
     const navigation = useNavigation<OtherNavigationProp>();
 
@@ -40,10 +41,11 @@ const SearchScreen = () => {
             },
         }).then((response) => {
             console.log(response.data);
+            setSearchList(response.data)
         }).catch((error) => {
+            setText('해당 검색 유저는 없는 유저 입니다.')
             console.log(error.data);
         });
-        setSearchList(searchData);
     };
 
     const clearSearch = () => {
@@ -82,7 +84,7 @@ const SearchScreen = () => {
             </View>
             {searchList == EmptySearchList ? (
                 <View style={styles['default-container']}>
-                    <Text style={styles['default-text']}>검색 할 사람을 입력해 주세요.</Text>
+                    <Text style={styles['default-text']}>{text}</Text>
                 </View>
             ) : (
                 <SafeAreaView style={styles['search-container']}>

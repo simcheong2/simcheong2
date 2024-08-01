@@ -4,14 +4,15 @@ export interface FeedItemResponse{
     comments: Comments[];
 }
 
-interface OtherUserInfoResponse{
+export interface OtherUserInfoResponse{
     profileUrl: string,
     nickname: string,
     isReport: boolean,
     isFollow: boolean,
 }
 
-interface Post{
+export interface Post{
+    postId: number,
     images: Images[],
     content: string,
     likeCount: number,
