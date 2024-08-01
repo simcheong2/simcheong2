@@ -15,6 +15,7 @@ import { ScreenNavigationProp, UploadNavigationProp } from '../../types/navigati
 import Snack from '../snack/Snack';
 
 const CameraTest = () => {
+    const [visible, setVisible] = useState<boolean>(false);
     const [facing, setFacing] = useState<CameraType>(CameraType.back);
     const [permission, requestPermission] = useCameraPermissions();
     const [photo, setPhoto] = useState<string[] | null>(null);
@@ -86,7 +87,20 @@ const CameraTest = () => {
     };
 
     const navigateToUpload = () => {
-        navigation.navigate('Upload',{photo: photo})
+        if(photo != null) {
+            // @ts-ignore
+            navigation.navigate('Upload', { photo: photo })
+        }else{
+            setVisible(true);
+        }
+    }
+
+    const onPress=()=>{
+
+    }
+
+    const onDismissSnackBar = () => {
+        setVisible(!visible);
     }
 
     return (
@@ -114,6 +128,7 @@ const CameraTest = () => {
                         ))}
                     </View>)
                 }
+                <Snack visible={visible} onDismissSnackBar={onDismissSnackBar} onPress={onPress} content='이미지가 없습니다.'/>
             </View>
     );
 };

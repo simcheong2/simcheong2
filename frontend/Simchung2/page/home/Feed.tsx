@@ -27,7 +27,7 @@ export interface FeedItem {
 
 interface FeedProps {
     feed: FeedItemResponse;
-    onPress: (comments: Comments[]) => void;
+    onPress: (postID: number) => void;
     onLike: (id: number) => void;
 }
 
@@ -72,7 +72,7 @@ const Feed = ({ feed, onPress, onLike }: FeedProps) => {
                 pagingEnabled
             />
             <View accessible={false} style={styles.favorite}>
-                <TouchableOpacity accessibilityLabel='댓글 창 입니다 확인 하시려면 두번 탭 해주세요.' style={styles['comment-container']} onPress={() => onPress && onPress(feed.comments)}>
+                <TouchableOpacity accessibilityLabel='댓글 창 입니다 확인 하시려면 두번 탭 해주세요.' style={styles['comment-container']} onPress={() => onPress && onPress(feed.posts.postId)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(feed.posts.commentCount)}</Text>
                 </TouchableOpacity>

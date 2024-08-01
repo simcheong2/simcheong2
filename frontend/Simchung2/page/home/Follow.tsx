@@ -11,6 +11,7 @@ import { getStorage } from '../../util/common/Storage.ts';
 import AccessTokenAtom from '../../recoil/atom/accessTokenAtom';
 import accessTokenAtom from '../../recoil/atom/accessTokenAtom';
 import Loading from '../loading/Loading';
+import PostAtom from '../../recoil/atom/postAtom';
 
 const styles = StyleSheet.create({
     container: {
@@ -33,7 +34,7 @@ const Follow = () => {
     const [loading, setLoading] = useState<boolean>(false);
     const [modal, setModal] = useRecoilState<number>(modalAtom);
     const [feeds, setFeeds] = useState<FeedItemResponse[]>();
-    const [comments, setComments] = useRecoilState<Comments[]>(commentsAtom);
+    const [postID, setPostID] = useRecoilState<number>(PostAtom);
     const [accessToken, setAccessToken] = useRecoilState(accessTokenAtom);
     const [like, setLike] = useState<boolean>(true);
 
@@ -43,9 +44,9 @@ const Follow = () => {
         });
     }, []);
 
-    const handleComment = (data: Comments[]) => {
+    const handleComment = (data: number) => {
         setModal(3);
-        setComments(data);
+        setPostID(data);
     };
 
     useEffect(() => {
