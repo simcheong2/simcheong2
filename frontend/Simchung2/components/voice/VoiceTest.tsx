@@ -171,21 +171,21 @@ const VoiceTest = ({ route }) => {
     const { width, height } = Dimensions.get('window');
 
     const renderItems: ListRenderItem<string> = ({ item }) => (
-        <View style={[styles['image-wrapper'], { width: width, height: height / 2.5 }]}>
+        <View accessible importantForAccessibility='yes' accessibilityLabel='첫번째 사진입니다. 원하시는 사진이 맞으신가요?' style={[styles['image-wrapper'], { width: width, height: height / 2.5 }]}>
             <Image style={styles.image} source={{ uri: item }} resizeMode="cover" />
         </View>
     );
 
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => backNavigation.goBack()}>
+        <View style={styles.container} accessible={false}>
+            <View style={styles.header} accessible={false}>
+                <TouchableOpacity onPress={() => backNavigation.goBack()} accessible accessibilityLabel='뒤로가기 버튼 입니다. 뒤로가기를 원하면 두번 탭해주세요.' importantForAccessibility='yes'>
                     <Icon name="chevron-left" size={36} />
                 </TouchableOpacity>
-                <View style={styles['text-container']}>
+                <View style={styles['text-container']} accessible importantForAccessibility='yes' accessibilityLabel='사진 업로드'>
                     <Text style={styles.text}>사진 업로드</Text>
                 </View>
-                <TouchableOpacity onPress={uploadPhoto}>
+                <TouchableOpacity onPress={uploadPhoto} accessible importantForAccessibility='yes' accessibilityLabel='업로드 버튼입니다. 게시글 업로드를 원하시면 두번 탭하세요.'>
                     <IconCommunity name="file-upload-outline" size={36} />
                 </TouchableOpacity>
             </View>
@@ -204,9 +204,9 @@ const VoiceTest = ({ route }) => {
                 <Text numberOfLines={3} ellipsizeMode="tail" style={styles['recoding-text']}>{text}</Text>
             </View>
             <View>
-                <TouchableOpacity style={styles.button} onPress={recording ? stopRecording : startRecording}>
+                <TouchableOpacity  accessible importantForAccessibility='yes' accessibilityLabel='음성을 통해 현재 느낌을 표현 해주세요. 두번 탭하세요.' style={styles.button} onPress={recording ? stopRecording : startRecording}>
                     <Animated.View style={{ transform: [{ scale: pulseAnim }] }}>
-                        <Icon name="mic" size={48} style={{ color: "#fff" }} />
+                        <Icon name="mic" size={48} style={{ color: '#fff' }} />
                     </Animated.View>
                 </TouchableOpacity>
             </View>
@@ -244,10 +244,10 @@ const styles = StyleSheet.create({
     },
 
     'recoding-container': {
-        width: "80%",
+        width: '80%',
         height: 64,
         flexDirection: 'row',
-        alignItems:'flex-start',
+        alignItems: 'flex-start',
         justifyContent: 'center',
         marginBottom: 20,
     },
@@ -268,7 +268,7 @@ const styles = StyleSheet.create({
     flatList: {
         flexGrow: 0,
         marginTop: 24,
-        marginBottom: 16
+        marginBottom: 16,
     },
 
     'image-wrapper': {

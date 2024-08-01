@@ -21,6 +21,7 @@ const Posts = ({ profile }: FeedProps) => {
     const [modal, setModal] = useRecoilState<number>(modalAtom);
 
     const [postID, setPostID] = useRecoilState<number>(postAtom);
+    const [profileData, setProfileData] = useState<MyProfile>(profile)
 
     const handleComment = (postID: number) => {
         setModal(3);
@@ -35,7 +36,26 @@ const Posts = ({ profile }: FeedProps) => {
                 Authorization: `Bearer ${accessToken}`,
             },
         }).then((response) => {
+            setProfileData((prevProfileData) => {
+                // 좋아요가 업데이트된 상태를 새로 생성
+                const updatedPosts = prevProfileData.posts.map((post) => {
+                    if (post.postId === postId) {
+                        // 좋아요 수와 좋아요 상태 업데이트
+                        return {
+                            ...post,
+                            likeCount: post.isLiked ? post.likeCount - 1 : post.likeCount + 1,
+                            isLiked: !post.isLiked,
+                        };
+                    }
+                    return post;
+                });
 
+                // 새 상태 반환
+                return {
+                    ...prevProfileData,
+                    posts: updatedPosts,
+                };
+            });
             console.log(response.data);
         }).catch((error)=>{
             console.log(error.data);
@@ -44,20 +64,20 @@ const Posts = ({ profile }: FeedProps) => {
 
     const navigation = useNavigation<FeedNavigationProp>();
     return (
-        <View style={styles.container}>
-            <View style={styles.header}>
-                <TouchableOpacity onPress={() => navigation.goBack()}>
+        <View accessible={false} style={styles.container}>
+            <View accessible={false} style={styles.header}>
+                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel='뒤로 가고 싶으시면 두번탭하세요.' onPress={() => navigation.goBack()}>
                     <Icon name="chevron-left" size={48} />
                 </TouchableOpacity>
-                <View style={styles['header-container']}>
+                <View accessible importantForAccessibility='yes' accessibilityLabel='게시글' style={styles['header-container']}>
                     <Text style={styles['header-title']}>게시글</Text>
                 </View>
             </View>
-            {profile.posts ?
+            {profileData.posts ?
                 (<SafeAreaView style={styles.container}>
                     <ScrollView style={styles.scrollView}>
-                        {profile.posts.map((post, index) => (
-                            <Post key={index} post={post} onPress={handleComment} profile={profile.profile} onLike={onLikeHandler}/>
+                        {profileData.posts.map((post, index) => (
+                            <Post key={index} post={post} onPress={handleComment} profile={profileData.profile} onLike={onLikeHandler}/>
                         ))}
                     </ScrollView>
                 </SafeAreaView>) :
