@@ -7,7 +7,7 @@ import UploadNavigation from '../navigation/photo/UploadNavigation';
 
 const PhotoScreen = () => {
     return(
-        <View style={styles.container} accessibilityLabel='게시글 작성 화면 입니다. 최대 사진 3개까지 촬영이 가능합니다. 좋은 추억을 남겨 공유 해봅시다.'>
+        <View style={styles.container}>
             <UploadNavigation/>
         </View>
     )

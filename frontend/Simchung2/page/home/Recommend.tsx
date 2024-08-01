@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Text, View, StyleSheet, SafeAreaView, ScrollView } from 'react-native';
+import { Text, View, StyleSheet, SafeAreaView, ScrollView, AccessibilityInfo } from 'react-native';
 import { useRecoilState } from 'recoil';
 import modalAtom from '../../recoil/modalAtom';
 import { Comments, FeedItemResponse } from '../../interface/feed/Feed';
@@ -81,6 +81,24 @@ const Recommend = () => {
                 Authorization: `Bearer ${accessToken}`,
             },
         }).then((response) => {
+            setFeeds((prevFeeds) => {
+                return prevFeeds?.map(feed => {
+                    if (feed.posts.postId === postId) {
+                        const commentLike = feed.posts.isLiked ? '좋아요 취소' : '좋아요';
+                        AccessibilityInfo.announceForAccessibility(commentLike);
+                        const num = feed.posts.isLiked ? -1 : +1;
+                        return {
+                            ...feed,
+                            posts: {
+                                ...feed.posts,
+                                likeCount: feed.posts.likeCount+num,  // 또는 다른 로직으로 업데이트
+                                isLiked: !feed.posts.isLiked,
+                            }
+                        };
+                    }
+                    return feed;
+                });
+            });
             console.log(response.data);
         }).catch((error)=>{
             console.log(error.data);

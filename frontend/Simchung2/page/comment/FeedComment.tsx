@@ -160,12 +160,12 @@ const FeedComment = () => {
           keyboardVerticalOffset={80}
       >
         <TouchableWithoutFeedback onPress={Keyboard.dismiss}>
-          <View style={styles.inner}>
-            <View style={styles["title-container"]}>
+          <View style={styles.inner} accessible={false}>
+            <View accessible={false} style={styles["title-container"]}>
               <Text>댓글</Text>
             </View>
-            <SafeAreaView style={styles["comments-container"]}>
-              <ScrollView style={styles["comments-scroll"]}>
+            <SafeAreaView accessible={false} style={styles["comments-container"]}>
+              <ScrollView accessible={false} style={styles["comments-scroll"]}>
                 {comments.length > 0 ? (
                     comments.map((comment, index) => (
                         <Comment key={index} comment={comment} />
@@ -175,8 +175,8 @@ const FeedComment = () => {
                 )}
               </ScrollView>
             </SafeAreaView>
-            <View style={styles["comment-register"]}>
-              <TextInput
+            <View accessible={false} style={styles["comment-register"]}>
+              <TextInput accessible importantForAccessibility='yes' accessibilityLabel='댓글을 두번 탭하시면 음성 인식 버튼이 나타납니다.'
                   style={styles.comment}
                   placeholder="댓글"
                   onFocus={onTextInputFocus}
@@ -185,8 +185,8 @@ const FeedComment = () => {
               />
             </View>
             {mic && (
-                <View style={styles["mic-wrapper"]}>
-                  <TouchableOpacity
+                <View accessible={false} style={styles["mic-wrapper"]}>
+                  <TouchableOpacity accessible accessibilityLabel='음성 댓글을 다시려면 두번 탭해주세요'
                       style={styles["mic-container"]}
                       onPress={recording ? stopRecording : startRecording}
                   >

@@ -37,7 +37,7 @@ const CustomSheet = ({ children, snapPoint }: CustomSheetProps) => {
     // renders
     return (
         <BottomSheetModalProvider>
-            <BottomSheetModal
+            <BottomSheetModal accessible accessibilityLabel='댓글창을 열었습니다.'
                 ref={bottomSheetModalRef}
                 index={2}
                 snapPoints={snapPoints}

@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { SafeAreaView, ScrollView, StyleSheet, Text, View, ViewBase } from 'react-native';
+import { AccessibilityInfo, SafeAreaView, ScrollView, StyleSheet, Text, View, ViewBase } from 'react-native';
 import Feed from './Feed';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import modalAtom from '../../recoil/modalAtom';
@@ -84,6 +84,8 @@ const Follow = () => {
             setFeeds((prevFeeds) => {
                 return prevFeeds?.map(feed => {
                     if (feed.posts.postId === postId) {
+                        const commentLike = feed.posts.isLiked ? '좋아요 취소' : '좋아요';
+                        AccessibilityInfo.announceForAccessibility(commentLike);
                         const num = feed.posts.isLiked ? -1 : +1;
                         return {
                             ...feed,
