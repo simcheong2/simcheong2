@@ -13,8 +13,6 @@ const Snack = ({visible, onDismissSnackBar, onPress, content, comment}: SnackPro
     return(
         <Snackbar
             accessibilityLabel={comment}
-            accessible
-            importantForAccessibility='yes'
             visible={visible}
             onDismiss={onDismissSnackBar}
             action={{

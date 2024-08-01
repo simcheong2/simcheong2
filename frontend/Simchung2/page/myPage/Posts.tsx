@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ScrollView } from 'react-native';
+import { StyleSheet, Text, View, TouchableOpacity, SafeAreaView, ScrollView, AccessibilityInfo } from 'react-native';
 import { MyProfile } from '../../interface/user/Profile';
 import Icon from 'react-native-vector-icons/MaterialIcons';
 import { useNavigation } from '@react-navigation/native';
@@ -40,6 +40,8 @@ const Posts = ({ profile }: FeedProps) => {
                 // 좋아요가 업데이트된 상태를 새로 생성
                 const updatedPosts = prevProfileData.posts.map((post) => {
                     if (post.postId === postId) {
+                        const commentLike = post.isLiked ? '좋아요 취소' : '좋아요';
+                        AccessibilityInfo.announceForAccessibility(commentLike);
                         // 좋아요 수와 좋아요 상태 업데이트
                         return {
                             ...post,
@@ -66,10 +68,10 @@ const Posts = ({ profile }: FeedProps) => {
     return (
         <View accessible={false} style={styles.container}>
             <View accessible={false} style={styles.header}>
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel='뒤로 가고 싶으시면 두번탭하세요.' onPress={() => navigation.goBack()}>
+                <TouchableOpacity accessibilityLabel='뒤로 가고 싶으시면 두번탭하세요.' onPress={() => navigation.goBack()}>
                     <Icon name="chevron-left" size={48} />
                 </TouchableOpacity>
-                <View accessible importantForAccessibility='yes' accessibilityLabel='게시글' style={styles['header-container']}>
+                <View accessibilityLabel='게시글' style={styles['header-container']}>
                     <Text style={styles['header-title']}>게시글</Text>
                 </View>
             </View>

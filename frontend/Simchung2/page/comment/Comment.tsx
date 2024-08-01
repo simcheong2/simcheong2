@@ -8,12 +8,12 @@ interface CommentProps {
 
 const Comment = ({ comment }: CommentProps) => {
     return (
-        <View style={styles.commentContainer}>
-            <View style={styles.header}>
-                <Text style={styles.username}>{comment.nickname}</Text>
+        <View accessible={false} style={styles.commentContainer}>
+            <View accessible={false} style={styles.header}>
+                <Text accessible accessibilityLabel={`${comment.nickname}님 입니다.`} style={styles.username}>{comment.nickname}</Text>
 
             </View>
-            <Text style={styles.commentText}>{comment.comment}</Text>
+            <Text accessible accessibilityLabel={comment.comment} style={styles.commentText}>{comment.comment}</Text>
         </View>
     )
 }

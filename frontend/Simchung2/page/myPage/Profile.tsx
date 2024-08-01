@@ -19,7 +19,7 @@ const Profile = ({ myProfile, filterClick, feedClick, editClick, followClick, fo
     const itemSize = (width) / 2; // Adjusted to maintain margins
 
     const renderPost: ListRenderItem<Posts> = ({ item }) => (
-        <TouchableOpacity  accessible importantForAccessibility='yes' accessibilityLabel={item.images[0].imageText}
+        <TouchableOpacity accessibilityLabel={item.images[0].imageText}
             style={[styles.postContainer, { width: itemSize, height: itemSize }]}
             onPress={() => filterClick(item)}>
             <Image source={{ uri: item.images[0].imageUrl }} style={styles.postImage} />
@@ -28,34 +28,34 @@ const Profile = ({ myProfile, filterClick, feedClick, editClick, followClick, fo
 
     return (
         <View accessible={false} style={styles.container}>
-            <View accessible importantForAccessibility='yes' accessibilityLabel={myProfile.profile.nickname} style={styles.header}>
+            <View accessibilityLabel={myProfile.profile.nickname} style={styles.header}>
                 <Text style={styles['header-title']}>{myProfile.profile.nickname}</Text>
             </View>
             <View accessible={false} style={styles['my-profile']}>
                 <Image accessible={false} style={styles['profile-image']} source={profileUrl} resizeMode="cover" />
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel={`게시물${myProfile.posts.length}개 입니다.`} style={styles.touchOpacity} onPress={feedClick}>
+                <TouchableOpacity accessibilityLabel={`게시물${myProfile.posts.length}개 입니다.`} style={styles.touchOpacity} onPress={feedClick}>
                     <Text style={styles.bold}>{myProfile.posts.length}</Text>
                     <Text style={styles.medium}>게시물</Text>
                 </TouchableOpacity>
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel={`팔로워${myProfile.profile.followerCount}명 입니다.`} style={styles.touchOpacity} onPress={() => followClick('follower')}>
+                <TouchableOpacity accessibilityLabel={`팔로워${myProfile.profile.followerCount}명 입니다.`} style={styles.touchOpacity} onPress={() => followClick('follower')}>
                     <Text style={styles.bold}>{myProfile.profile.followerCount}</Text>
                     <Text style={styles.medium}>팔로워</Text>
                 </TouchableOpacity>
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel={`팔로잉${myProfile.profile.followingCount}명 입니다.`} style={styles.touchOpacity} onPress={() => followClick('follow')}>
+                <TouchableOpacity accessibilityLabel={`팔로잉${myProfile.profile.followingCount}명 입니다.`} style={styles.touchOpacity} onPress={() => followClick('follow')}>
                     <Text style={styles.bold}>{myProfile.profile.followingCount}</Text>
                     <Text style={styles.medium}>팔로잉</Text>
                 </TouchableOpacity>
             </View>
             <View style={styles['profile-edit']}>
                 {isMine ?
-                    <TouchableOpacity  accessible importantForAccessibility='yes' accessibilityLabel='프로필 편집을 원하시면 두번 탭 하세요.'
+                    <TouchableOpacity accessibilityLabel='프로필 편집을 원하시면 두번 탭 하세요.'
                         style={styles['edit-button']}
                         onPress={editClick}
                     >
                         <Text style={{ fontSize: 12, color: '#fff' }}>프로필 편집</Text>
                     </TouchableOpacity>
                     :
-                    <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel={myProfile.profile.isFollow?'팔로우를 취소하고 싶으시면 두번 탭하세요.' : '팔로우 하고 싶으시면 두번 탭하세요.'}
+                    <TouchableOpacity accessibilityLabel={myProfile.profile.isFollow?'팔로우를 취소하고 싶으시면 두번 탭하세요.' : '팔로우 하고 싶으시면 두번 탭하세요.'}
                         style={styles['edit-button']}
                         onPress={followingClick}
                     >

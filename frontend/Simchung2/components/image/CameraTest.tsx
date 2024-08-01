@@ -106,21 +106,21 @@ const CameraTest = () => {
     };
 
     return (
-        <View style={styles.container} accessible importantForAccessibility="yes"
+        <View style={styles.container}
               accessibilityLabel="게시글 작성 화면 입니다. 최대 사진 3개까지 촬영이 가능합니다. 좋은 추억을 남겨 공유 해봅시다.">
             <Camera style={styles.camera} type={facing} ref={cameraRef} accessible={false}>
                 <View style={styles.buttonContainer} accessible={false}>
-                    <TouchableOpacity accessible importantForAccessibility="yes"
+                    <TouchableOpacity
                                       accessibilityLabel="화면 전환 버튼 입니다. 화면을 전환 하여 찍고 싶으시면 두번 탭하세요."
                                       style={[styles.button]} onPress={toggleCameraFacing}>
                         <Icon style={styles.text} name="screen-rotation" size={48} />
                     </TouchableOpacity>
-                    <TouchableOpacity accessible importantForAccessibility="yes"
+                    <TouchableOpacity
                                       accessibilityLabel="카메라 버튼 입니다. 촬영을 원하시면 두번 탭하세요." style={[styles.button]}
                                       onPress={takePicture}>
                         <Icon style={styles.text} name="camera-alt" size={48} />
                     </TouchableOpacity>
-                    <TouchableOpacity accessible importantForAccessibility="yes"
+                    <TouchableOpacity
                                       accessibilityLabel="사진촬영이 끝나 본문을 작성하러 다음으로 이동하고 싶으시면 두번 탭하세요."
                                       style={[styles.button]} onPress={navigateToUpload}>
                         <Icon style={styles.text} name="skip-next" size={48} />

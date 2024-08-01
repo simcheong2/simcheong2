@@ -18,10 +18,15 @@ const Post = ({post, profile, onPress,onLike}:PostProps) => {
     const { width } = Dimensions.get('window');
 
     const renderItems: ListRenderItem<Images> = ({ item }) => (
-        <View accessible importantForAccessibility='yes' style={[styles['image-wrapper'], {width: width}]} accessibilityLabel={`${item.imageText}`}>
+        <View style={[styles['image-wrapper'], {width: width}]} accessibilityLabel={`${item.imageText}`}>
             <Image style={styles.image} source={{ uri: item.imageUrl }} resizeMode="cover" />
         </View>
     );
+
+    const formatFavorite = ():string => {
+        const icon = post.isLiked ? 'favorite' : 'favorite-outline'
+        return icon
+    }
 
     return (
         <View accessible={false} style={[styles.container, { marginTop: 12, marginBottom: 12 }]}>
@@ -31,8 +36,8 @@ const Post = ({post, profile, onPress,onLike}:PostProps) => {
                     source={userImgSrc}
                     resizeMode="cover" />
                 <View accessible={false} style={styles['user-container']}>
-                    <Text accessible importantForAccessibility='yes' accessibilityLabel={`나는 ${profile.nickname}`} style={styles.userName}>{profile.nickname}</Text>
-                    <Text accessible importantForAccessibility='yes' accessibilityLabel={`${post.content}`} style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{post.content}</Text>
+                    <Text accessibilityLabel={`나는 ${profile.nickname}`} style={styles.userName}>{profile.nickname}</Text>
+                    <Text accessibilityLabel={`${post.content}`} style={styles.comment} numberOfLines={1} ellipsizeMode="tail">{post.content}</Text>
                 </View>
                 <TouchableOpacity accessible={false} style={styles.iconButton}>
                     <Icon name="more-horiz" size={24} style={styles.icon} />
@@ -49,12 +54,12 @@ const Post = ({post, profile, onPress,onLike}:PostProps) => {
                 pagingEnabled
             />
             <View accessible={false} style={styles.favorite}>
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel='댓글 창 입니다 확인 하시려면 두번 탭 해주세요.'  style={styles['comment-container']} onPress={()=>onPress&&onPress(post.postId)}>
+                <TouchableOpacity accessibilityLabel='댓글 창 입니다 확인 하시려면 두번 탭 해주세요.'  style={styles['comment-container']} onPress={()=>onPress&&onPress(post.postId)}>
                     <LonIcons name="chatbubble-ellipses" size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(post.commentCount)}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity accessible importantForAccessibility='yes' accessibilityLabel={`좋아요 버튼 입니다. 좋아요를 ${post.isLiked ? '취소' : ''}하고 싶으면 두번 탭 해주세요.`} style={styles['favorite-container']} onPress={()=>onLike && onLike(post.postId)}>
-                    <Icon name="favorite-outline" size={24} style={styles.icon} />
+                <TouchableOpacity accessibilityLabel={`좋아요 버튼 입니다. 좋아요를 ${post.isLiked ? '취소' : ''}하고 싶으면 두번 탭 해주세요.`} style={styles['favorite-container']} onPress={()=>onLike && onLike(post.postId)}>
+                    <Icon name={formatFavorite()} size={24} style={styles.icon} />
                     <Text style={styles['comment-count']}>{formatComma(post.likeCount)}</Text>
                 </TouchableOpacity>
             </View>
