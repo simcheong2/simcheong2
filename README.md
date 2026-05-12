@@ -6,7 +6,7 @@
 
 <br/>
 
-<img src="https://capsule-render.vercel.app/api?type=rounded&color=61DAFB&height=150&section=header&text=Simcheong2go&fontSize=42&fontColor=ffffff&animation=fadeIn" />
+<img src="https://capsule-render.vercel.app/api?type=rounded&color=61DAFB&height=150&section=header&text=Simcheong2&fontSize=42&fontColor=ffffff&animation=fadeIn" />
 
 <br/>
 
