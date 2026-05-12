@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🌊 Simcheong2go
+# 🌊 Simcheong2
 
 ### 시각장애인을 위한 음성 기반 SNS 모바일 앱
 
